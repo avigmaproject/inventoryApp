@@ -11,44 +11,132 @@ import {
   Image,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import {Select, Toast} from 'native-base';
 import InputText from '../../components/InputText';
-import HeaderBack from '../../components/HeaderBack';
+import Header from './Header';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { flex } from 'styled-system';
 export default function Additem(props){
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+  const [id, setid] = useState(null);
   const [items, setItems] = useState([
     {label: 'Pallet', value: 'Pallet'},
     {label: 'individual item', value: 'individual item'},
   ]);
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
-
- <View
-          style={{
-            backgroundColor: '#fff',
-            height: 60,
-            justifyContent: 'center',
-            //   alignItems: 'center',
-            flexDirection: 'row',
-          }}>
-          <TouchableOpacity
-            onPress={() => props.navigation.goBack()}
-            style={{position: 'absolute', left: 20, top: 20}}>
-            <AntDesign name="arrowleft" size={30} color="#0F0B56" />
-          </TouchableOpacity>
-          
+        // <ScrollView  style={{height:'100%'}}> 
+        <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
+            <Header
+          header="Add Item"
+          onPressCancel={() => props.navigation.goBack()}
+          // onPressSave={() => this.editProduct()}
+        />
+       
+    <ScrollView keyboardShouldPersistTaps="handled" style={{paddingHorizontal:20}}>
+    <View style={{marginTop: 20}}>
+            <InputText
+              label="Select Vender"
+              placeholder="Select Vender"
+            />
           </View>
-        <View style={{justifyContent:'center',alignItems:'center',marginTop:30}}>
-          <Text style={{color: 'black',
-              fontSize: 28,
-              fontWeight: '600',}}>Add item</Text>
+          <View style={{marginTop: 20}}>
+            <InputText
+              label="Select Subcategory"
+              placeholder="Select Subcategory"
+            />
+          </View>
+          <View style={{marginTop: 20, alignItems: 'center'}}>
+          <Select
+              dropdownIcon
+              style={{
+                fontSize: 14,
+                paddingLeft: 20,
+                color: '#000',
+                height: 55,
+                backgroundColor: '#fff',
+              }}
+               selectedValue={id}
+              width="100%"
+              placeholder="Type Of Item"
+              onValueChange={itemValue => setid(itemValue)}
+              _selectedItem={{
+                bg: 'gray',
+              }}>
+              <Select.Item label="Pallet" value={'1'}  />
+              <Select.Item label="individual item" value={'2'} />
+            </Select>
+  
+            </View>
+            {id=="1" ? (
+  <View> 
+    <View style={{marginTop: 20,}}>
+    <InputText
+     
+     label="RFID tag"
+  placeholder="Enter RFID tag"
+/>
+   
+     
+</View>
+ <View style={{marginTop: 20}}>
+      <InputText
+     
+     label="LPN#(Pallet only)"
+  placeholder="Enter LPN#(Pallet only)"
+/>
+</View>
+<View style={{marginTop: 20}}>
+      <InputText
+     
+     label="Model#"
+  placeholder="Enter Model#"
+/>
+</View>
+<View style={{marginTop: 20}}>
+      <InputText
+     
+     label="QTY"
+  placeholder="Enter QTY"
+/>
+</View>
+    </View>   ) :id=="2" ? (
+      <View> 
+      <View style={{marginTop: 20}}>
+      <InputText
+       
+       label="RFID tag"
+    placeholder="Enter RFID tag"
+  />
+     
+       
+  </View>
+  
+  <View style={{marginTop: 20}}>
+        <InputText
+       
+       label="Model#"
+    placeholder="Enter Model#"
+  />
+   <View style={{marginTop: 20}}>
+        <InputText
+       
+       label="Serial #"
+    placeholder="Serial #"
+  />
+  </View>
+  </View>
+    </View>
+      ) : (
+        <View>
         </View>
+       )}
+    
 
-<View style={{paddingHorizontal:30}}>
-  {/* <ScrollView style={{backgroundColor:'yellow',height:'100%'}}> */}
-<View  style={{flexDirection:'row',height:50,backgroundColor:'white',marginTop:30,alignItems:'center'}}>
+
+{/* <View style={{paddingHorizontal:30}}>
+
+<View  style={{flexDirection:'row',backgroundColor:'white',marginTop:30,alignItems:'center'}}>
 
   
           <Text style={{color: 'black',
@@ -87,13 +175,14 @@ export default function Additem(props){
           style={{
             height: 55,
             borderWidth: 0,
-            backgroundColor:'red'
+            
           }}
           containerStyle={{
             width: '100%',
             alignSelf: 'center',
             justifyContent: 'center',
-            backgroundColor: '#fff',
+           
+            backgroundColor: 'white',zIndex: 1000, elevation: 1000 
            
           }}
           labelStyle={{
@@ -101,7 +190,7 @@ export default function Additem(props){
             color: 'black',
             fontSize: 16,
             lineHeight: 24,
-            backgroundColor:'pink'
+           
           }}
         />
   
@@ -148,9 +237,11 @@ export default function Additem(props){
         <View>
         </View>
        )}
-     {/* </ScrollView>   */}
-</View>
+    
+</View> */}
 
+</ScrollView>
       </SafeAreaView>
+    
       );
     }

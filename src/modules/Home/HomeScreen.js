@@ -534,13 +534,13 @@ class HomeScreen extends Component {
               flexDirection: 'row',
               marginTop: 20,
             }}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() =>
                 this.props.navigation.dispatch(DrawerActions.openDrawer())
               }
               style={{position: 'absolute', left: 20}}>
               <Entypo name="menu" size={30} color="#0F0B56" />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <View
               style={{
                 position: 'absolute',

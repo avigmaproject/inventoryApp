@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import InputText from '../../../../components/InputText';
 import Button from '../../../../components/Button';
 import BackButton from '../../../../components/BackButton';
+
 import {
   userprofile,
   updateuserprofile,
@@ -192,7 +193,7 @@ const EditProfile = ({navigation}) => {
         text="Edit Your Profile"
         onPress={() => navigation.goBack()}
       />
-      <ScrollView keyboardShouldPersistTaps="handled">
+      <ScrollView keyboardShouldPersistTaps="handled" style={{paddingHorizontal:20}}>
         <View style={{marginTop: 50}}>
           <InputText
             label="Full Name"
@@ -251,7 +252,7 @@ const EditProfile = ({navigation}) => {
               backgroundColor: '#fff',
             }}
             mode="dropdown"
-            width="90%"
+            width="100%"
             placeholder="Select Gender"
             // selectedValue={gender}
             onValueChange={itemValue => setGender(itemValue)}>
@@ -264,8 +265,9 @@ const EditProfile = ({navigation}) => {
           <Button
             text="Update"
             onPress={updateUserData}
-            backgroundColor="#6633FF"
+            backgroundColor="#055C9D"
           />
+          
         </View>
       </ScrollView>
     </SafeAreaView>

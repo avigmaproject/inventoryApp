@@ -9,6 +9,8 @@ const Tabs =() =>{
     return(
         <Tab.Navigator
         screenOptions={({ route }) => ({
+          activeTintColor:'#1FAFDF',
+          inactiveTintColor:'grey',
           headerShown:false,
           tabBarOptions: {
             labelStyle: {
@@ -16,9 +18,11 @@ const Tabs =() =>{
              
             },
           },
-          tabBarInactiveBackgroundColor:'#D0D3D4',
-          tabBarActiveBackgroundColor:'#1D3D92',
-          tabBarStyle: { height: 70,fontSize:60, },
+          
+          // tabBarInactiveBackgroundColor:'white',
+          // tabBarActiveBackgroundColor:'#1FAFDF',
+          tabBarStyle: { height: 50,fontSize:60, },
+          tabStyle: { fontSize: 50, },
           tabBarHideOnKeyboard: true,
         })}
           initialRouteName="Home"

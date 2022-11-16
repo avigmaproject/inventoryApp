@@ -22,6 +22,7 @@ const InputText = props => {
       onBlur={props.onBlur}
       mode="outlined"
       outlineColor="transparent"
+      
       // dense
       style={{
         width: '100%',
@@ -29,6 +30,7 @@ const InputText = props => {
         // height: 65,
         fontSize: 14,
         color: '#000000',
+        borderRadius:45
       }}
       theme={{
         colors: {
@@ -37,6 +39,7 @@ const InputText = props => {
           primary: '#0F0B56',
           underlineColor: 'transparent',
           background: '#FFFFFF',
+          borderRadius:45
         },
       }}
     />
