@@ -30,15 +30,16 @@ export default function Itemlist(props){
             <AntDesign name="arrowleft" size={30} color="#0F0B56" />
           </TouchableOpacity>
           </View> */}
-        <View style={{justifyContent:'center',alignItems:'center',marginTop:30}}>
+        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginTop:30}}>
           <Text style={{color: 'black',
               fontSize: 28,
               fontWeight: '600',}}>Items</Text>
+              <TouchableOpacity style={{position: 'absolute', right: 20,}}> 
+  <Icon name="filter" size={30} color="#1FAFDF" style={{marginLeft:20}} />
+  </TouchableOpacity>
         </View>
 <View style={{alignSelf:'flex-end',marginRight:30,marginTop:30}}>
-  <TouchableOpacity style={{height:30,width:80,justifyContent:'center',alignItems:'center',backgroundColor:'#1FAFDF'}}>
-      <Text style={{color:'white'}} >Filter</Text>
-  </TouchableOpacity>
+  
 
 </View>
 <View style={{paddingHorizontal:30}}>

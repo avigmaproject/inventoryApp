@@ -15,7 +15,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HeaderBackWithSearchBar from '../../../components/HeaderBackWithSearchBar';
 import {getproducts} from '../../../services/api.function';
-
+import Icon from 'react-native-vector-icons/Feather'
 export const ItemList = ({navigation, route}) => {
   const [photo, setPhoto] = useState('');
   const [loading, setLoading] = useState(false);

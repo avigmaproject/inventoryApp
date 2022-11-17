@@ -265,7 +265,7 @@ const EditProfile = ({navigation}) => {
           <Button
             text="Update"
             onPress={updateUserData}
-            backgroundColor="#055C9D"
+            backgroundColor="#1FAFDF"
           />
           
         </View>

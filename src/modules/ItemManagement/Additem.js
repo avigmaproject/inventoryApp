@@ -22,7 +22,7 @@ export default function Additem(props){
   const [id, setid] = useState(null);
   const [items, setItems] = useState([
     {label: 'Pallet', value: 'Pallet'},
-    {label: 'individual item', value: 'individual item'},
+    {label: 'Individual item', value: 'individual item'},
   ]);
     return (
         // <ScrollView  style={{height:'100%'}}> 
@@ -64,7 +64,7 @@ export default function Additem(props){
                 bg: 'gray',
               }}>
               <Select.Item label="Pallet" value={'1'}  />
-              <Select.Item label="individual item" value={'2'} />
+              <Select.Item label="Individual item" value={'2'} />
             </Select>
   
             </View>

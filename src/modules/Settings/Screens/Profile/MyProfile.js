@@ -334,7 +334,7 @@ export default class MyProfile extends Component {
             <Button
               text="Update Profile"
               onPress={() => this.props.navigation.navigate('EditProfile')}
-              backgroundColor="#055C9D"
+              backgroundColor="#1FAFDF"
             />
           </View>
         </ScrollView>
