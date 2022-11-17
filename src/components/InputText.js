@@ -21,7 +21,7 @@ const InputText = props => {
       onSubmitEditing={props.onSubmitEditing}
       onBlur={props.onBlur}
       mode="outlined"
-      outlineColor="transparent"
+      outlineColor="#1FAFDF"
       
       // dense
       style={{
@@ -36,8 +36,8 @@ const InputText = props => {
         colors: {
           placeholder: '#ACACAC',
           text: '#000',
-          primary: '#0F0B56',
-          underlineColor: 'transparent',
+          primary: '#1FAFDF',
+          underlineColor: '#1FAFDF',
           background: '#FFFFFF',
           borderRadius:45
         },

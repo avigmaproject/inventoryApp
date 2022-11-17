@@ -10,7 +10,7 @@ import {
   View,
   Image,
 } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/Feather';
 import HeaderBack from '../../components/HeaderBack';
 export default function Itemlist(props){
  
@@ -36,8 +36,8 @@ export default function Itemlist(props){
               fontWeight: '600',}}>Items</Text>
         </View>
 <View style={{alignSelf:'flex-end',marginRight:30,marginTop:30}}>
-  <TouchableOpacity style={{height:30,width:80,justifyContent:'center',alignItems:'center',backgroundColor:'#D0D3D4'}}>
-      <Text style={{color:'black'}} >Filter</Text>
+  <TouchableOpacity style={{height:30,width:80,justifyContent:'center',alignItems:'center',backgroundColor:'#1FAFDF'}}>
+      <Text style={{color:'white'}} >Filter</Text>
   </TouchableOpacity>
 
 </View>
@@ -45,7 +45,7 @@ export default function Itemlist(props){
 <View  style={{flexDirection:'row',height:50,backgroundColor:'white',marginTop:30,alignItems:'center'}}>
 <TouchableOpacity style={{flexDirection:'row',}} onPress={() =>  props.navigation.navigate('Additem')}>
         
-          <AntDesign name="pluscircleo" size={30} color="#1FAFDF" style={{marginLeft:20}} />
+          <Icon name="plus-circle" size={30} color="#1FAFDF" style={{marginLeft:20}} />
 
   
           <Text style={{color: 'black',

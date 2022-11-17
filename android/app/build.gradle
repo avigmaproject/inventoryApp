@@ -2,7 +2,9 @@ apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
-
+project.ext.react = [
+     entryFile: "index.js"
+]
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
  * and bundleReleaseJsAndAssets).
@@ -12,6 +14,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
  * and their defaults. If you decide to add a configuration block, make sure to add it before the
  * `apply from: "../../node_modules/react-native/react.gradle"` line.
  *
+ 
  * project.ext.react = [
  *   // the name of the generated asset file containing your JS bundle
  *   bundleAssetName: "index.android.bundle",
@@ -134,7 +137,10 @@ android {
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
-
+    dexOptions {
+   incremental true
+   javaMaxHeapSize "4g"
+}
     defaultConfig {
         applicationId "com.inventoryapp"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -316,7 +322,7 @@ def isNewArchitectureEnabled() {
 }
 project.ext.vectoricons = [
   iconFontNames: [ 'FontAwesome.ttf', 'FontAwesome5_Regular.ttf',
-             'FontAwesome5_Solid.ttf', 'FontAwesome5_Brands.ttf',
+             'FontAwesome5_Solid.ttf', 'FontAwesome5_Brands.ttf','Entypo.ttf',
              'MaterialIcons.ttf', 'Ionicons.ttf', 'MaterialCommunityIcons.ttf',  'Feather.ttf'] // Name of the font files you want to copy
 ]
 

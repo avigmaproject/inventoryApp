@@ -9,7 +9,7 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {DrawerActions} from '@react-navigation/native';
@@ -224,7 +224,7 @@ export default class MyProfile extends Component {
           <TouchableOpacity
             onPress={() => this.props.navigation.goBack()}
             style={{position: 'absolute', left: 20, top: 20}}>
-            <AntDesign name="arrowleft" size={30} color="#0F0B56" />
+            <Ionicons name="arrow-back" size={30} color="#0F0B56" />
           </TouchableOpacity>
           <Text
             style={{
@@ -248,7 +248,7 @@ export default class MyProfile extends Component {
                 height: 200,
                 width: 200,
                 borderRadius: 150,
-                borderColor: '#BDBDBD',
+                borderColor: '#1FAFDF',
                 borderWidth: 1,
                 top: 10,
               }}
