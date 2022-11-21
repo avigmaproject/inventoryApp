@@ -82,7 +82,7 @@ export default class SplashScreen extends Component {
     return (
       <SafeAreaView>
         <Animated.Image
-          source={require('../../assets/Image/Logo.png')}
+          source={require('../../assets/Image/ilogo.png')}
           style={{
             width: '90%',
             height: '100%',

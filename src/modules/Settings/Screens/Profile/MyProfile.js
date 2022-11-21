@@ -8,12 +8,15 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  Alert
 } from 'react-native';
+import { connect } from "react-redux";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {DrawerActions} from '@react-navigation/native';
 import ImagePicker from 'react-native-image-crop-picker';
+import {signOut,userId} from '../../../../store/action/auth/action';
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FAB} from 'react-native-paper';
@@ -33,7 +36,7 @@ const options = [
   <Text style={{color: 'black'}}>Camera</Text>,
 ];
 
-export default class MyProfile extends Component {
+class MyProfile extends Component {
   constructor() {
     super();
     this.state = {
@@ -59,7 +62,20 @@ export default class MyProfile extends Component {
   componentWillUnmount() {
     this._unsubscribe;
   }
+  Logout = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [{text: 'LOGOUT', onPress: () => this.logoutUser()}, {text: 'CANCEL'}],
+      {cancelable: false},
+    );
+  };
 
+  logoutUser = async () => {
+    this.props.signOut();
+
+    await AsyncStorage.removeItem('token');
+  };
   onOpenImage = () => this.ActionSheet.show();
 
   ImageGallery = async () => {
@@ -237,6 +253,11 @@ export default class MyProfile extends Component {
             My Profile
           </Text>
           <TouchableOpacity
+            onPress={() => this.Logout()}
+            style={{position: 'absolute',right: 20, top: 20}}>
+           <Text style={{color:'#21618C',fontSize:18,fontWeight:'600'}}>Logout</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={{
               position: 'absolute',
               zIndex: 100,
@@ -248,7 +269,7 @@ export default class MyProfile extends Component {
                 height: 200,
                 width: 200,
                 borderRadius: 150,
-                borderColor: '#1FAFDF',
+                borderColor: '#21618C',
                 borderWidth: 1,
                 top: 10,
               }}
@@ -330,11 +351,12 @@ export default class MyProfile extends Component {
           <View
             style={{
               marginTop: 20,
+              paddingHorizontal:20
             }}>
             <Button
               text="Update Profile"
-              onPress={() => this.props.navigation.navigate('EditProfile')}
-              backgroundColor="#1FAFDF"
+              // onPress={() => this.props.navigation.navigate('EditProfile')}
+              backgroundColor="#21618C"
             />
           </View>
         </ScrollView>
@@ -342,3 +364,12 @@ export default class MyProfile extends Component {
     );
   }
 }
+const mapDispatchToProps = {
+  signOut,
+  userId,
+};
+const mapStateToProps = (state, ownProps) => ({
+  // contacts: state.contactReducer.contacts,
+  // parentid: state.parentidReducer.parentid,
+});
+export default connect(mapStateToProps, mapDispatchToProps)(MyProfile);

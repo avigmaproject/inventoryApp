@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   TouchableOpacity,
 } from 'react-native';
 import qs from 'qs';
@@ -18,6 +19,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 import {login} from '../../services/api.function';
 import {useDispatch} from 'react-redux';
 import {setToken} from '../../store/action/auth/action';
+import logo from '../../assets/Image/ilogo.png'
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
 
@@ -132,27 +134,30 @@ const Login = ({navigation}) => {
         backgroundColor: '#F3F2F4',
       }}>
       <Spinner visible={loading} />
-      <ScrollView keyboardShouldPersistTaps="handled">
+      <ScrollView keyboardShouldPersistTaps="handled" style={{paddingHorizontal:20}}>
         <View
           style={{
             alignItems: 'center',
             justifyContent: 'center',
             // height: '50%',
-            marginTop: '40%',
-            marginBottom: '15%',
+            marginTop: '20%',
+           
             // borderWidth: 1,
           }}>
+       
+            <Image source={logo} resizeMode='contain' style={{width: 220, height: 120}}  />
+          
           <Text
             style={{
               color: '#0F0B56',
-              fontWeight: '600',
+              fontWeight: '800',
               fontSize: 24,
               lineHeight: 36,
             }}>
-            Login Now
+            Login
           </Text>
         </View>
-        <View>
+        <View style={{marginTop:20}}>
           <InputText
             label="Email / Username"
             onChangeText={email => setEmail(email)}
@@ -183,30 +188,30 @@ const Login = ({navigation}) => {
             />
           </TouchableOpacity>
         </View>
-        <View
+         <View
           style={{
             marginTop: 10,
-            width: '32%',
+           
             // borderWidth: 1,
-            alignSelf: 'center',
+         alignItems:'center',
             left: 110,
           }}>
           <TouchableOpacity
             onPress={() => navigation.navigate('ForgotPassword')}>
             <Text
               style={{
-                color: '#6633FF',
+                color: '#2874A6',
                 fontWeight: '700',
                 fontSize: 14,
-                lineHeight: 21,
-                textDecorationLine: 'underline',
+                // lineHeight: 21,
+                // textDecorationLine: 'underline',
               }}>
               Forgot Password?
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> 
         <View style={{marginTop: 35}}>
-          <Button text="Login" onPress={LoginUser} backgroundColor="#6633FF" />
+          <Button text="Login" onPress={LoginUser} backgroundColor="#21618C" />
         </View>
         <View
           style={{
@@ -214,25 +219,29 @@ const Login = ({navigation}) => {
             flexDirection: 'row',
             alignSelf: 'center',
             marginTop: 10,
+            justifyContent:'center',
+            
           }}>
           <Text
             style={{
-              color: '#969696',
+              color: '#2874A6',
               fontWeight: '600',
               fontSize: 14,
               lineHeight: 21,
+             
             }}>
-            Don't have an account? {''}
+            Don't have an account?
           </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
             <Text
               style={{
-                color: '#6633FF',
+                color: '#2874A6',
                 fontWeight: '600',
                 fontSize: 14,
                 lineHeight: 21,
+               marginLeft:5
               }}>
-              Sign up Now
+              Sign up
             </Text>
           </TouchableOpacity>
         </View>

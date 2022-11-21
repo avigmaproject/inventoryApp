@@ -163,7 +163,15 @@ export default class ForgotPassword extends Component {
           text="Forgot Password"
           onPress={() => this.props.navigation.goBack()}
         />
-        <View style={{marginTop: 30}}>
+        <View style={{paddingHorizontal:20}}>
+        <Text style={{ fontSize: 16,
+marginTop:10,
+color: '#9B9C9F',
+fontWeight: '400',}}>
+                Enter the registered email address to receive the reset password
+                link.{' '}
+              </Text>
+        <View style={{marginTop: 20}}>
           <InputText
             label="Email Address"
             placeholder="Enter your Emal ID"
@@ -177,9 +185,10 @@ export default class ForgotPassword extends Component {
         <View style={{marginTop: 35}}>
           <Button
             text="Send Link"
-            backgroundColor="#6633FF"
+            backgroundColor="#2874A6"
             onPress={() => this.onHandleForgotPassword()}
           />
+        </View>
         </View>
       </SafeAreaView>
     );

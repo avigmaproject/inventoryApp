@@ -36,8 +36,8 @@ export default function Additem(props){
     <ScrollView keyboardShouldPersistTaps="handled" style={{paddingHorizontal:20}}>
     <View style={{marginTop: 20}}>
             <InputText
-              label="Select Vender"
-              placeholder="Select Vender"
+              label="Select Vendor"
+              placeholder="Select Vendor"
             />
           </View>
           <View style={{marginTop: 20}}>

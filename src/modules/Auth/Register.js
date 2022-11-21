@@ -177,26 +177,32 @@ const Register = ({navigation}) => {
         flex: 1,
         backgroundColor: '#F3F2F4',
       }}>
-      <ScrollView keyboardShouldPersistTaps="handled">
+      <ScrollView keyboardShouldPersistTaps="handled" style={{paddingHorizontal:20}}>
         <Spinner visible={loading} />
         <View
           style={{
-            alignItems: 'center',
-            justifyContent: 'center',
+           
             // height: '50%',
             marginTop: '30%',
-            marginBottom: '10%',
+            marginBottom:10
             // borderWidth: 1,
           }}>
           <Text
             style={{
               color: '#0F0B56',
-              fontWeight: '600',
+              fontWeight:'800',
               fontSize: 24,
               lineHeight: 36,
             }}>
-            Sign up Now
+            Sign up
           </Text>
+          <Text style={{fontSize: 16,
+justifyContent:'flex-start',alignSelf:'flex-start',
+color: '#9B9C9F',
+marginTop:5,
+fontWeight: '400',}}>
+                Plese sign up to continue with app.
+              </Text>
         </View>
         <View>
           <InputText
@@ -268,7 +274,7 @@ const Register = ({navigation}) => {
           <Button
             text="Sign Up"
             onPress={() => RegisterUser()}
-            backgroundColor="#6633FF"
+            backgroundColor="#2874A6"
           />
         </View>
         <View
@@ -276,25 +282,27 @@ const Register = ({navigation}) => {
             width: '90%',
             flexDirection: 'row',
             alignSelf: 'center',
+            justifyContent:'center',
             marginTop: 10,
             marginBottom: 20,
           }}>
           <Text
             style={{
-              color: '#969696',
+              color: '#2874A6',
               fontWeight: '600',
               fontSize: 14,
               lineHeight: 21,
             }}>
-            If you already have an account {''}
+            Already have an account?
           </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text
               style={{
-                color: '#6633FF',
+                color: '#2874A6',
                 fontWeight: '600',
                 fontSize: 14,
                 lineHeight: 21,
+                marginLeft:5
               }}>
               Login Now
             </Text>

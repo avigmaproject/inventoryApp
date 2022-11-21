@@ -35,7 +35,7 @@ export default function Itemlist(props){
               fontSize: 28,
               fontWeight: '600',}}>Items</Text>
               <TouchableOpacity style={{position: 'absolute', right: 20,}}> 
-  <Icon name="filter" size={30} color="#21618C" style={{marginLeft:20}} />
+  <Icon name="filter" size={30} color="#1FAFDF" style={{marginLeft:20}} />
   </TouchableOpacity>
         </View>
 <View style={{alignSelf:'flex-end',marginRight:30,marginTop:30}}>
@@ -46,7 +46,7 @@ export default function Itemlist(props){
 <View  style={{flexDirection:'row',height:50,backgroundColor:'white',marginTop:30,alignItems:'center'}}>
 <TouchableOpacity style={{flexDirection:'row',}} onPress={() =>  props.navigation.navigate('Additem')}>
         
-          <Icon name="plus-circle" size={30} color="#21618C" style={{marginLeft:20}} />
+          <Icon name="plus-circle" size={30} color="#1FAFDF" style={{marginLeft:20}} />
 
   
           <Text style={{color: 'black',

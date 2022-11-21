@@ -40,22 +40,17 @@ export default function ItemDetail(props){
               fontWeight: '600',}}>Items Details</Text>
         </View>
 <View style={{alignSelf:'flex-end',marginRight:30,marginTop:30}}>
-  <TouchableOpacity style={{height:30,width:80,justifyContent:'center',alignItems:'center',backgroundColor:'#1FAFDF'}}>
+  <TouchableOpacity style={{height:30,width:80,justifyContent:'center',alignItems:'center',backgroundColor:'#21618C'}}>
       <Text style={{color:'white'}} >save</Text>
   </TouchableOpacity>
 
 </View>  
 <View style={{paddingBottom:20}}> 
-<View style={{marginTop: 20}}>
-            <InputText
-              label="Select Vender"
-              placeholder="Select Vender"
-            />
-          </View>
+
           <View style={{marginTop: 20}}>
             <InputText
-              label="Select Vender"
-              placeholder="Select Vender"
+              label="Select Vendor"
+              placeholder="Select Vendor"
             />
           </View>
           <View style={{marginTop: 20}}>

@@ -16,7 +16,7 @@ import {
 import {Toast, Select} from 'native-base';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {FAB} from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -577,6 +577,32 @@ class HomeScreen extends Component {
        
         </View>
 <View style={{paddingHorizontal:20}}>
+<View  style={{flexDirection:'row',height:80,borderRadius:20,backgroundColor:'white',marginTop:30,alignItems:'center'}}>
+
+                 
+
+<TouchableOpacity
+           onPress={() => this.props.navigation.navigate('BarcodeScanner')}
+            style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+            {/* <MaterialIcons name="qr-code-scanner" size={30} color="#1FAFDF"  style={{marginLeft:20}}/> */}
+            <Image
+                  style={{
+                    marginLeft:20,
+                    height: 45,
+                    width: 45,
+                    borderRadius: 45,
+                    borderColor: '#BDBDBD',
+                    borderWidth: 1,
+                  }}
+                  source={require('../../assets/Logo/barcode.png')}
+                 
+                
+                />
+          <Text style={{color: 'black',
+              fontSize: 15,
+              fontWeight: '600',marginLeft:15,}}>Scan Barcode</Text>
+              </TouchableOpacity>
+        </View>
 <View  style={{flexDirection:'row',height:80,borderRadius:20,backgroundColor:'white',marginTop:30,alignItems:'center'}}>
 <Image
                   style={{

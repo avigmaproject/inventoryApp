@@ -9,7 +9,7 @@ const Tabs =() =>{
     return(
         <Tab.Navigator
         screenOptions={({ route }) => ({
-          tabBarActiveTintColor:'#1FAFDF',
+          tabBarActiveTintColor:'#21618C',
           tabBarInactiveTintColor:'grey',
           headerShown:false,
           tabBarOptions: {

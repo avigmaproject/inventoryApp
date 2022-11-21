@@ -77,7 +77,9 @@ const App = () => {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        {userToken ? <MaintabNavivgation /> : <AuthStack/>}
+        {userToken ? <MaintabNavivgation /> :  
+         <AuthStack/>
+         }
       </NavigationContainer>
     </NativeBaseProvider>
   );

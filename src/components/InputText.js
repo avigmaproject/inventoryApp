@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import {TextInput} from 'react-native-paper';
+import { padding } from 'styled-system';
 
 const InputText = props => {
   return (
@@ -21,13 +22,13 @@ const InputText = props => {
       onSubmitEditing={props.onSubmitEditing}
       onBlur={props.onBlur}
       mode="outlined"
-      outlineColor="#1FAFDF"
+      outlineColor="#2874A6"
       
       // dense
       style={{
         width: '100%',
         alignSelf: 'center',
-        // height: 65,
+      
         fontSize: 14,
         color: '#000000',
         borderRadius:45
@@ -36,10 +37,11 @@ const InputText = props => {
         colors: {
           placeholder: '#ACACAC',
           text: '#000',
-          primary: '#1FAFDF',
-          underlineColor: '#1FAFDF',
+          primary: '#21618C',
+          underlineColor: '#2874A6',
           background: '#FFFFFF',
-          borderRadius:45
+          borderRadius:40,
+          
         },
       }}
     />

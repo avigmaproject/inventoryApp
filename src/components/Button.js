@@ -14,7 +14,7 @@ const Button = ({text, ...props}) => {
   return (
     <TouchableOpacity
       style={{
-        width: '90%',
+        width: '100%',
         alignSelf: 'center',
         height: 65,
         alignItems: 'center',
@@ -27,7 +27,7 @@ const Button = ({text, ...props}) => {
         style={{
           color: '#FFFFFF',
           fontWeight: '600',
-          fontSize: 16,
+          fontSize: 18,
           lineHeight: 24,
         }}>
         {text}

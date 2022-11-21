@@ -58,7 +58,7 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
         <TouchableOpacity
           onPress={onPressSave}
           style={{
-            backgroundColor:'#055C9D',
+            backgroundColor:'#21618C',
             height: 35,
             width: 60,
             justifyContent: 'center',

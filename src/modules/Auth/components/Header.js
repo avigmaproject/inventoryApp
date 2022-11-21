@@ -10,7 +10,7 @@ import {
   Image,
 } from 'react-native';
 
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const HeaderBack = ({text, image, onimageclick, ...props}) => {
   return (
@@ -25,7 +25,7 @@ const HeaderBack = ({text, image, onimageclick, ...props}) => {
       <TouchableOpacity
         onPress={props.onPress}
         style={{position: 'absolute', left: 20}}>
-        <AntDesign name="arrowleft" size={30} color="#0F0B56" />
+         <Ionicons name="arrow-back" size={30} color="#0F0B56" />
       </TouchableOpacity>
       <Text
         style={{
