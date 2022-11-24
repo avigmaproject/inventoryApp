@@ -138,10 +138,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function ScanQr() {
+export default function ScanQr(props) {
   return (
-    <View>
-      <Text>ScanQr</Text>
+    <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+      <Text style={{fontSize:30}}>{props.route.params.data}</Text>
     </View>
   )
 }

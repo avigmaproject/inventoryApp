@@ -14,7 +14,6 @@ import { connect } from "react-redux";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import {DrawerActions} from '@react-navigation/native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {signOut,userId} from '../../../../store/action/auth/action';
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
@@ -55,7 +54,9 @@ class MyProfile extends Component {
   componentDidMount() {
     const {navigation} = this.props;
     this._unsubscribe = navigation.addListener('focus', () => {
-      this.getToken();
+     console.log("token",this.props.token)
+    this.getUserData()
+
     });
   }
 
@@ -73,8 +74,6 @@ class MyProfile extends Component {
 
   logoutUser = async () => {
     this.props.signOut();
-
-    await AsyncStorage.removeItem('token');
   };
   onOpenImage = () => this.ActionSheet.show();
 
@@ -138,8 +137,7 @@ class MyProfile extends Component {
       User_Image_Base: 'data:image/png;base64, ' + base64,
     });
     try {
-      const token = await AsyncStorage.getItem('token');
-      const res = await registerStoreImage(data, token);
+      const res = await registerStoreImage(data, this.props.token);
       console.log(data, 'dataaaaaa');
       console.log(res, 'resssss');
       AsyncStorage.setItem('imagepath', res[1]);
@@ -155,7 +153,7 @@ class MyProfile extends Component {
     }
   };
 
-  getUserData = async token => {
+  getUserData = async () => {
     this.setState({loading: true});
     var data = JSON.stringify({
       User_PkeyId: 1,
@@ -163,7 +161,7 @@ class MyProfile extends Component {
       Type: 2,
     });
     try {
-      const res = await userprofile(data, token);
+      const res = await userprofile(data, this.props.token);
       console.log(res, 'ressssssss');
       console.log(res[0][0].User_Email, ' res[0][0].User_Email');
       this.setState({
@@ -186,21 +184,6 @@ class MyProfile extends Component {
       console.log({message});
     }
   };
-
-  getToken = async () => {
-    let token;
-    try {
-      token = await AsyncStorage.getItem('token');
-      if (token) {
-        this.getUserData(token);
-      } else {
-        console.log('no token found');
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   validateGender = value => {
     var lvalue = 0;
     switch (value) {
@@ -369,7 +352,6 @@ const mapDispatchToProps = {
   userId,
 };
 const mapStateToProps = (state, ownProps) => ({
-  // contacts: state.contactReducer.contacts,
-  // parentid: state.parentidReducer.parentid,
+  token: state.authReducer.userToken,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(MyProfile);

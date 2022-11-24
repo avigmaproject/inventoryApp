@@ -158,20 +158,7 @@ export const deleteprofile = async (data, access_token) => {
     });
 };
 
-export const activeprofile = async (data, access_token) => {
-  return axios(`${BASE_URL}${API.ACTIVE_PROFILE}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + access_token,
-    },
-    data,
-  })
-    .then(response => response.data)
-    .catch(error => {
-      throw error;
-    });
-};
+
 
 export const getlocation = async (data, access_token) => {
   return axios(`${BASE_URL}${API.GET_LOCATION}`, {
@@ -188,128 +175,8 @@ export const getlocation = async (data, access_token) => {
     });
 };
 
-export const createbin = async (data, access_token) => {
-  return axios(`${BASE_URL}${API.CREATE_BIN}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + access_token,
-    },
-    data,
-  })
-    .then(response => response.data)
-    .catch(error => {
-      throw error;
-    });
-};
-
-export const updatebin = async (data, access_token) => {
-  return axios(`${BASE_URL}${API.UPDATE_BIN}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + access_token,
-    },
-    data,
-  })
-    .then(response => response.data)
-    .catch(error => {
-      throw error;
-    });
-};
-
-export const getbins = async (data, access_token) => {
-  return axios(`${BASE_URL}${API.GET_BIN}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + access_token,
-    },
-    data,
-  })
-    .then(response => response.data)
-    .catch(error => {
-      throw error;
-    });
-};
-
 export const uploadimage = async (data, access_token) => {
   return axios(`${BASE_URL}${API.UPLOAD_IMAGE}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + access_token,
-    },
-    data,
-  })
-    .then(response => response.data)
-    .catch(error => {
-      throw error;
-    });
-};
-
-export const getproducts = async (data, access_token) => {
-  return axios(`${BASE_URL}${API.GET_PRODUCTS}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + access_token,
-    },
-    data,
-  })
-    .then(response => response.data)
-    .catch(error => {
-      throw error;
-    });
-};
-
-export const addupdateproducts = async (data, access_token) => {
-  return axios(`${BASE_URL}${API.ADD_UPDATE_PRODUCT}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + access_token,
-    },
-    data,
-  })
-    .then(response => response.data)
-    .catch(error => {
-      throw error;
-    });
-};
-
-export const uploadqrimage = async (data, access_token) => {
-  return axios(`${BASE_URL}${API.UPLOAD_QR_IMAGE}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + access_token,
-    },
-    data,
-  })
-    .then(response => response.data)
-    .catch(error => {
-      throw error;
-    });
-};
-
-export const getcategorymaster = async (data, access_token) => {
-  return axios(`${BASE_URL}${API.GET_CATEGORY_MASTER}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + access_token,
-    },
-    data,
-  })
-    .then(response => response.data)
-    .catch(error => {
-      throw error;
-    });
-};
-
-export const getsubcategorymaster = async (data, access_token) => {
-  return axios(`${BASE_URL}${API.GET_SUBCATEGORY_MASTER}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

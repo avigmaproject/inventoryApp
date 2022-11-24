@@ -6,10 +6,10 @@ import MaintabScreen from "../Tabnavigator/Maintab"
 
 const Drawer = createDrawerNavigator();
 
-export const DrawerNavigator = () => {
+export const DrawerNavigator = (props) => {
   return (
     <Drawer.Navigator
-      drawerContent={props => <DrawerContent {...props} />}
+      drawerContent={(props) => <DrawerContent {...props} />}
       screenOptions={{headerShown: false}}>
       <Drawer.Screen name="MainTabScreen" component={MaintabScreen} />
     </Drawer.Navigator>

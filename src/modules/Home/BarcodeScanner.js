@@ -1,3 +1,28 @@
+import { View, Text } from "react-native"
+import React from "react"
+import { CameraScreen } from "react-native-camera-kit"
+
+export default function BarcodeScanner(props) {
+  const onReadCode = (event) => {
+    if (event.nativeEvent.codeStringValue) {
+      console.log(event.nativeEvent.codeStringValue)
+      props.navigation.navigate("ScanQr", {
+        data: event.nativeEvent.codeStringValue
+      })
+    }
+  }
+  return (
+    <View>
+      <CameraScreen
+        scanBarcode={true}
+        onReadCode={(event) => onReadCode(event)} // optional
+        showFrame={true} // (default false) optional, show frame with transparent layer (qr code or barcode will be read on this area ONLY), start animation for scanner,that stoped when find any code. Frame always at center of the screen
+        laserColor="red" // (default red) optional, color of laser in scanner frame
+        frameColor="white" // (default white) optional, color of border of scanner frame
+      />
+    </View>
+  )
+}
 
 // import React, {useState, useEffect} from 'react';
 // import {
@@ -32,18 +57,6 @@
 //         cameraType={cameraType}
 //       />
 //      </View>
- 
-    
 
 //       );
 //     }
-import { View, Text } from 'react-native'
-import React from 'react'
-
-export default function BarcodeScanner() {
-  return (
-    <View>
-      <Text>BarcodeScanner</Text>
-    </View>
-  )
-}

@@ -31,14 +31,12 @@ class DrawerContent extends Component {
   }
 
   componentDidMount() {
-    const {navigation} = this.props;
-    this._unsubscribe = navigation.addListener('focus', () => {
-      this.getToken();
-    });
+    console.log(this.props)
+   
   }
-  componentWillUnmount() {
-    this._unsubscribe();
-  }
+  // componentWillUnmount() {
+  //   this._unsubscribe();
+  // }
 
   Logout = () => {
     Alert.alert(
@@ -93,82 +91,8 @@ class DrawerContent extends Component {
     }
   };
 
-  // activateProfile = async () => {
-  //   this.setState({
-  //     loading: true,
-  //   });
-  //   let data = {
-  //     Type: 9,
-  //     User_PkeyID: this.state.profileid,
-  //     User_IsActive_Prof: true,
-  //   };
-  //   try {
-  //     const token = await AsyncStorage.getItem('token');
-  //     const res = await activeprofile(data, token);
-  //     console.log(res, 'res');
-  //     this.setState(
-  //       {
-  //         loading: false,
-  //         activeid: res[0][0],
-  //       },
-  //       () => this.GetActiveProfile(),
-  //     );
 
-  //     // const pushActions = StackActions.push('HomeScreen');
-  //     // this.props.navigation.dispatch(pushActions);
-  //   } catch (error) {
-  //     console.log('hihihihihihih', {e: error.response.data.error});
-  //     this.setState({
-  //       loading: false,
-  //     });
-  //   }
-  // };
-
-  // GetActiveProfile = async () => {
-  //   this.setState({
-  //     loading: true,
-  //   });
-  //   var data = JSON.stringify({
-  //     Type: 4,
-  //     User_PkeyID: this.state.activeid,
-  //   });
-  //   try {
-  //     const token = await AsyncStorage.getItem('token');
-  //     const res = await getprofiles(data, token);
-  //     this.setState({
-  //       email: res[0][0].User_Email,
-  //       imagepath: res[0][0].User_Image_Path,
-  //       loading: false,
-  //     });
-
-  //     console.log(res, 'ressssssss');
-  //   } catch (error) {
-  //     console.log('hihihihihihih', {e: error.response.data.error});
-  //     let message = '';
-  //     if (error.response) {
-  //       this.setState({
-  //         loading: false,
-  //       });
-  //     } else {
-  //       message = '';
-  //     }
-  //     console.log({message});
-  //   }
-  // };
-
-  getToken = async () => {
-    let token;
-    try {
-      token = await AsyncStorage.getItem('token');
-      if (token) {
-        this.GetProfile(token);
-      } else {
-        console.log('no token found');
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  
 
   render() {
     return (
@@ -261,24 +185,8 @@ class DrawerContent extends Component {
                 size={25}
               />
             )}
-            label="Scan"
-            onPress={() => this.props.navigation.navigate('ScanQr')}
-            labelStyle={styles.labelStyle}
-          />
-          <Divider />
-          <DrawerItem
-            icon={() => (
-              <SimpleLineIcons name="plus" color="#0F0B56" size={25} />
-            )}
-            label="Create New Bin"
-            onPress={() => this.props.navigation.navigate('CreateBin')}
-            labelStyle={styles.labelStyle}
-          />
-          <Divider />
-          <DrawerItem
-            icon={() => <Entypo name="export" color="#0F0B56" size={25} />}
-            label="Export"
-            onPress={() => this.props.navigation.navigate('Export')}
+            label="Barcode Scanner"
+            onPress={() => this.props.navigation.navigate('BarcodeScanner')}
             labelStyle={styles.labelStyle}
           />
           <Divider />
@@ -286,8 +194,8 @@ class DrawerContent extends Component {
             icon={() => (
               <SimpleLineIcons name="settings" color="#0F0B56" size={25} />
             )}
-            label="Setting"
-            onPress={() => this.props.navigation.navigate('Setting')}
+            label="Profile"
+            onPress={() => this.props.navigation.navigate('MyProfile')}
             labelStyle={styles.labelStyle}
           />
           <Divider />
