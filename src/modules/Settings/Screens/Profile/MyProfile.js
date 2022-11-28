@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { connect } from "react-redux";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import InputText from '../../../../components/InputText';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -22,9 +23,11 @@ import {FAB} from 'react-native-paper';
 import InputView from '../../../../components/InputView';
 import Button from '../../../../components/Button';
 import BackButton from '../../../../components/BackButton';
+import {Select, useToast} from 'native-base';
 import {
   userprofile,
   registerStoreImage,
+  updateuserprofile,
 } from '../../../../services/api.function';
 
 const options = [
@@ -56,6 +59,7 @@ class MyProfile extends Component {
     this._unsubscribe = navigation.addListener('focus', () => {
      console.log("token",this.props.token)
     this.getUserData()
+    
 
     });
   }
@@ -152,7 +156,16 @@ class MyProfile extends Component {
       }
     }
   };
-
+  onHandleChange = (key, value) => {
+  
+      this.setState({
+        ...this.state,
+        form: {
+          ...this.state.form,
+          [key]: value,
+        },
+      });
+    }
   getUserData = async () => {
     this.setState({loading: true});
     var data = JSON.stringify({
@@ -184,6 +197,75 @@ class MyProfile extends Component {
       console.log({message});
     }
   };
+   Validation = () => {
+    let cancel = false;
+    if (this.state.form.name.length === 0) {
+      cancel = true;
+    }
+    if (this.state.form.phone.length === 0) {
+      cancel = true;
+    }
+    if (cancel) {
+      showerrorMessage('Fields can not be empty');
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  PhoneValidation = () => {
+    let cancel = false;
+    if (this.state.form.phone.length > 10 || this.state.form.phone.length < 10) {
+      cancel = true;
+    }
+    if (cancel) {
+      showerrorMessage('Invalid Phone Number');
+      return false;
+    } else {
+      return true;
+    }
+  };
+  updateUserData = async () => {
+    console.log("helloo update")
+    //  if (this.Validation() && this.PhoneValidation()) {
+      // this.setState({loading: true});
+      let data = {
+        User_PkeyID:this.state.form.userid,
+        User_Email: this.state.form.email,
+        User_Name:this.state.form.name,
+        User_Phone: this.state.form.phone,
+        User_Gender: this.state.form.gender,
+        User_Image_Path: this.state.form.imagepath,
+        User_Password:this.state.form.password,
+        Type: 2,
+        User_Type: 1,
+        User_IsActive: 1,
+        User_IsDelete: 0,
+      };
+      console.log(data, 'userrrrr');
+      try {
+        const res = await updateuserprofile(data, this.state.token);
+        console.log('ressssss:', res);
+         showMessage('Profile Updated');
+      } catch (error) {
+        // showerrorMessage(error.response.data.error_description);
+        console.log('errrro',error)
+      }
+    //  }
+  };
+  showMessage = message => {
+    if (message !== '' && message !== null && message !== undefined) {
+      toast.show({
+        title: message,
+        placement: 'bottom',
+        status: 'success',
+        duration: 5000,
+        // backgroundColor: 'red.500',
+      });
+    }
+  };
+
+  
   validateGender = value => {
     var lvalue = 0;
     switch (value) {
@@ -249,9 +331,9 @@ class MyProfile extends Component {
             onPress={() => this.onOpenImage()}>
             <Image
               style={{
-                height: 200,
-                width: 200,
-                borderRadius: 150,
+                height: 140,
+                width: 140,
+                borderRadius: 120,
                 borderColor: '#21618C',
                 borderWidth: 1,
                 top: 10,
@@ -293,52 +375,95 @@ class MyProfile extends Component {
             }
           }}
         />
-        <ScrollView>
+        <ScrollView style={{paddingHorizontal:20}}>
           <View
             style={{
-              marginTop: 120,
+              marginTop: 50,
             }}>
-            <InputView text="Full Name" value={name} />
-          </View>
-          <View
-            style={{
-              marginTop: 20,
-            }}>
-            <InputView text="Phone no." value={phone != null ? phone : 'NA'} />
-          </View>
-          <View
-            style={{
-              marginTop: 20,
-            }}>
-            <InputView text="Email Address" value={email} />
-          </View>
-          <View
-            style={{
-              marginTop: 20,
-            }}>
-            <InputView
-              text="Gender"
-              value={
-                this.validateGender(gender) != null
-                  ? this.validateGender(gender)
-                  : 'NA'
-              }
+             <InputText label="Full Name" value={name} 
+              // onChangeText={name => (name)}
+              onChangeText={(text) => this.onHandleChange("name", text)}
+            
             />
           </View>
           <View
             style={{
               marginTop: 20,
             }}>
-            <InputView text="Password" value="********" />
+             <InputText label="Phone no." value={phone}
+                keyboardType="numeric"
+                // onChangeText={phone => this.state.phone(phone)}
+          onChangeText={(text) => this.onHandleChange("phone", text)}
+            />
           </View>
           <View
             style={{
               marginTop: 20,
-              paddingHorizontal:20
+            }}>
+            <InputText label="Email Address" value={email} 
+            //onChangeText={(text) => this.onHandleChange("name", text)}
+            />
+          </View>
+          {/* <View
+            style={{
+              marginTop: 20,
+            }}>
+            <InputText
+              label="Gender"
+              value={
+                this.validateGender(gender) != null
+                  ? this.validateGender(gender)
+                  : 'NA'
+              }
+              onChangeText={(text) => this.onHandleChange("gender", text)}
+            />
+          </View> */}
+          <View style={{marginTop: 20, alignItems: 'center'}}>
+          <Select
+            _selectedItem={{
+              bg: '#ACACAC',
+            }}
+            mt={1}
+            style={{
+              justifyContent: 'center',
+              height: 65,
+              fontSize: 14,
+              color: '#000000',
+              backgroundColor: '#fff',
+            }}
+            mode="dropdown"
+            width="100%"
+            placeholder="Select Gender"
+             value={
+                this.validateGender(gender) != null
+                  ? this.validateGender(gender)
+                  : 'NA'
+              }
+            // selectedValue={gender}
+            onValueChange={itemValue => this.onHandleChange("gender", itemValue)}>
+            <Select.Item label="Female" value={1} />
+            <Select.Item label="Male" value={2} />
+            <Select.Item label="Other" value={3} />
+          </Select>
+        </View>
+          <View
+            style={{
+              marginTop: 20,
+            }}>
+            <InputText label="Password" value="********"
+              onChangeText={(text) => this.onHandleChange("password", text)} 
+              />
+
+          </View>
+          <View
+            style={{
+              marginTop: 20,
+             
             }}>
             <Button
               text="Update Profile"
               // onPress={() => this.props.navigation.navigate('EditProfile')}
+              onPress={() => this.updateUserData()}
               backgroundColor="#21618C"
             />
           </View>

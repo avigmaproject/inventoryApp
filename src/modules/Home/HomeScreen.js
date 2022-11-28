@@ -53,6 +53,7 @@ class HomeScreen extends Component {
   componentDidMount() {
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
      console.log("token",this.props.token)
+     this.GetProfile()
     })
   }
   componentWillUnmount() {
@@ -70,6 +71,46 @@ class HomeScreen extends Component {
       })
     }
   }
+  GetProfile = async token => {
+    // alert('second');
+    this.setState({
+      loading: true,
+    });
+
+    var data = JSON.stringify({
+      User_PkeyId: 1,
+      User_PkeyID_Master: 1,
+      Type: 2,
+    });
+    try {
+      const res = await userprofile(data, this.props.token);
+    console.log("ressss of update",res)
+          this.setState(
+            {
+              name: res[0][0].User_Name,
+              imagepath: res[0][0].User_Image_Path,
+              loading: false,
+            },
+           
+          );
+        
+
+     
+    } catch (error) {
+    console.log("error is",error)
+      let message = '';
+      if (error.response) {
+        this.setState({
+          loading: false,
+        });
+      } else {
+        message = '';
+      }
+      console.log({message});
+    }
+  };
+ 
+
   render() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F2F4" }}>
@@ -123,7 +164,7 @@ class HomeScreen extends Component {
             </View>
             <View style={{ flexDirection: "row", paddingRight: 50 }}>
               <Text style={styles.heading}>Hi </Text>
-              <Text style={styles.heading}>{this.state.splitname}</Text>
+              <Text style={styles.heading}>{this.state.name}</Text>
             </View>
           </View>
         </View>
