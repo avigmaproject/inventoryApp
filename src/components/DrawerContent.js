@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {View, Alert, StyleSheet} from 'react-native';
 import {Select, Toast} from 'native-base';
+import Icon from "react-native-vector-icons/Ionicons"
 import {Avatar, Title, Caption, Drawer, Divider} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../context/AuthContext';
@@ -170,7 +171,7 @@ class DrawerContent extends Component {
         <Drawer.Section>
           <DrawerItem
             icon={() => (
-              <SimpleLineIcons name="home" color="#0F0B56" size={25} />
+              <Icon name="home" color="#21618C" size={25} />
             )}
             label="Home"
             onPress={() => this.props.navigation.navigate('HomeScreen')}
@@ -181,7 +182,7 @@ class DrawerContent extends Component {
             icon={() => (
               <MaterialCommunityIcons
                 name="qrcode-scan"
-                color="#0F0B56"
+                color="#21618C"
                 size={25}
               />
             )}
@@ -192,7 +193,7 @@ class DrawerContent extends Component {
           <Divider />
           <DrawerItem
             icon={() => (
-              <SimpleLineIcons name="settings" color="#0F0B56" size={25} />
+              <Icon name="person-circle-sharp" color="#21618C" size={30} />
             )}
             label="Profile"
             onPress={() => this.props.navigation.navigate('MyProfile')}
@@ -201,7 +202,7 @@ class DrawerContent extends Component {
           <Divider />
           <DrawerItem
             icon={() => (
-              <SimpleLineIcons name="logout" color="#0F0B56" size={25} />
+              <MaterialIcons name="logout" color="#21618C" size={25} />
             )}
             label="Logout"
             onPress={() => this.Logout()}
