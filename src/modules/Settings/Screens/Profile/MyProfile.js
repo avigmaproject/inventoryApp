@@ -23,6 +23,7 @@ import { FAB } from "react-native-paper"
 import InputView from "../../../../components/InputView"
 import Button from "../../../../components/Button"
 import BackButton from "../../../../components/BackButton"
+import Icon from 'react-native-vector-icons/Entypo';
 import { Select, useToast } from "native-base"
 import {
   userprofile,
@@ -51,7 +52,8 @@ class MyProfile extends Component {
       email: "",
       phone: null,
       gender: null,
-      userid: null
+      userid: null,
+      hidePassword: true,
     }
   }
 
@@ -176,6 +178,8 @@ class MyProfile extends Component {
         [key]: value
       }
     })
+    console.log("key ",key)
+    console.log("Value ",value)
   }
   getUserData = async () => {
     this.setState({ loading: true })
@@ -191,6 +195,7 @@ class MyProfile extends Component {
         form: {
           ...this.state.form,
           name: res[0][0].User_Name,
+          password:res[0][0].User_Password,
           email: res[0][0].User_Email,
           phone: res[0][0].User_Phone,
           userid: res[0][0].User_PkeyID,
@@ -263,13 +268,16 @@ class MyProfile extends Component {
         const res = await updateuserprofile(data, this.props.token)
         console.log("ressssss:", res)
         this.getUserData()
-        // showMessage("Profile Updated")
+        alert("Profile Updated")
       } catch (error) {
         console.log("errrro", error)
       }
 
     }
   }
+  managePasswordVisibility = () => {
+    this.setState({hidePassword: !this.state.hidePassword});
+  };
   showMessage = (message) => {
     if (message !== "" && message !== null && message !== undefined) {
       toast.show({
@@ -306,7 +314,7 @@ class MyProfile extends Component {
   }
 
   render() {
-    const { name, email, phone, gender, imagepath} = this.state.form
+    const { name, email, phone, gender, imagepath,password} = this.state.form
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F2F4" }}>
         <Spinner visible={this.state.loading} />
@@ -446,12 +454,12 @@ class MyProfile extends Component {
               placeholder="Select Gender"
               value={gender}
               onValueChange={(itemValue) =>
-                this.onHandleChange("gender", itemValue)
+                this.onHandleChange("gender",(itemValue))
               }
             >
-              <Select.Item label="Female" value={"1"} />
-              <Select.Item label="Male" value={"2"} />
-              <Select.Item label="Other" value={"3"} />
+              <Select.Item label="Female" value={"Female"} />
+              <Select.Item label="Male" value={"Male"} />
+              <Select.Item label="Other" value={"Other"} />
             </Select>
           </View>
           <View
@@ -461,10 +469,25 @@ class MyProfile extends Component {
           >
             <InputText
               label="Password"
-              value="********"
+              value={password}
               onChangeText={(text) => this.onHandleChange("password", text)}
+              secureTextEntry={this.state.hidePassword}
             />
-          </View>
+             <TouchableOpacity
+            onPress={this.managePasswordVisibility}
+            style={{
+              position: 'absolute',
+              right: 30,
+              top: 20,
+              zIndex: 1,
+            }}>
+            <Icon
+               name={this.state.hidePassword ? 'eye-with-line' : 'eye'}
+              size={30}
+              color="#ACACAC"
+            />
+            </TouchableOpacity>
+                       </View>
           <View
             style={{
               marginTop: 20
