@@ -457,9 +457,9 @@ class MyProfile extends Component {
                 this.onHandleChange("gender",(itemValue))
               }
             >
-              <Select.Item label="Female" value={"Female"} />
-              <Select.Item label="Male" value={"Male"} />
-              <Select.Item label="Other" value={"Other"} />
+              <Select.Item label="Female" value={1} />
+              <Select.Item label="Male" value={2} />
+              <Select.Item label="Other" value={3} />
             </Select>
           </View>
           <View

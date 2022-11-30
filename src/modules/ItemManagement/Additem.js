@@ -1,4 +1,5 @@
-import React ,{useState} from 'react';
+import React ,{useState,useEffect} from 'react';
+import SearchableDropdown from 'react-native-searchable-dropdown';
 import {
   SafeAreaView,
   ScrollView,
@@ -10,20 +11,36 @@ import {
   View,
   Image,
 } from 'react-native';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Barcodescanner from '../Home/BarcodeScanner'
 import {Select, Toast} from 'native-base';
 import InputText from '../../components/InputText';
 import Header from './Header';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { flex } from 'styled-system';
 export default function Additem(props){
+  const [selectedItems, setSelectedItems] = useState()
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [id, setid] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Pallet', value: 'Pallet'},
-    {label: 'Individual item', value: 'individual item'},
-  ]);
+  // const [items, setItems] = useState([
+  //   {label: 'Pallet', value: 'Pallet'},
+  //   {label: 'Individual item', value: 'individual item'},
+  // ]);
+  const items = [
+    // name key is must. It is to show the text in front
+    {id: 1, name: 'angellist'},
+    {id: 2, name: 'codepen'},
+    {id: 3, name: 'envelope'},
+    {id: 4, name: 'etsy'},
+    {id: 5, name: 'facebook'},
+    {id: 6, name: 'foursquare'},
+    {id: 7, name: 'github-alt'},
+    {id: 8, name: 'github'},
+    {id: 9, name: 'gitlab'},
+    {id: 10, name: 'instagram'},
+  ];
     return (
         // <ScrollView  style={{height:'100%'}}> 
         <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
@@ -34,18 +51,118 @@ export default function Additem(props){
         />
        
     <ScrollView keyboardShouldPersistTaps="handled" style={{paddingHorizontal:20}}>
-    <View style={{marginTop: 20}}>
-            <InputText
-              label="Select Vendor"
-              placeholder="Select Vendor"
-            />
-          </View>
-          <View style={{marginTop: 20}}>
-            <InputText
-              label="Select Subcategory"
-              placeholder="Select Subcategory"
-            />
-          </View>
+      <View style={{marginTop:20}}>
+      <SearchableDropdown
+             selectedItems={selectedItems}
+          onTextChange={(text) => console.log(text)}
+           onItemSelect={(item) =>setSelectedItems((item))}
+          containerStyle={{padding: 5}}
+          textInputStyle={{
+            // Inserted text style
+            padding: 12,
+            borderWidth: 1,
+            color:'black',
+            borderColor: '#2874A6',
+            backgroundColor: '#fff',
+          }}
+          itemStyle={{
+            // Single dropdown item style
+            padding: 10,
+            marginTop: 2,
+            backgroundColor: '#fff',
+            borderColor: '#2874A6',
+            borderWidth: 1,
+          }}
+          itemTextStyle={{
+          
+            color: 'black',
+          }}
+          itemsContainerStyle={{
+
+            // maxHeight: '60%',
+          }}
+          items={items}
+          // defaultIndex={2}
+          placeholder="Select Vendor"
+          resPtValue={false}
+          underlineColorAndroid="transparent"
+        />
+      </View>
+      <View style={{marginTop:20}}>
+      <SearchableDropdown
+            selectedItems={selectedItems}
+          onTextChange={(text) => console.log(text)}
+          onItemSelect={(item) =>setSelectedItems((item))}
+          containerStyle={{padding: 5}}
+          textInputStyle={{
+            // Inserted text style
+            padding: 12,
+            borderWidth: 1,
+            color:'black',
+            borderColor: '#2874A6',
+            backgroundColor: '#fff',
+          }}
+          itemStyle={{
+            // Single dropdown item style
+            padding: 10,
+            marginTop: 2,
+            backgroundColor: '#fff',
+            borderColor: '#2874A6',
+            borderWidth: 1,
+          }}
+          itemTextStyle={{
+          
+            color: 'black',
+          }}
+          itemsContainerStyle={{
+
+            // maxHeight: '60%',
+          }}
+          items={items}
+          // defaultIndex={2}
+          placeholder="Select Category"
+        
+          underlineColorAndroid="transparent"
+        />
+      </View>
+      <View style={{marginTop:20}}>
+      <SearchableDropdown
+            selectedItems={selectedItems}
+          onTextChange={(text) => console.log(text)}
+           onItemSelect={(item) =>setSelectedItems((item))}
+          containerStyle={{padding: 5}}
+          textInputStyle={{
+            // Inserted text style
+            padding: 12,
+            borderWidth: 1,
+            color:'black',
+            borderColor: '#2874A6',
+            backgroundColor: '#fff',
+          }}
+          itemStyle={{
+            // Single dropdown item style
+            padding: 10,
+            marginTop: 2,
+            backgroundColor: '#fff',
+            borderColor: '#2874A6',
+            borderWidth: 1,
+          }}
+          itemTextStyle={{
+          
+            color: 'black',
+          }}
+          itemsContainerStyle={{
+
+            // maxHeight: '60%',
+          }}
+          items={items}
+          // defaultIndex={2}
+          placeholder="Select Subcategory"
+          resPtValue={false}
+          underlineColorAndroid="transparent"
+        />
+      </View>
+    
           <View style={{marginTop: 20, alignItems: 'center'}}>
           <Select
               dropdownIcon
@@ -79,26 +196,84 @@ export default function Additem(props){
    
      
 </View>
- <View style={{marginTop: 20}}>
-      <InputText
+ <View style={{marginTop: 20,width:"100%",flexDirection:'row'}}>
+<View style={{width:'90%'}}>
+<InputText
      
      label="LPN#(Pallet only)"
   placeholder="Enter LPN#(Pallet only)"
 />
 </View>
-<View style={{marginTop: 20}}>
+<View style={{width:'10%',justifyContent:'center',alignItems:'center',marginLeft:5}}>    
+<TouchableOpacity
+              onPress={() => props.navigation.navigate("BarcodeScanner")}
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <MaterialIcons
+                name="qr-code-scanner"
+                size={30}
+                color="#1FAFDF"
+              
+              />
+              </TouchableOpacity>
+              </View>
+</View>
+<View style={{marginTop: 20,width:"100%",flexDirection:'row'}}>
+<View style={{width:'90%'}}>
       <InputText
      
      label="Model#"
   placeholder="Enter Model#"
+  
 />
 </View>
-<View style={{marginTop: 20}}>
+<View style={{width:'10%',justifyContent:'center',alignItems:'center',marginLeft:5}}>    
+<TouchableOpacity
+              onPress={() =>props.navigation.navigate("BarcodeScanner")}
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <MaterialIcons
+                name="qr-code-scanner"
+                size={30}
+                color="#1FAFDF"
+              
+              />
+              </TouchableOpacity>
+              </View>
+</View>
+<View style={{marginTop: 20,width:"100%",flexDirection:'row'}}>
+<View style={{width:'90%'}}>
       <InputText
      
      label="QTY"
   placeholder="Enter QTY"
 />
+</View>
+<View style={{width:'10%',justifyContent:'center',alignItems:'center',marginLeft:5}}>    
+<TouchableOpacity
+              onPress={() =>props.navigation.navigate("BarcodeScanner")}
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <MaterialIcons
+                name="qr-code-scanner"
+                size={30}
+                color="#1FAFDF"
+              
+              />
+              </TouchableOpacity>
+              </View>
 </View>
     </View>   ) :id=="2" ? (
       <View> 
@@ -112,20 +287,59 @@ export default function Additem(props){
        
   </View>
   
-  <View style={{marginTop: 20}}>
+  <View style={{marginTop: 20,width:"100%",flexDirection:'row'}}>
+  <View style={{width:'90%'}}>
         <InputText
        
        label="Model#"
     placeholder="Enter Model#"
   />
-   <View style={{marginTop: 20}}>
+  </View>
+  <View style={{width:'10%',justifyContent:'center',alignItems:'center',marginLeft:5}}>    
+<TouchableOpacity
+             onPress={() => props.navigation.navigate("BarcodeScanner")}
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <MaterialIcons
+                name="qr-code-scanner"
+                size={30}
+                color="#1FAFDF"
+              
+              />
+              </TouchableOpacity>
+              </View>
+              </View>
+              <View style={{marginTop: 20,width:"100%",flexDirection:'row'}}>
+   <View style={{width:'90%'}}>
         <InputText
        
        label="Serial #"
     placeholder="Serial #"
   />
   </View>
+  <View style={{width:'10%',justifyContent:'center',alignItems:'center',marginLeft:5}}>    
+<TouchableOpacity
+              onPress={() => props.navigation.navigate("BarcodeScanner")}
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <MaterialIcons
+                name="qr-code-scanner"
+                size={30}
+                color="#1FAFDF"
+              
+              />
+              </TouchableOpacity>
+              </View>
   </View>
+  
     </View>
       ) : (
         <View>
