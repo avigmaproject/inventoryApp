@@ -16,9 +16,10 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
     <View
       style={{
         backgroundColor: '#fff',
-        height: 100,
+        height: '10%',
         justifyContent: 'center',
         paddingHorizontal: 15,
+        paddingBottom:10
       }}>
       <View
         style={{
@@ -32,9 +33,10 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
           style={{
             backgroundColor: '#F3F2F4',
             height: 35,
-            width: 60,
+            width: 70,
             justifyContent: 'center',
             alignItems: 'center',
+            borderRadius:15
           }}>
           <Text
             style={{
@@ -60,9 +62,10 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
           style={{
             backgroundColor:'#21618C',
             height: 35,
-            width: 60,
+            width: 70,
             justifyContent: 'center',
             alignItems: 'center',
+            borderRadius:15
           }}>
           <Text
             style={{

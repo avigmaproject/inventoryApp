@@ -118,7 +118,9 @@ class HomeScreen extends Component {
         <View
           style={{
             backgroundColor: "#fff",
-            height: 80
+            height: 70,
+            justifyContent:'center',
+            paddingBottom:20
           }}
         >
           <View
@@ -143,7 +145,7 @@ class HomeScreen extends Component {
                 //   borderColor:"#FFFFFF"
               }}
             >
-              <TouchableOpacity
+              <TouchableOpacity style={{paddingBottom:10}}
                 onPress={() => this.props.navigation.navigate("MyProfile")}
               >
                 <Image
@@ -152,7 +154,8 @@ class HomeScreen extends Component {
                     width: 45,
                     borderRadius: 45,
                     borderColor: "#BDBDBD",
-                    borderWidth: 1
+                    borderWidth: 1,
+                    
                   }}
                   source={{
                     uri: this.state.imagepath

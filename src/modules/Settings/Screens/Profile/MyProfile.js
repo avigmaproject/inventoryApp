@@ -199,7 +199,7 @@ class MyProfile extends Component {
           email: res[0][0].User_Email,
           phone: res[0][0].User_Phone,
           userid: res[0][0].User_PkeyID,
-          gender: res[0][0].User_Gender.toString(),
+          gender: res[0][0].User_Gender,
           imagepath: res[0][0].User_Image_Path
         },
         loading: false

@@ -1,6 +1,9 @@
 import React ,{useState,useEffect} from 'react';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import {
+  getvendormaster
+} from '../../services/api.function'
+import {
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -19,15 +22,20 @@ import InputText from '../../components/InputText';
 import Header from './Header';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { flex } from 'styled-system';
+import {useSelector} from 'react-redux';
 export default function Additem(props){
   const [selectedItems, setSelectedItems] = useState()
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+  const [vendor, setvendor] = useState([0]);
+  const [Category, setcategory] = useState([0]);
   const [id, setid] = useState(null);
   // const [items, setItems] = useState([
   //   {label: 'Pallet', value: 'Pallet'},
   //   {label: 'Individual item', value: 'individual item'},
   // ]);
+  const token = useSelector(state => state.authReducer.userToken);
+  console.log('token is',token)
   const items = [
     // name key is must. It is to show the text in front
     {id: 1, name: 'angellist'},
@@ -41,6 +49,36 @@ export default function Additem(props){
     {id: 9, name: 'gitlab'},
     {id: 10, name: 'instagram'},
   ];
+  useEffect(() => {
+    GetVendorMaster()
+  }, [])
+  const GetVendorMaster = async () => {
+    let data = {
+      Type: 4,
+      
+    };
+    console.log("data and token",data,token)
+    await getvendormaster(data,token)
+      .then(res => {
+        const fetchvendor = res[0]
+        const collectvendor = fetchvendor?.map((item) => {
+          return { id: item.Ven_PkeyID,name: item.Ven_Name }
+        })
+        setvendor(collectvendor)
+        const fetchcat = res[1]
+        const collectcat = fetchcat?.map((item) => {
+          return { id: item.Cat_Pkey,name: item.Cat_Name }
+        })
+        setcategory(collectcat)
+     console.log("response of vendor is",vendor)
+     console.log("response of vendor is",res[0])
+     console.log("response of vendor is",res[1])
+       
+      })
+      .catch(error => {
+        console.log("errorr of vendor is",error)
+      });
+  };
     return (
         // <ScrollView  style={{height:'100%'}}> 
         <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
@@ -49,7 +87,9 @@ export default function Additem(props){
           onPressCancel={() => props.navigation.goBack()}
           // onPressSave={() => this.editProduct()}
         />
-       
+       {/* <View style={{}}>
+      <Text style={{fontSize:30}}>{props.route.params.data}</Text>
+    </View> */}
     <ScrollView keyboardShouldPersistTaps="handled" style={{paddingHorizontal:20}}>
       <View style={{marginTop:20}}>
       <SearchableDropdown
@@ -74,14 +114,12 @@ export default function Additem(props){
             borderWidth: 1,
           }}
           itemTextStyle={{
-          
             color: 'black',
           }}
           itemsContainerStyle={{
-
             // maxHeight: '60%',
           }}
-          items={items}
+          items={vendor}
           // defaultIndex={2}
           placeholder="Select Vendor"
           resPtValue={false}
@@ -118,10 +156,9 @@ export default function Additem(props){
 
             // maxHeight: '60%',
           }}
-          items={items}
+          items={Category}
           // defaultIndex={2}
           placeholder="Select Category"
-        
           underlineColorAndroid="transparent"
         />
       </View>
@@ -252,7 +289,6 @@ export default function Additem(props){
 <View style={{marginTop: 20,width:"100%",flexDirection:'row'}}>
 <View style={{width:'90%'}}>
       <InputText
-     
      label="QTY"
   placeholder="Enter QTY"
 />
@@ -279,13 +315,10 @@ export default function Additem(props){
       <View> 
       <View style={{marginTop: 20}}>
       <InputText
-       
        label="RFID tag"
     placeholder="Enter RFID tag"
   />
-     
-       
-  </View>
+     </View>
   
   <View style={{marginTop: 20,width:"100%",flexDirection:'row'}}>
   <View style={{width:'90%'}}>
@@ -307,8 +340,7 @@ export default function Additem(props){
               <MaterialIcons
                 name="qr-code-scanner"
                 size={30}
-                color="#1FAFDF"
-              
+                color="#1FAFDF"         
               />
               </TouchableOpacity>
               </View>
@@ -316,7 +348,6 @@ export default function Additem(props){
               <View style={{marginTop: 20,width:"100%",flexDirection:'row'}}>
    <View style={{width:'90%'}}>
         <InputText
-       
        label="Serial #"
     placeholder="Serial #"
   />
@@ -328,56 +359,38 @@ export default function Additem(props){
                 flexDirection: "row",
                 justifyContent: "center",
                 alignItems: "center"
-              }}
-            >
+              }}>
               <MaterialIcons
                 name="qr-code-scanner"
                 size={30}
-                color="#1FAFDF"
-              
-              />
+                color="#1FAFDF" />
               </TouchableOpacity>
               </View>
   </View>
-  
-    </View>
+   </View>
       ) : (
         <View>
         </View>
        )}
-    
-
-
 {/* <View style={{paddingHorizontal:30}}>
-
 <View  style={{flexDirection:'row',backgroundColor:'white',marginTop:30,alignItems:'center'}}>
-
-  
-          <Text style={{color: 'black',
+<Text style={{color: 'black',
               fontSize: 18,
               fontWeight: '600',marginLeft:10,}}>select Vendor</Text>
             
         </View>
         <View  style={{flexDirection:'row',height:50,backgroundColor:'white',marginTop:30,alignItems:'center'}}>
-
-  
           <Text style={{color: 'black',
               fontSize: 18,
-              fontWeight: '600',marginLeft:10,}}>select subcategory</Text>
-            
+              fontWeight: '600',marginLeft:10,}}>select subcategory</Text>            
         </View>
 
         <View  style={{marginTop:30}}>
-
-  
           <Text style={{color: 'black',
               fontSize: 18,
               fontWeight: '600',marginLeft:10,}}>Types of Item</Text>
-            
         </View>
         <View  style={{marginTop:10}}>
-
-  
         <DropDownPicker
           open={open}
           value={value}
@@ -423,8 +436,6 @@ export default function Additem(props){
               fontSize: 18,
               fontWeight: '600',marginLeft:10,marginTop:20}}>LPN#(Pallet only)</Text>
       <InputText
-     
-  
   placeholder="Enter LPN#(Pallet only)"
 />
 <Text style={{color: 'black',
@@ -439,8 +450,6 @@ export default function Additem(props){
               fontSize: 18,
               fontWeight: '600',marginLeft:10,marginTop:20}}>QTY</Text>
       <InputText
-     
-  
   placeholder="Enter QTY"
 />
     </View>
@@ -451,11 +460,8 @@ export default function Additem(props){
         <View>
         </View>
        )}
-    
 </View> */}
-
 </ScrollView>
       </SafeAreaView>
-    
       );
     }
