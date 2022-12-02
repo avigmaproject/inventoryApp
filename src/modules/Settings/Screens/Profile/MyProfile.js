@@ -100,8 +100,9 @@ class MyProfile extends Component {
             base64: image.data,
             filename:
               Platform.OS === "ios" ? image.filename : "images" + new Date(),
-            ...this.state.form,
+
             form: {
+              ...this.state.form,
               imagepath: image.path
             }
           },
@@ -129,8 +130,9 @@ class MyProfile extends Component {
             base64: image.data,
             filename:
               Platform.OS === "ios" ? image.filename : "images" + new Date(),
-            ...this.state.form,
+
             form: {
+              ...this.state.form,
               imagepath: image.path
             }
           },
@@ -178,8 +180,8 @@ class MyProfile extends Component {
         [key]: value
       }
     })
-    console.log("key ",key)
-    console.log("Value ",value)
+    console.log("key ", key)
+    console.log("Value ", value)
   }
   getUserData = async () => {
     this.setState({ loading: true })
@@ -272,12 +274,11 @@ class MyProfile extends Component {
       } catch (error) {
         console.log("errrro", error)
       }
-
     }
   }
   managePasswordVisibility = () => {
-    this.setState({hidePassword: !this.state.hidePassword});
-  };
+    this.setState({ hidePassword: !this.state.hidePassword })
+  }
   showMessage = (message) => {
     if (message !== "" && message !== null && message !== undefined) {
       toast.show({
@@ -473,21 +474,22 @@ class MyProfile extends Component {
               onChangeText={(text) => this.onHandleChange("password", text)}
               secureTextEntry={this.state.hidePassword}
             />
-             <TouchableOpacity
-            onPress={this.managePasswordVisibility}
-            style={{
-              position: 'absolute',
-              right: 30,
-              top: 20,
-              zIndex: 1,
-            }}>
-            <Icon
-               name={this.state.hidePassword ? 'eye-with-line' : 'eye'}
-              size={30}
-              color="#ACACAC"
-            />
+            <TouchableOpacity
+              onPress={this.managePasswordVisibility()}
+              style={{
+                position: "absolute",
+                right: 30,
+                top: 20,
+                zIndex: 1
+              }}
+            >
+              <Icon
+                name={this.state.hidePassword ? "eye-with-line" : "eye"}
+                size={30}
+                color="#ACACAC"
+              />
             </TouchableOpacity>
-                       </View>
+          </View>
           <View
             style={{
               marginTop: 20
