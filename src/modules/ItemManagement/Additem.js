@@ -1,7 +1,8 @@
 import React ,{useState,useEffect} from 'react';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import {
-  getvendormaster
+  getvendormaster,
+  getsubcategorymaster
 } from '../../services/api.function'
 import {
   SafeAreaView,
@@ -24,11 +25,14 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { flex } from 'styled-system';
 import {useSelector} from 'react-redux';
 export default function Additem(props){
-  const [selectedItems, setSelectedItems] = useState()
+  const [selectedvendorItems, setselectedvendorItems] = useState()
+  const [selectedcatItems, setselectedcatItems] = useState()
+  const [selectedsubcatItems, setselectedsubcatItems] = useState()
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [vendor, setvendor] = useState([0]);
-  const [Category, setcategory] = useState([0]);
+  const [vendor, setvendor] = useState([]);
+  const [Category, setcategory] = useState([]);
+  const [subCategory, setsubcategory] = useState([]);
   const [id, setid] = useState(null);
   // const [items, setItems] = useState([
   //   {label: 'Pallet', value: 'Pallet'},
@@ -36,22 +40,21 @@ export default function Additem(props){
   // ]);
   const token = useSelector(state => state.authReducer.userToken);
   console.log('token is',token)
-  const items = [
-    // name key is must. It is to show the text in front
-    {id: 1, name: 'angellist'},
-    {id: 2, name: 'codepen'},
-    {id: 3, name: 'envelope'},
-    {id: 4, name: 'etsy'},
-    {id: 5, name: 'facebook'},
-    {id: 6, name: 'foursquare'},
-    {id: 7, name: 'github-alt'},
-    {id: 8, name: 'github'},
-    {id: 9, name: 'gitlab'},
-    {id: 10, name: 'instagram'},
-  ];
+  
   useEffect(() => {
     GetVendorMaster()
+    // 
   }, [])
+  const onvendorselected=(item)=>{
+    setselectedvendorItems(item)
+  }
+  const oncatselected = (item)=>{
+    setselectedcatItems(item)
+    GetSubCategory(item)
+  }
+  const onsubselected=(item)=>{
+    setselectedsubcatItems(item)
+  }
   const GetVendorMaster = async () => {
     let data = {
       Type: 4,
@@ -70,13 +73,33 @@ export default function Additem(props){
           return { id: item.Cat_Pkey,name: item.Cat_Name }
         })
         setcategory(collectcat)
-     console.log("response of vendor is",vendor)
-     console.log("response of vendor is",res[0])
-     console.log("response of vendor is",res[1])
+     console.log("response of vendor is",collectcat)
+    //  console.log("response of vendor is",res[0])
+    //  console.log("response of vendor is",res[1])
        
       })
       .catch(error => {
         console.log("errorr of vendor is",error)
+      });
+  };
+  const GetSubCategory = async (item) => {
+    let data = {
+      Type: 5,
+      SubCat_Cat_Pkey :item.Cat_Pkey
+    };
+
+     console.log("data and token",data,token)
+    await getsubcategorymaster(data,token)
+      .then(res => {
+        const fetchsubcat = res[0]
+        const collectsubcat = fetchsubcat?.map((item) => {
+          return { id: item.SubCat_Cat_Pkey,name: item.SubCat_Name }
+        })
+        setsubcategory(collectsubcat)
+      console.log("responsee of subcategory",res[0]) 
+      })
+      .catch(error => {
+        console.log("errorr of subcategory is",error)
       });
   };
     return (
@@ -93,9 +116,9 @@ export default function Additem(props){
     <ScrollView keyboardShouldPersistTaps="handled" style={{paddingHorizontal:20}}>
       <View style={{marginTop:20}}>
       <SearchableDropdown
-             selectedItems={selectedItems}
+             selectedItems={selectedvendorItems}
           onTextChange={(text) => console.log(text)}
-           onItemSelect={(item) =>setSelectedItems((item))}
+           onItemSelect={(item) =>onvendorselected((item))}
           containerStyle={{padding: 5}}
           textInputStyle={{
             // Inserted text style
@@ -128,9 +151,9 @@ export default function Additem(props){
       </View>
       <View style={{marginTop:20}}>
       <SearchableDropdown
-            selectedItems={selectedItems}
+            selectedItems={selectedcatItems}
           onTextChange={(text) => console.log(text)}
-          onItemSelect={(item) =>setSelectedItems((item))}
+          onItemSelect={(item) =>oncatselected((item))}
           containerStyle={{padding: 5}}
           textInputStyle={{
             // Inserted text style
@@ -164,9 +187,9 @@ export default function Additem(props){
       </View>
       <View style={{marginTop:20}}>
       <SearchableDropdown
-            selectedItems={selectedItems}
+            selectedItems={selectedsubcatItems}
           onTextChange={(text) => console.log(text)}
-           onItemSelect={(item) =>setSelectedItems((item))}
+           onItemSelect={(item) =>onsubselected((item))}
           containerStyle={{padding: 5}}
           textInputStyle={{
             // Inserted text style
@@ -192,7 +215,7 @@ export default function Additem(props){
 
             // maxHeight: '60%',
           }}
-          items={items}
+          items={subCategory}
           // defaultIndex={2}
           placeholder="Select Subcategory"
           resPtValue={false}
@@ -226,12 +249,36 @@ export default function Additem(props){
   <View> 
     <View style={{marginTop: 20,}}>
     <InputText
-     
      label="RFID tag"
   placeholder="Enter RFID tag"
 />
    
      
+</View>
+<View style={{marginTop: 20,width:"100%",flexDirection:'row'}}>
+<View style={{width:'90%'}}>
+<InputText
+     label="RFID tag"
+  placeholder="Enter RFID tag"
+/>
+</View>
+<View style={{width:'10%',justifyContent:'center',alignItems:'center',marginLeft:5}}>    
+<TouchableOpacity
+              onPress={() => props.navigation.navigate("BarcodeScanner")}
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <MaterialIcons
+                name="qr-code-scanner"
+                size={30}
+                color="#1FAFDF"
+              
+              />
+              </TouchableOpacity>
+              </View>
 </View>
  <View style={{marginTop: 20,width:"100%",flexDirection:'row'}}>
 <View style={{width:'90%'}}>

@@ -21,14 +21,14 @@ export default function ItemDetail(props){
         <View
           style={{
             backgroundColor: '#fff',
-            height: 60,
+            height: 55,
             justifyContent: 'center',
             //   alignItems: 'center',
             flexDirection: 'row',
           }}>
           <TouchableOpacity
             onPress={() =>  props.navigation.goBack()}
-            style={{position: 'absolute', left: 20, top: 20}}>
+            style={{position: 'absolute', left: 20, top: 12}}>
             <Ionicons name="arrow-back" size={30} color="#0F0B56" />
           </TouchableOpacity>
           </View>

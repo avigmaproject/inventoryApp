@@ -15,5 +15,9 @@ export const API = {
   DELETE_PROFILE: '/api/cssell/AddUserMasterData',
   UPLOAD_IMAGE: '/api/cssell/UploadImages',
   GET_PRODUCTS: '/api/cssell/GetProduct',
-  GET_VENDOR_MASTER:"/api/cssell/GetVendorMaster"
+  GET_VENDOR_MASTER:"/api/cssell/GetVendorMaster",
+  GET_SUBCATEGORY_MASTER:"/api/cssell/GetSubCategoryMaster"
+
+
+  
 };

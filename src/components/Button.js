@@ -16,7 +16,7 @@ const Button = ({text, ...props}) => {
       style={{
         width: '100%',
         alignSelf: 'center',
-        height: 65,
+        height: 55,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: props.backgroundColor,

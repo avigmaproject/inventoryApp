@@ -10,13 +10,13 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 const Header = ({header, onPressCancel, onPressSave, ...props}) => {
   return (
     <View
       style={{
         backgroundColor: '#fff',
-        height: '10%',
+        height: 55,
         justifyContent: 'center',
         paddingHorizontal: 15,
         paddingBottom:10
@@ -24,10 +24,18 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
       <View
         style={{
           flexDirection: 'row',
-          marginTop: 20,
+           marginTop: 10,
           justifyContent: 'space-between',
           //   alignItems: 'center',
         }}>
+         
+            {props.back ? (
+              <TouchableOpacity
+                onPress={() =>  props.navigation.goBack()}
+                style={{position: 'absolute', left: 20, top: 12}}>
+                <Ionicons name="arrow-back" size={30} color="#0F0B56" />
+              </TouchableOpacity>
+                ) : props.cancel ? (
         <TouchableOpacity
           onPress={onPressCancel}
           style={{
@@ -41,17 +49,18 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
           <Text
             style={{
               color: '#ACACAC',
-              fontSize: 14,
+              fontSize: 12,
               lineHeight: 21,
               fontWeight: '500',
             }}>
             Cancel
           </Text>
         </TouchableOpacity>
+         ) : null}
         <Text
           style={{
             color: '#0F0B56',
-            fontSize: 24,
+            fontSize: 20,
             lineHeight: 36,
             fontWeight: '600',
           }}>
@@ -70,7 +79,7 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
           <Text
             style={{
               color: 'white',
-              fontSize: 14,
+              fontSize: 12,
               lineHeight: 21,
               fontWeight: '500',
             }}>

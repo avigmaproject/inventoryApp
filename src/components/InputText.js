@@ -28,7 +28,7 @@ const InputText = props => {
       style={{
         width: '100%',
         alignSelf: 'center',
-      
+        // height:55,
         fontSize: 14,
         color: '#000000',
         borderRadius:45

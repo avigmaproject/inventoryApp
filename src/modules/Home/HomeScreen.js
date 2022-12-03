@@ -23,6 +23,7 @@ import {
 } from "../../services/api.function"
 // import { setBinId, setImage } from "../../store/action/auth/action"
 import { connect } from "react-redux"
+import { marginBottom } from "styled-system"
 
 class HomeScreen extends Component {
   constructor() {
@@ -118,9 +119,9 @@ class HomeScreen extends Component {
         <View
           style={{
             backgroundColor: "#fff",
-            height: 70,
+            height: 65,
             justifyContent:'center',
-            paddingBottom:20
+           
           }}
         >
           <View
@@ -128,7 +129,7 @@ class HomeScreen extends Component {
               justifyContent: "center",
               // alignItems: 'center',
               flexDirection: "row",
-              marginTop: 20
+             
             }}
           >
             <TouchableOpacity
@@ -140,12 +141,13 @@ class HomeScreen extends Component {
             </TouchableOpacity>
             <View
               style={{
-                position: "absolute",
-                right: 25
+                 position: "absolute",
+                right: 25,
+               marginTop:-5
                 //   borderColor:"#FFFFFF"
               }}
             >
-              <TouchableOpacity style={{paddingBottom:10}}
+              <TouchableOpacity style={{ }}
                 onPress={() => this.props.navigation.navigate("MyProfile")}
               >
                 <Image
@@ -165,7 +167,7 @@ class HomeScreen extends Component {
                 />
               </TouchableOpacity>
             </View>
-            <View style={{ flexDirection: "row", paddingRight: 50 }}>
+            <View style={{ flexDirection: "row", }}>
               <Text style={styles.heading}>Hi </Text>
               <Text style={styles.heading}>{this.state.name}</Text>
             </View>

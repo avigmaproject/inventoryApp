@@ -203,4 +203,22 @@ export const getvendormaster = async (data, access_token) => {
       console.log("eroorrr of api error",error)
       throw error;
     });
+
 };
+export const getsubcategorymaster = async (data, access_token) => {
+  return axios(`${BASE_URL}${API.GET_SUBCATEGORY_MASTER}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + access_token,
+    },
+    data: data,
+  })
+    .then(response => response.data)
+    .catch(error => {
+      console.log("eroorrr of api error",error)
+      throw error;
+    });
+
+};
+
