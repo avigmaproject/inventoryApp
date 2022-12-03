@@ -36,37 +36,11 @@ export default class SplashScreen extends Component {
       linkdata: url,
     });
   };
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
-  }
-
-  _handleAppStateChange = async nextAppState => {
-    if (
-      this.state.appState.match(/inactive|background/) &&
-      nextAppState === 'active'
-    ) {
-      this._getInitialUrl();
-    }
-  };
-  handleDynamicLink = link => {
-    if (link.url.includes('CreateUpdateBinMaster')) {
-      alert('hii');
-      this.props.navigation.navigate('ShowBinData', {link: link.url});
-    } else {
-      this.props.navigation.navigate('ResetPassword', {link: link.url});
-    }
-  };
-
-  substring = () => {
-    console.log(this.state.linkdata, 'substring');
-  };
+  
   componentDidMount = async () => {
-    setTimeout(() => {
-      this.props.navigation.navigate('Login');
-    }, 5000);
+   
     this._getInitialUrl();
     this.substring();
-    AppState.addEventListener('change', this._handleAppStateChange);
     await dynamicLinks()
       .getInitialLink()
       .then(link => {

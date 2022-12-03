@@ -12,7 +12,6 @@ import {
 import qs from "qs"
 import Spinner from "react-native-loading-spinner-overlay"
 import { useToast } from "native-base"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import InputText from "../../components/InputText"
 import Button from "../../components/Button"
 import Icon from "react-native-vector-icons/Entypo"

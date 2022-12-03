@@ -23,7 +23,7 @@ import { FAB } from "react-native-paper"
 import InputView from "../../../../components/InputView"
 import Button from "../../../../components/Button"
 import BackButton from "../../../../components/BackButton"
-import Icon from 'react-native-vector-icons/Entypo';
+import Icon from "react-native-vector-icons/Entypo"
 import { Select, useToast } from "native-base"
 import {
   userprofile,
@@ -43,17 +43,10 @@ class MyProfile extends Component {
   constructor() {
     super()
     this.state = {
-      form:{},
+      form: {},
       base64: "",
-      filename: "image",
-      imagepath: "",
       loading: false,
-      name: "",
-      email: "",
-      phone: null,
-      gender: null,
-      userid: null,
-      hidePassword: true,
+      hidePassword: true
     }
   }
 
@@ -64,9 +57,9 @@ class MyProfile extends Component {
     })
   }
 
-  componentWillUnmount() {
-    this._unsubscribe
-  }
+  // componentWillUnmount() {
+  //   this._unsubscribe
+  // }
   Logout = () => {
     Alert.alert(
       "Logout",
@@ -153,7 +146,7 @@ class MyProfile extends Component {
     })
     try {
       const res = await registerStoreImage(data, this.props.token)
-      console.log(data, "data")
+      console.log(res[1], "data")
       this.setState({
         form: {
           ...this.state.form,
@@ -161,7 +154,6 @@ class MyProfile extends Component {
         },
         loading: false
       })
-      this.setState({ loading: false })
     } catch (error) {
       if (error.request) {
         console.log(error.request)
@@ -192,12 +184,12 @@ class MyProfile extends Component {
     })
     try {
       const res = await userprofile(data, this.props.token)
-      console.log(res, "res")
+      console.log("res ==> userprofile",res[0][0])
       this.setState({
         form: {
           ...this.state.form,
           name: res[0][0].User_Name,
-          password:res[0][0].User_Password,
+          password: res[0][0].User_Password,
           email: res[0][0].User_Email,
           phone: res[0][0].User_Phone,
           userid: res[0][0].User_PkeyID,
@@ -206,7 +198,7 @@ class MyProfile extends Component {
         },
         loading: false
       })
-      console.log("form ",this.state.form)
+      console.log(" res ==>form ", this.state.form)
     } catch (error) {
       console.log("hihi", { e: error.response.data.error })
       let message = ""
@@ -315,14 +307,15 @@ class MyProfile extends Component {
   }
 
   render() {
-    const { name, email, phone, gender, imagepath,password} = this.state.form
+    const { name, email, phone, gender, imagepath, password } = this.state.form
+    console.log("imagepath",imagepath)
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F2F4" }}>
         <Spinner visible={this.state.loading} />
         <View
           style={{
             backgroundColor: "#fff",
-            height: 200,
+            height: 60,
             justifyContent: "center",
             flexDirection: "row"
           }}
@@ -352,11 +345,13 @@ class MyProfile extends Component {
               Logout
             </Text>
           </TouchableOpacity>
+        </View>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
           <TouchableOpacity
             style={{
-              position: "absolute",
-              zIndex: 100,
-              top: 80
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center"
             }}
             onPress={() => this.onOpenImage()}
           >
@@ -366,8 +361,7 @@ class MyProfile extends Component {
                 width: 140,
                 borderRadius: 120,
                 borderColor: "#21618C",
-                borderWidth: 1,
-                top: 10
+                borderWidth: 1
               }}
               source={{
                 uri: imagepath
@@ -380,36 +374,37 @@ class MyProfile extends Component {
               icon="camera"
               style={{
                 position: "absolute",
-                right: 0,
+                right: 100,
                 bottom: 10,
                 backgroundColor: "#ACACAC"
               }}
             />
           </TouchableOpacity>
-        </View>
-        <ActionSheet
-          ref={(o) => (this.ActionSheet = o)}
-          title={
-            <Text style={{ color: "#000", fontSize: 18 }}>Profile Photo</Text>
-          }
-          options={options}
-          cancelButtonIndex={0}
-          destructiveButtonIndex={4}
-          useNativeDriver={true}
-          onPress={(index) => {
-            if (index === 0) {
-              // cancel action
-            } else if (index === 1) {
-              this.ImageGallery()
-            } else if (index === 2) {
-              this.ImageCamera()
+          <ActionSheet
+            ref={(o) => (this.ActionSheet = o)}
+            title={
+              <Text style={{ color: "#000", fontSize: 18 }}>Profile Photo</Text>
             }
-          }}
-        />
+            options={options}
+            cancelButtonIndex={0}
+            destructiveButtonIndex={4}
+            useNativeDriver={true}
+            onPress={(index) => {
+              if (index === 0) {
+                // cancel action
+              } else if (index === 1) {
+                this.ImageGallery()
+              } else if (index === 2) {
+                this.ImageCamera()
+              }
+            }}
+          />
+        </View>
+
         <ScrollView style={{ paddingHorizontal: 20 }}>
           <View
             style={{
-              marginTop: 50
+              marginTop: 10
             }}
           >
             <InputText
@@ -453,9 +448,11 @@ class MyProfile extends Component {
               mode="dropdown"
               width="100%"
               placeholder="Select Gender"
-              value={gender}
+              selectedValue={gender}
               onValueChange={(itemValue) =>
-                this.onHandleChange("gender",(itemValue))
+                { 
+            console.log("itemValue",itemValue)
+            this.onHandleChange("gender", itemValue)}
               }
             >
               <Select.Item label="Female" value={1} />
@@ -475,7 +472,7 @@ class MyProfile extends Component {
               secureTextEntry={this.state.hidePassword}
             />
             <TouchableOpacity
-              onPress={this.managePasswordVisibility()}
+              onPress={() => this.managePasswordVisibility()}
               style={{
                 position: "absolute",
                 right: 30,

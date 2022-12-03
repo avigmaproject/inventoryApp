@@ -1,14 +1,12 @@
 import { View, Text } from "react-native"
 import React from "react"
 import { CameraScreen } from "react-native-camera-kit"
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function BarcodeScanner(props) {
   const onReadCode = (event) => {
     if (event.nativeEvent.codeStringValue) {
-      console.log(event.nativeEvent.codeStringValue)
-      props.navigation.navigate("ScanQr", {
-        data: event.nativeEvent.codeStringValue
-      })
+      AsyncStorage.setItem(`${props.route.params.title}`, event.nativeEvent.codeStringValue);
+      console.log(props.route.params.title,event.nativeEvent.codeStringValue)
     }
   }
   return (
