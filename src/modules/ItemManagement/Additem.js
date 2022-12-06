@@ -3,6 +3,7 @@ import SearchableDropdown from 'react-native-searchable-dropdown';
 import {
   getvendormaster,
   getsubcategorymaster,
+  additemdata
 } from '../../services/api.function';
 import {
   SafeAreaView,
@@ -15,6 +16,7 @@ import {
   View,
   Image,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Barcodescanner from '../Home/BarcodeScanner';
@@ -34,7 +36,13 @@ export default function Additem(props) {
   const [Category, setcategory] = useState([]);
   const [subCategory, setsubcategory] = useState([]);
   const [id, setid] = useState(null);
-  // const [items, setItems] = useState([
+  const [rfidtxt, setrfidtxt] = useState(null);
+  const [rfidtxt1, setrfidtxt1] = useState(null);
+ const [lpntxt, setlpntxt] = useState(null);
+ const [modeltxt, setmodeltxt] = useState(null);
+ const [model1txt, setmodel1txt] = useState(null);
+ const [qtytxt, setqtytxt] = useState(null);
+   const [serialtxt, setserialtxt] = useState(null);
   //   {label: 'Pallet', value: 'Pallet'},
   //   {label: 'Individual item', value: 'individual item'},
   // ]);
@@ -48,27 +56,75 @@ export default function Additem(props) {
   useEffect(() => {
       getAsyncData()
     }, [])
+    const onAdditem = async () => {
+      let data = {
+        Type: 1,
+        // Pro_Vendor_Name: vendor,
+        // Pro_Category: Category,
+        // Pro_SubCategory: subCategory,
+        // Pro_TypeOfItem: address,
+        Pro_RFIDTag: rfidtxt,
+        Pro_LPN: lpntxt,
+        Pro_Model: modeltxt,
+        Pro_Serial: serialtxt,
+        Pro_Qty:qtytxt
+      }
+      console.log("Add itemss....",data, token)
+      await additemdata(data, token)
+        .then((res) => {
+        
+          console.log("res of additem........", res[0])
+        
+        })
+        .catch((error) => {
+          console.log("errror is.....", error)
+       
+          
+        })
+    }
+    
   const getAsyncData = async () => {
     const rfid = await AsyncStorage.getItem('rfid');
+    const rfid1 = await AsyncStorage.getItem('rfid1');
     const lpn = await AsyncStorage.getItem('lpn');
     const model = await AsyncStorage.getItem('model');
     const serial = await AsyncStorage.getItem('serial');
     const qty = await AsyncStorage.getItem('qty');
     const model1 = await AsyncStorage.getItem('model1');
+    const vendor = await AsyncStorage.getItem('vendor');
+    // const cat = await AsyncStorage.getItem('category');
+    // const subcat = await AsyncStorage.getItem('subcategory');
+   
+    const parsevendor= vendor != null ? JSON.parse(vendor) : null
+    setselectedvendorItems(parsevendor)
+    
+    setrfidtxt(rfid)
+    setrfidtxt1(rfid1)
+    setlpntxt(lpn)
+    setqtytxt(qty)
+    setmodel1txt(model1)
+    setserialtxt(serial)
+    setmodeltxt(model)
   };
+ 
   const onvendorselected = item => {
     setselectedvendorItems(item);
+    console.log("vendor item.....",item)
+    const vanderitem = JSON.stringify(item)
+     AsyncStorage.setItem(`vendor`, vanderitem);
   };
   const oncatselected = item => {
     setselectedcatItems(item);
     GetSubCategory(item);
+    AsyncStorage.setItem(`category`, item);
   };
   const onsubselected = item => {
     setselectedsubcatItems(item);
+    AsyncStorage.setItem(`subcategory`, item);
   };
   const GetVendorMaster = async () => {
     let data = {
-      Type: 4,
+      Type:4,
     };
     console.log('data and token', data, token);
     await getvendormaster(data, token)
@@ -115,8 +171,10 @@ export default function Additem(props) {
     <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
       <Header
         header="Add Item"
+        back={true}
+        save={true}
         onPressCancel={() => props.navigation.goBack()}
-        // onPressSave={() => this.editProduct()}
+        onPressSave={() => onAdditem()}
       />
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -126,6 +184,7 @@ export default function Additem(props) {
             selectedItems={selectedvendorItems}
             onTextChange={text => console.log(text)}
             onItemSelect={item => onvendorselected(item)}
+
             containerStyle={{padding: 5}}
             textInputStyle={{
               // Inserted text style
@@ -245,12 +304,13 @@ export default function Additem(props) {
         </View>
         {id == '1' ? (
           <View>
-            <View style={{marginTop: 20}}>
-              <InputText label="RFID tag" placeholder="Enter RFID tag" />
-            </View>
+           
             <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
               <View style={{width: '90%'}}>
-                <InputText label="RFID tag" placeholder="Enter RFID tag" />
+                <InputText label="RFID tag" placeholder="Enter RFID tag"
+                value={rfidtxt}
+
+               />
               </View>
               <View
                 style={{
@@ -281,6 +341,7 @@ export default function Additem(props) {
                 <InputText
                   label="LPN#(Pallet only)"
                   placeholder="Enter LPN#(Pallet only)"
+                  value={lpntxt}
                 />
               </View>
               <View
@@ -309,7 +370,8 @@ export default function Additem(props) {
             </View>
             <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
               <View style={{width: '90%'}}>
-                <InputText label="Model#" placeholder="Enter Model#" />
+                <InputText label="Model#" placeholder="Enter Model#"
+                value={modeltxt} />
               </View>
               <View
                 style={{
@@ -339,7 +401,8 @@ export default function Additem(props) {
             </View>
             <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
               <View style={{width: '90%'}}>
-                <InputText label="QTY" placeholder="Enter QTY" />
+                <InputText label="QTY" placeholder="Enter QTY"
+                value={qtytxt} />
               </View>
               <View
                 style={{
@@ -368,13 +431,43 @@ export default function Additem(props) {
           </View>
         ) : id == '2' ? (
           <View>
-            <View style={{marginTop: 20}}>
-              <InputText label="RFID tag" placeholder="Enter RFID tag" />
+          
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
+              <View style={{width: '90%'}}>
+                <InputText label="RFID tag" placeholder="Enter RFID tag"
+                value={rfidtxt1}
+
+               />
+              </View>
+              <View
+                style={{
+                  width: '10%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 5,
+                }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    props.navigation.navigate('BarcodeScanner', {title: 'rfid1'})
+                  }
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <MaterialIcons
+                    name="qr-code-scanner"
+                    size={30}
+                    color="#1FAFDF"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
 
             <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
               <View style={{width: '90%'}}>
-                <InputText label="Model#" placeholder="Enter Model#" />
+                <InputText label="Model#" placeholder="Enter Model#"
+                value={model1txt} />
               </View>
               <View
                 style={{
@@ -404,7 +497,7 @@ export default function Additem(props) {
             </View>
             <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
               <View style={{width: '90%'}}>
-                <InputText label="Serial #" placeholder="Serial #" />
+                <InputText label="Serial #" placeholder="Serial #" value={serialtxt} />
               </View>
               <View
                 style={{

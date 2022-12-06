@@ -16,7 +16,9 @@ export const API = {
   UPLOAD_IMAGE: '/api/cssell/UploadImages',
   GET_PRODUCTS: '/api/cssell/GetProduct',
   GET_VENDOR_MASTER:"/api/cssell/GetVendorMaster",
-  GET_SUBCATEGORY_MASTER:"/api/cssell/GetSubCategoryMaster"
+  GET_SUBCATEGORY_MASTER:"/api/cssell/GetSubCategoryMaster",
+  ADD_UPDATE_POST:"/api/cssell/CreateUpdateProduct",
+  GET_PRODUCT_LIST:"/api/cssell/GetProduct"
 
 
   

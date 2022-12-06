@@ -12,39 +12,24 @@ import {
   Image,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import HeaderBack from '../../components/HeaderBack';
+import Header from './Header';
 import InputText from '../../components/InputText';
 export default function ItemDetail(props){
  
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
-        <View
-          style={{
-            backgroundColor: '#fff',
-            height: 55,
-            justifyContent: 'center',
-            //   alignItems: 'center',
-            flexDirection: 'row',
-          }}>
-          <TouchableOpacity
-            onPress={() =>  props.navigation.goBack()}
-            style={{position: 'absolute', left: 20, top: 12}}>
-            <Ionicons name="arrow-back" size={30} color="#0F0B56" />
-          </TouchableOpacity>
-          </View>
+         <Header
+        header="Items Details"
+        back={true}
+        save={true}
+     
+        onPressCancel={() => props.navigation.goBack()}
+        // onPressSave={() => this.editProduct()}
+      />
+       
    <ScrollView style={{paddingHorizontal:30,}}>
  
-        <View style={{justifyContent:'center',alignItems:'center',marginTop:30}}>
-          <Text style={{color: 'black',
-              fontSize: 28,
-              fontWeight: '600',}}>Items Details</Text>
-        </View>
-<View style={{alignSelf:'flex-end',marginRight:30,marginTop:30}}>
-  <TouchableOpacity style={{height:30,width:80,justifyContent:'center',alignItems:'center',backgroundColor:'#21618C'}}>
-      <Text style={{color:'white'}} >save</Text>
-  </TouchableOpacity>
-
-</View>  
+       
 <View style={{paddingBottom:20}}> 
 
           <View style={{marginTop: 20}}>

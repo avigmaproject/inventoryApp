@@ -1,7 +1,6 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import SplashScreen from '../../modules/SplashScreen/SplashScreen';
 import Login from '../../modules/Auth/Login';
 import ForgotPassword from '../../modules/Auth/ForgotPassword';
 import ResetPassword from '../../modules/Auth/ResetPassword';
@@ -14,7 +13,6 @@ const Stack = createStackNavigator();
 export default function AuthNavigation () {
   return (
     <AuthStack.Navigator screenOptions={{headerShown: false}}>
-      <AuthStack.Screen name="SplashScreen" component={SplashScreen} />
       <AuthStack.Screen name="Login" component={Login} />
       <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} />
       <AuthStack.Screen name="ResetPassword" component={ResetPassword} />

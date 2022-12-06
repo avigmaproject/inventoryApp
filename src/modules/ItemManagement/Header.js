@@ -10,6 +10,7 @@ import {
   Image,
   TextInput,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 const Header = ({header, onPressCancel, onPressSave, ...props}) => {
   return (
@@ -31,8 +32,8 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
          
             {props.back ? (
               <TouchableOpacity
-                onPress={() =>  props.navigation.goBack()}
-                style={{position: 'absolute', left: 20, top: 12}}>
+                onPress={onPressCancel}
+                style={{}}>
                 <Ionicons name="arrow-back" size={30} color="#0F0B56" />
               </TouchableOpacity>
                 ) : props.cancel ? (
@@ -66,6 +67,7 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
           }}>
           {header}
         </Text>
+        {props.save ? (
         <TouchableOpacity
           onPress={onPressSave}
           style={{
@@ -86,7 +88,13 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
             Save
           </Text>
         </TouchableOpacity>
+          ) : props.filtricon ? (
+            <TouchableOpacity style={{marginTop:5}}> 
+            <Icon name="filter" size={30} color="#21618C" style={{}} />
+            </TouchableOpacity>
+             ) : null}
       </View>
+       
     </View>
   );
 };

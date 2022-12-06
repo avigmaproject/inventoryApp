@@ -1,4 +1,4 @@
-import React  from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -10,12 +10,46 @@ import {
   View,
   Image,
 } from 'react-native';
+import Header from './Header';
 import Icon from 'react-native-vector-icons/Feather';
 import HeaderBack from '../../components/HeaderBack';
+import {
+  getproductlist
+} from '../../services/api.function';
+import {useSelector} from 'react-redux';
 export default function Itemlist(props){
- 
+  useEffect(() => {
+    GetProductList();
+    
+  }, []);
+  const token = useSelector(state => state.authReducer.userToken);
+  console.log('token is', token);
+  const GetProductList = async () => {
+    let data = {
+      Type: 4,
+    };
+    console.log('data and token', data, token);
+    await getproductlist(data, token)
+      .then(res => {
+        console.log("res of Product List........", res[0])
+        
+        })
+        .catch((error) => {
+          console.log("errror is.....", error)
+       
+          
+        })
+    }
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
+          <Header
+        header="Items"
+        back={true}
+        filtricon={true}
+     
+        onPressCancel={() => props.navigation.goBack()}
+        // onPressSave={() => this.editProduct()}
+      />
  {/* <View
           style={{
             backgroundColor: '#fff',
@@ -30,18 +64,8 @@ export default function Itemlist(props){
             <AntDesign name="arrowleft" size={30} color="#0F0B56" />
           </TouchableOpacity>
           </View> */}
-        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginTop:30}}>
-          <Text style={{color: 'black',
-              fontSize: 28,
-              fontWeight: '600',}}>Items</Text>
-              <TouchableOpacity style={{position: 'absolute', right: 20,}}> 
-  <Icon name="filter" size={30} color="#21618C" style={{marginLeft:20}} />
-  </TouchableOpacity>
-        </View>
-<View style={{alignSelf:'flex-end',marginRight:30,marginTop:30}}>
-  
+      
 
-</View>
 <View style={{paddingHorizontal:30}}>
 <View  style={{flexDirection:'row',height:50,backgroundColor:'white',marginTop:30,alignItems:'center'}}>
 <TouchableOpacity style={{flexDirection:'row',}} onPress={() =>  props.navigation.navigate('Additem')}>

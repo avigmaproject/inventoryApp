@@ -266,7 +266,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.0.2')
     //   implementation project(':react-native-zebra-scanner')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-
+    implementation project(':react-native-splash-screen')
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }
