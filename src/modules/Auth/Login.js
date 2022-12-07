@@ -126,6 +126,7 @@ const Login = ({ navigation }) => {
         backgroundColor: "#F3F2F4"
       }}
     >
+        <StatusBar barStyle="dark-content" />
       <Spinner visible={loading} />
       <ScrollView
         keyboardShouldPersistTaps="handled"

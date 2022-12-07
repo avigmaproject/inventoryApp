@@ -168,6 +168,7 @@ export default class ResetPassword extends Component {
     const {cpassword, password} = this.state;
     return (
       <SafeAreaView>
+          <StatusBar barStyle="dark-content" />
         <Spinner visible={this.state.isLoading} />
         <View
           style={{

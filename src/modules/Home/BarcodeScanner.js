@@ -4,6 +4,7 @@ import { CameraScreen } from "react-native-camera-kit"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from "react";
 export default function BarcodeScanner(props) {
+   
  
   const onReadCode = (event) => {
     if (event.nativeEvent.codeStringValue) {

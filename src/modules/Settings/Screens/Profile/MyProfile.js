@@ -3,6 +3,7 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   View,
   TouchableOpacity,
@@ -46,7 +47,8 @@ class MyProfile extends Component {
       form: {},
       base64: "",
       loading: false,
-      hidePassword: true
+      hidePassword: true,
+      imagepath: '',
     }
   }
 
@@ -75,95 +77,88 @@ class MyProfile extends Component {
   logoutUser = async () => {
     this.props.signOut()
   }
-  onOpenImage = () => this.ActionSheet.show()
+  onOpenImage = () => this.ActionSheet.show();
 
   ImageGallery = async () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true,
-      multiple: false,
-      compressImageQuality: 1
-    }).then((image) => {
-      console.log(image)
-      if (image.data) {
-        this.setState(
-          {
-            base64: image.data,
-            filename:
-              Platform.OS === "ios" ? image.filename : "images" + new Date(),
-
-            form: {
-              ...this.state.form,
-              imagepath: image.path
-            }
-          },
-          () => {
-            this.uploadImage(image.data)
-          }
-        )
-      }
-    })
-  }
-
+    setTimeout(() => {
+      ImagePicker.openPicker({
+        width: 300,
+        height: 400,
+        cropping: true,
+        includeBase64: true,
+        multiple: false,
+        compressImageQuality: 0.5,
+      }).then(image => {
+        console.log(image);
+        if (image.data) {
+          this.setState(
+            {
+              base64: image.data,
+              filename:
+                Platform.OS === 'ios' ? image.filename : 'image' + new Date(),
+              imagepath: image.path,
+            },
+            () => {
+              this.uploadImage();
+            },
+          );
+        }
+      });
+    }, 700);
+  };
   ImageCamera = async () => {
-    ImagePicker.openCamera({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true,
-      multiple: false,
-      compressImageQuality: 1
-    }).then((image) => {
-      console.log(image)
-      if (image.data) {
-        this.setState(
-          {
-            base64: image.data,
-            filename:
-              Platform.OS === "ios" ? image.filename : "images" + new Date(),
+    setTimeout(() => {
+      ImagePicker.openCamera({
+        width: 300,
+        height: 400,
+        cropping: true,
+        includeBase64: true,
+        multiple: false,
+        compressImageQuality: 0.5,
+      }).then(image => {
+        console.log(image);
+        if (image.data) {
+          this.setState(
+            {
+              base64: image.data,
+              filename:
+                Platform.OS === 'ios' ? image.filename : 'image' + new Date(),
+              imagepath: image.path,
+            },
+            () => {
+              this.uploadImage();
+            },
+          );
+        }
+      });
+    }, 700);
+  };
 
-            form: {
-              ...this.state.form,
-              imagepath: image.path
-            }
-          },
-          () => {
-            this.uploadImage(image.data)
-          }
-        )
-      }
-    })
-  }
 
-  uploadImage = async (base) => {
-    this.setState({ loading: true })
-    const { base64 } = this.state
+  uploadImage = async () => {
+    this.setState({loading: true});
+    const {base64} = this.state;
     let data = JSON.stringify({
       Type: 6,
-      User_Image_Base: "data:image/png;base64, " + base64 ? base64 : base
-    })
+      User_Image_Base: 'data:image/png;base64, ' + base64,
+    });
     try {
-      const res = await registerStoreImage(data, this.props.token)
-      console.log(res[1], "data")
-      this.setState({
-        form: {
-          ...this.state.form,
-          imagepath: res[1]
-        },
-        loading: false
-      })
+      const token = await AsyncStorage.getItem('token');
+      const res = await registerStoreImage(data, token);
+      console.log(data, 'dataaaaaa');
+      console.log(res, 'resssss');
+      AsyncStorage.setItem('imagepath', res[1]);
+      this.setState({loading: false});
     } catch (error) {
       if (error.request) {
-        console.log(error.request)
+        console.log(error.request);
       } else if (error.responce) {
-        console.log(error.responce)
+        console.log(error.responce);
       } else {
-        console.log(error)
+        console.log(error);
       }
     }
-  }
+  };
   onHandleChange = (key, value) => {
     this.setState({
       ...this.state,
@@ -194,9 +189,10 @@ class MyProfile extends Component {
           phone: res[0][0].User_Phone,
           userid: res[0][0].User_PkeyID,
           gender: res[0][0].User_Gender,
-          imagepath: res[0][0].User_Image_Path
+          // imagepath: res[0][0].User_Image_Path
         },
-        loading: false
+        loading: false,
+        imagepath: res[0][0].User_Image_Path,
       })
       console.log(" res ==>form ", this.state.form)
     } catch (error) {
@@ -250,7 +246,7 @@ class MyProfile extends Component {
         User_Name: this.state.form.name,
         User_Phone: this.state.form.phone,
         User_Gender: this.state.form.gender,
-        User_Image_Path: this.state.form.imagepath,
+         User_Image_Path: this.state.imagepath,
         User_Password: this.state.form.password,
         Type: 2,
         User_Type: 1,
@@ -307,10 +303,12 @@ class MyProfile extends Component {
   }
 
   render() {
-    const { name, email, phone, gender, imagepath, password } = this.state.form
+    const { name, email, phone, gender,  password } = this.state.form
+    const { imagepath} = this.state
     console.log("imagepath",imagepath)
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F2F4" }}>
+         <StatusBar barStyle="dark-content" />
         <Spinner visible={this.state.loading} />
         <View
           style={{
@@ -319,34 +317,36 @@ class MyProfile extends Component {
             justifyContent: "center",
             flexDirection: "row"
           }}
-        >
+        ><View>
+          
+        </View>
           <TouchableOpacity
             onPress={() => this.props.navigation.goBack()}
-            style={{ position: "absolute", left: 20, top: 20 }}
+            style={{ position: "absolute", left: 20, top: 13 }}
           >
             <Ionicons name="arrow-back" size={30} color="#0F0B56" />
           </TouchableOpacity>
           <Text
             style={{
               color: "#0F0B56",
-              fontSize: 24,
+              fontSize: 22,
               lineHeight: 36,
               fontWeight: "700",
-              top: 20
+              top: 13
             }}
           >
             My Profile
           </Text>
           <TouchableOpacity
             onPress={() => this.Logout()}
-            style={{ position: "absolute", right: 20, top: 20 }}
+            style={{ position: "absolute", right: 20, top: 14 }}
           >
             <Text style={{ color: "#21618C", fontSize: 18, fontWeight: "600" }}>
               Logout
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <View style={{ justifyContent: "center", alignItems: "center",marginTop:10 }}>
           <TouchableOpacity
             style={{
               width: "100%",
@@ -374,7 +374,7 @@ class MyProfile extends Component {
               icon="camera"
               style={{
                 position: "absolute",
-                right: 100,
+                right: 130,
                 bottom: 10,
                 backgroundColor: "#ACACAC"
               }}

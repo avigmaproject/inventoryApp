@@ -17,7 +17,7 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
     <View
       style={{
         backgroundColor: '#fff',
-        height: 55,
+        height: 60,
         justifyContent: 'center',
         paddingHorizontal: 15,
         paddingBottom:10
@@ -25,7 +25,7 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
       <View
         style={{
           flexDirection: 'row',
-           marginTop: 10,
+           marginTop: 13,
           justifyContent: 'space-between',
           //   alignItems: 'center',
         }}>

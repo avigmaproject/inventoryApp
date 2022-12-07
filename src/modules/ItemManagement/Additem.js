@@ -19,6 +19,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useFocusEffect } from "@react-navigation/native"
 import Barcodescanner from '../Home/BarcodeScanner';
 import {Select, Toast} from 'native-base';
 import InputText from '../../components/InputText';
@@ -51,17 +52,20 @@ export default function Additem(props) {
 
   useEffect(() => {
     GetVendorMaster();
-    //
+    getAsyncData()
   }, []);
-  useEffect(() => {
-      getAsyncData()
-    }, [])
+ 
+    useFocusEffect(
+      React.useCallback(() => {
+        getAsyncData()
+      }, [])
+    )
     const onAdditem = async () => {
       let data = {
         Type: 1,
-        // Pro_Vendor_Name: vendor,
-        // Pro_Category: Category,
-        // Pro_SubCategory: subCategory,
+       Pro_Vendor_Name: selectedvendorItems.name,
+        Pro_Category: selectedcatItems.name,
+         Pro_SubCategory: selectedsubcatItems.name,
         // Pro_TypeOfItem: address,
         Pro_RFIDTag: rfidtxt,
         Pro_LPN: lpntxt,
@@ -92,12 +96,21 @@ export default function Additem(props) {
     const qty = await AsyncStorage.getItem('qty');
     const model1 = await AsyncStorage.getItem('model1');
     const vendor = await AsyncStorage.getItem('vendor');
-    // const cat = await AsyncStorage.getItem('category');
-    // const subcat = await AsyncStorage.getItem('subcategory');
+     const cat = await AsyncStorage.getItem('category');
+     const subcat = await AsyncStorage.getItem('subcategory');
    
     const parsevendor= vendor != null ? JSON.parse(vendor) : null
     setselectedvendorItems(parsevendor)
-    
+    console.log("parce*****vendor is",parsevendor)
+
+    const parsecat= cat != null ? JSON.parse(cat) : null
+    selectedcatItems(parsecat)
+    console.log("parce*****cat  is",parsecat)
+
+    const parsesubcat= subcat != null ? JSON.parse(subcat) : null
+    selectedsubcatItems(parsesubcat)
+    console.log("parce*****subcat  is",parsesubcat)
+
     setrfidtxt(rfid)
     setrfidtxt1(rfid1)
     setlpntxt(lpn)
@@ -115,12 +128,16 @@ export default function Additem(props) {
   };
   const oncatselected = item => {
     setselectedcatItems(item);
+    console.log("category item.....",item)
     GetSubCategory(item);
-    AsyncStorage.setItem(`category`, item);
+    const catitem = JSON.stringify(item)
+    AsyncStorage.setItem(`category`, catitem);
   };
   const onsubselected = item => {
     setselectedsubcatItems(item);
-    AsyncStorage.setItem(`subcategory`, item);
+    console.log("subcategory item.....",item)
+    const subcatitem = JSON.stringify(item)
+    AsyncStorage.setItem(`subcategory`, subcatitem);
   };
   const GetVendorMaster = async () => {
     let data = {
@@ -139,7 +156,7 @@ export default function Additem(props) {
           return {id: item.Cat_Pkey, name: item.Cat_Name};
         });
         setcategory(collectcat);
-        console.log('response of collectcat is', collectcat);
+        // console.log('response of collectcat is', collectcat);
       })
       .catch(error => {
         console.log('errorr of vendor is', error);
@@ -160,7 +177,7 @@ export default function Additem(props) {
           return {id: item.SubCat_Cat_Pkey, name: item.SubCat_Name};
         });
         setsubcategory(collectsubcat);
-        console.log('responsee of subcategory', res[0]);
+        // console.log('responsee of subcategory', res[0]);
       })
       .catch(error => {
         console.log('errorr of subcategory is', error);
@@ -169,6 +186,7 @@ export default function Additem(props) {
   return (
     // <ScrollView  style={{height:'100%'}}>
     <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
+       <StatusBar barStyle="dark-content" />
       <Header
         header="Add Item"
         back={true}

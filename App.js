@@ -22,9 +22,9 @@ const AppWrapper = () => (
 )
 const App = () => {
   const userToken = useSelector((state) => state.authReducer.userToken)
-  useEffect(() => {
-    SplashScreen.hide();
-  }, [])
+  // useEffect(() => {
+  //   SplashScreen.hide();
+  // }, [])
   return (
     <NativeBaseProvider>
       <NavigationContainer>

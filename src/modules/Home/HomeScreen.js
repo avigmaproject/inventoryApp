@@ -85,7 +85,7 @@ class HomeScreen extends Component {
     });
     try {
       const res = await userprofile(data, this.props.token);
-    console.log("ressss of update",res)
+    // console.log("ressss of update",res)
           this.setState(
             {
               name: res[0][0].User_Name,
@@ -115,12 +115,14 @@ class HomeScreen extends Component {
   render() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F2F4" }}>
+         <StatusBar barStyle="dark-content" />
         <Spinner visible={this.state.loading} />
         <View
           style={{
             backgroundColor: "#fff",
-            height: 65,
+            height: 60,
             justifyContent:'center',
+            
            
           }}
         >

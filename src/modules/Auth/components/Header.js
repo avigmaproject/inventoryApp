@@ -17,14 +17,14 @@ const HeaderBack = ({text, image, onimageclick, ...props}) => {
     <View
       style={{
         backgroundColor: '#fff',
-        height: 75,
+        height: 60,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
       }}>
       <TouchableOpacity
         onPress={props.onPress}
-        style={{position: 'absolute', left: 20}}>
+        style={{position: 'absolute', left: 10}}>
          <Ionicons name="arrow-back" size={30} color="#0F0B56" />
       </TouchableOpacity>
       <Text

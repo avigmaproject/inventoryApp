@@ -18,6 +18,7 @@ export default function ItemDetail(props){
  
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
+         <StatusBar barStyle="dark-content" />
          <Header
         header="Items Details"
         back={true}

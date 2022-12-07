@@ -31,7 +31,7 @@ export default function Itemlist(props){
     console.log('data and token', data, token);
     await getproductlist(data, token)
       .then(res => {
-        console.log("res of Product List........", res[0])
+        // console.log("res of Product List........", res)
         
         })
         .catch((error) => {
@@ -42,6 +42,7 @@ export default function Itemlist(props){
     }
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
+         <StatusBar barStyle="dark-content" />
           <Header
         header="Items"
         back={true}

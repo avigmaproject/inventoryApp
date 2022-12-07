@@ -240,7 +240,7 @@ export const getproductlist = async (data, access_token) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + access_token,
+      // Authorization: 'Bearer ' + access_token,
     },
     data: data,
   })
