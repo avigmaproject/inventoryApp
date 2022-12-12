@@ -84,7 +84,8 @@ export const updateuserprofile = async (data, access_token) => {
 };
 
 export const registerStoreImage = async (data, access_token) => {
-  return axios(`${BASE_URL}${API.STORE_IMAGE_API}`, {
+  // return axios(`${BASE_URL}${API.UPLOAD_IMAGE}`, {
+    return axios(`${BASE_URL}${API.STORE_IMAGE_API}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -237,6 +238,22 @@ export const additemdata = async data => {
 };
 export const getproductlist = async (data, access_token) => {
   return axios(`${BASE_URL}${API.GET_PRODUCT_LIST}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      // Authorization: 'Bearer ' + access_token,
+    },
+    data: data,
+  })
+    .then(response => response.data)
+    .catch(error => {
+      console.log("eroorrr of api error",error)
+      throw error;
+    });
+
+};
+export const gethomemasterdata = async (data, access_token) => {
+  return axios(`${BASE_URL}${API.GET_HOME_MASTER_DATA}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

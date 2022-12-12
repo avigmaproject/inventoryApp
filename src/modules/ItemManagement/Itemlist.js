@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
   Image,
+  FlatList
 } from 'react-native';
 import Header from './Header';
 import Icon from 'react-native-vector-icons/Feather';
@@ -22,6 +23,7 @@ export default function Itemlist(props){
     GetProductList();
     
   }, []);
+  const [item, setitem] = useState([]);
   const token = useSelector(state => state.authReducer.userToken);
   console.log('token is', token);
   const GetProductList = async () => {
@@ -31,8 +33,8 @@ export default function Itemlist(props){
     console.log('data and token', data, token);
     await getproductlist(data, token)
       .then(res => {
-        // console.log("res of Product List........", res)
-        
+         console.log("res of Product List........", res)
+        setitem(res[0])
         })
         .catch((error) => {
           console.log("errror is.....", error)
@@ -40,6 +42,27 @@ export default function Itemlist(props){
           
         })
     }
+    const _renderItem = ({item, index}) => {
+      return (
+<View  style={{flexDirection:'row',height:50,backgroundColor:'white',marginTop:30,alignItems:'center'}}>
+<TouchableOpacity style={{flexDirection:'row'}} onPress={() =>  props.navigation.navigate('ItemDetail',{Detail:item})} > 
+<Image
+                  style={{
+                    marginLeft:20,
+                    height: 35,
+                    width: 35,
+                    borderRadius: 45,
+                    borderColor: '#BDBDBD',
+                    borderWidth: 1,
+                  }}
+                  source={require('../../assets/Logo/items.png')}
+  />
+          <Text style={{color: 'black',
+              fontSize: 18,
+              fontWeight: '600',marginLeft:30,}}>{item.Pro_PkeyID}</Text>
+              </TouchableOpacity>
+        </View>
+      )}
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
          <StatusBar barStyle="dark-content" />
@@ -51,21 +74,7 @@ export default function Itemlist(props){
         onPressCancel={() => props.navigation.goBack()}
         // onPressSave={() => this.editProduct()}
       />
- {/* <View
-          style={{
-            backgroundColor: '#fff',
-            height: 60,
-            justifyContent: 'center',
-            //   alignItems: 'center',
-            flexDirection: 'row',
-          }}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.goBack()}
-            style={{position: 'absolute', left: 20, top: 20}}>
-            <AntDesign name="arrowleft" size={30} color="#0F0B56" />
-          </TouchableOpacity>
-          </View> */}
-      
+
 
 <View style={{paddingHorizontal:30}}>
 <View  style={{flexDirection:'row',height:50,backgroundColor:'white',marginTop:30,alignItems:'center'}}>
@@ -78,6 +87,11 @@ export default function Itemlist(props){
               fontSize: 18,
               fontWeight: '600',marginLeft:30,}}>Add Item</Text>
               </TouchableOpacity>
+        </View>
+        <View>
+        <FlatList 
+         data={item} 
+         renderItem={_renderItem} />
         </View>
 <View  style={{flexDirection:'row',height:50,backgroundColor:'white',marginTop:30,alignItems:'center'}}>
 <TouchableOpacity style={{flexDirection:'row'}} onPress={() =>  props.navigation.navigate('ItemDetail')} > 

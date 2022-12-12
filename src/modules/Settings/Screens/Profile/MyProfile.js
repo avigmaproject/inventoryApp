@@ -12,6 +12,7 @@ import {
   Alert
 } from "react-native"
 import { connect } from "react-redux"
+import {Toast} from 'native-base';
 import Ionicons from "react-native-vector-icons/Ionicons"
 import InputText from "../../../../components/InputText"
 import Spinner from "react-native-loading-spinner-overlay"
@@ -25,6 +26,7 @@ import InputView from "../../../../components/InputView"
 import Button from "../../../../components/Button"
 import BackButton from "../../../../components/BackButton"
 import Icon from "react-native-vector-icons/Entypo"
+import {verifyPassword} from '../../../Auth/miscellaneous/miscellaneous.configure';
 import { Select, useToast } from "native-base"
 import {
   userprofile,
@@ -51,7 +53,7 @@ class MyProfile extends Component {
       imagepath: '',
     }
   }
-
+ 
   componentDidMount() {
     const { navigation } = this.props
     this._unsubscribe = navigation.addListener("focus", () => {
@@ -134,13 +136,14 @@ class MyProfile extends Component {
     }, 700);
   };
 
-
+ 
   uploadImage = async () => {
     this.setState({loading: true});
     const {base64} = this.state;
     let data = JSON.stringify({
       Type: 6,
       User_Image_Base: 'data:image/png;base64, ' + base64,
+      // Image_Base:'data:image/png;base64, ' + base64,
     });
     try {
       const token = await AsyncStorage.getItem('token');
@@ -206,6 +209,7 @@ class MyProfile extends Component {
       console.log({ message })
     }
   }
+  
   Validation = () => {
     let cancel = false
     if (this.state.form.name.length === 0) {
@@ -214,14 +218,49 @@ class MyProfile extends Component {
     if (this.state.form.phone.length === 0) {
       cancel = true
     }
+    if(this.state.form.password.length=== 0){
+      cancel = true
+    }
+    if(!this.state.form.gender){
+      cancel = true
+    }
+    
     if (cancel) {
-      showerrorMessage("Fields can not be empty")
+      this.showerrorMessage("Fields can not be empty")
       return false
     } else {
       return true
     }
   }
-
+  showerrorMessage = message => {
+    if (message !== '' && message !== null && message !== undefined) {
+      Toast.show({
+        title: message,
+        placement: 'bottom',
+        status: 'error',
+        duration: 5000,
+      });
+    }
+  };
+isvalidpassword = value => {
+    let regx = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    return regx.test(value);
+  };
+  checkPass = () => {
+    let cancel = false;
+   
+    if (!this.isvalidpassword(this.state.form.password)) {
+      cancel = true;
+      this.warningMessage(
+        `Your password must be minimum 8 characters to 16 characters and must contain one uppercase, one digit and special character '?!@#$%^&*'`,
+      );
+    }
+    if (cancel) {
+      return false;
+    } else {
+      return true;
+    }
+  };
   PhoneValidation = () => {
     let cancel = false
     if (
@@ -231,14 +270,26 @@ class MyProfile extends Component {
       cancel = true
     }
     if (cancel) {
-      showerrorMessage("Invalid Phone Number")
+      this.showerrorMessage("Invalid Phone Number")
       return false
     } else {
       return true
     }
   }
+  warningMessage = message => {
+    if (message !== '' && message !== null && message !== undefined) {
+      Toast.show({
+        title: message,
+        placement: 'bottom',
+        status: 'warning',
+        duration: 5000,
+        // backgroundColor: 'red.500',
+      });
+    }
+  };
+
   updateUserData = async () => {
-    if (this.Validation() && this.PhoneValidation()) {
+    if (this.Validation() && this.PhoneValidation() && this.checkPass()) {
       // this.setState({loading: true});
       let data = {
         User_PkeyID: this.state.form.userid,
@@ -269,7 +320,7 @@ class MyProfile extends Component {
   }
   showMessage = (message) => {
     if (message !== "" && message !== null && message !== undefined) {
-      toast.show({
+      Toast.show({
         title: message,
         placement: "bottom",
         status: "success",

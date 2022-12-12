@@ -4,7 +4,7 @@ import Button from '../../components/Button';
 
 export const SuccessPage = ({navigation}) => {
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4',paddingHorizontal:20}}>
       <View style={{alignSelf: 'center', marginTop: 100}}>
         <Text
           style={{
@@ -19,7 +19,7 @@ export const SuccessPage = ({navigation}) => {
       <View style={{marginTop: 30}}>
         <Button
           text="Click here for login"
-          backgroundColor="#6633FF"
+          backgroundColor="#2874A6"
           onPress={() => navigation.navigate('Login')}
         />
       </View>

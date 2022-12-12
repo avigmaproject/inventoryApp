@@ -20,6 +20,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import Spinner from "react-native-loading-spinner-overlay"
 import {
   userprofile,
+  gethomemasterdata
 } from "../../services/api.function"
 // import { setBinId, setImage } from "../../store/action/auth/action"
 import { connect } from "react-redux"
@@ -47,14 +48,18 @@ class HomeScreen extends Component {
       activeid: null,
       userprofile: [],
       searchData: [],
-      flag: false
+      flag: false,
+      vender:"",
+      totalitem:"",
+      subcatitem:""
     }
   }
 
   componentDidMount() {
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
      console.log("token",this.props.token)
-     this.GetProfile()
+     this.GetProfile(),
+     this.GetHomeData()
     })
   }
   componentWillUnmount() {
@@ -72,6 +77,30 @@ class HomeScreen extends Component {
       })
     }
   }
+  GetHomeData = async () => {
+    let data = {
+      Type: 1,
+    };
+    console.log('data and token', data, this.props.token);
+    await gethomemasterdata(data, this.props.token)
+      .then(res => {
+        this.setState({
+          vender:res[1][0].TotalVendorCount,
+          totalitem: res[0][0].TotalItemCount,
+          subcatitem:res[2][0].TotalCategoryCount
+         
+        });
+         console.log("res of Product List........", res[0])
+         console.log("res of vendor List........", this.state.vender)
+         console.log("res of item List........", this.state.totalitem)
+         console.log("res of subcat item........", this.state.subcatitem)
+        })
+        .catch((error) => {
+          console.log("errror is.....", error)
+       
+          
+        })
+    }
   GetProfile = async token => {
     // alert('second');
     this.setState({
@@ -176,55 +205,7 @@ class HomeScreen extends Component {
           </View>
         </View>
         <View style={{ paddingHorizontal: 20 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              height: 80,
-              borderRadius: 20,
-              backgroundColor: "white",
-              marginTop: 30,
-              alignItems: "center"
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("BarcodeScanner")}
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <MaterialIcons
-                name="qr-code-scanner"
-                size={30}
-                color="#1FAFDF"
-                style={{ marginLeft: 20 }}
-              />
-              {/* <Image
-                  style={{
-                    marginLeft:20,
-                    height: 45,
-                    width: 45,
-                    borderRadius: 45,
-                    borderColor: '#BDBDBD',
-                    borderWidth: 1,
-                  }}
-                  source={require('../../assets/Logo/barcode.png')}
-                 
-                
-                /> */}
-              <Text
-                style={{
-                  color: "black",
-                  fontSize: 15,
-                  fontWeight: "600",
-                  marginLeft: 15
-                }}
-              >
-                Scan Barcode
-              </Text>
-            </TouchableOpacity>
-          </View>
+          
           <View
             style={{
               flexDirection: "row",
@@ -254,7 +235,7 @@ class HomeScreen extends Component {
                 marginLeft: 15
               }}
             >
-              Total Item Count (1000)
+              Total Item Count ({this.state.totalitem})
             </Text>
           </View>
           <View
@@ -286,7 +267,7 @@ class HomeScreen extends Component {
                 marginLeft: 30
               }}
             >
-              Item Count By Vendor (40)
+              Item Count By Vendor ({this.state.vender})
             </Text>
           </View>
           <View
@@ -318,7 +299,7 @@ class HomeScreen extends Component {
                 marginLeft: 30
               }}
             >
-              Item Count By Subcategory (25)
+              Item Count By Subcategory ({this.state.subcatitem})
             </Text>
           </View>
         </View>

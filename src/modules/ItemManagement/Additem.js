@@ -31,6 +31,7 @@ export default function Additem(props) {
   const [selectedvendorItems, setselectedvendorItems] = useState();
   const [selectedcatItems, setselectedcatItems] = useState();
   const [selectedsubcatItems, setselectedsubcatItems] = useState();
+  const [selectedropdownItems, setselectedropdownItems] = useState();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [vendor, setvendor] = useState([]);
@@ -63,10 +64,10 @@ export default function Additem(props) {
     const onAdditem = async () => {
       let data = {
         Type: 1,
-       Pro_Vendor_Name: selectedvendorItems.name,
-        Pro_Category: selectedcatItems.name,
-         Pro_SubCategory: selectedsubcatItems.name,
-        // Pro_TypeOfItem: address,
+       Pro_Vendor_Name: selectedvendorItems,
+        Pro_Category: selectedcatItems.id,
+         Pro_SubCategory:selectedsubcatItems.id,
+       Pro_TypeOfItem:selectedropdownItems.value,
         Pro_RFIDTag: rfidtxt,
         Pro_LPN: lpntxt,
         Pro_Model: modeltxt,
@@ -74,16 +75,16 @@ export default function Additem(props) {
         Pro_Qty:qtytxt
       }
       console.log("Add itemss....",data, token)
+      // return 0
       await additemdata(data, token)
         .then((res) => {
-        
+          alert("Item Added")
+          props.navigation.navigate('Itemlist')
           console.log("res of additem........", res[0])
         
         })
         .catch((error) => {
-          console.log("errror is.....", error)
-       
-          
+          console.log("errror is.....", error)          
         })
     }
     
@@ -98,17 +99,20 @@ export default function Additem(props) {
     const vendor = await AsyncStorage.getItem('vendor');
      const cat = await AsyncStorage.getItem('category');
      const subcat = await AsyncStorage.getItem('subcategory');
-   
+     const types = await AsyncStorage.getItem('typesofitem');
+   console.log("typesofitem",types)
+   setselectedropdownItems(types)
+   console.log("selecte items.....****",selectedsubcatItems)
     const parsevendor= vendor != null ? JSON.parse(vendor) : null
     setselectedvendorItems(parsevendor)
     console.log("parce*****vendor is",parsevendor)
 
     const parsecat= cat != null ? JSON.parse(cat) : null
-    selectedcatItems(parsecat)
+    setselectedcatItems(parsecat)
     console.log("parce*****cat  is",parsecat)
 
     const parsesubcat= subcat != null ? JSON.parse(subcat) : null
-    selectedsubcatItems(parsesubcat)
+    setselectedsubcatItems(parsesubcat)
     console.log("parce*****subcat  is",parsesubcat)
 
     setrfidtxt(rfid)
@@ -118,6 +122,13 @@ export default function Additem(props) {
     setmodel1txt(model1)
     setserialtxt(serial)
     setmodeltxt(model)
+  };
+  const ondropdownselected = itemValue => {
+    setid(itemValue)
+    console.log(id,'***///*****')
+    const typesofitem = JSON.stringify(itemValue)
+  AsyncStorage.setItem(`typesofitem`, typesofitem);
+
   };
  
   const onvendorselected = item => {
@@ -129,9 +140,10 @@ export default function Additem(props) {
   const oncatselected = item => {
     setselectedcatItems(item);
     console.log("category item.....",item)
-    GetSubCategory(item);
+ 
     const catitem = JSON.stringify(item)
     AsyncStorage.setItem(`category`, catitem);
+    GetSubCategory(item);
   };
   const onsubselected = item => {
     setselectedsubcatItems(item);
@@ -312,7 +324,7 @@ export default function Additem(props) {
             selectedValue={id}
             width="100%"
             placeholder="Type Of Item"
-            onValueChange={itemValue => setid(itemValue)}
+            onValueChange={itemValue => ondropdownselected(itemValue)}
             _selectedItem={{
               bg: 'gray',
             }}>

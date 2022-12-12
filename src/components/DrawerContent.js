@@ -3,6 +3,7 @@ import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {View, Alert, StyleSheet} from 'react-native';
 import {Select, Toast} from 'native-base';
 import Icon from "react-native-vector-icons/Ionicons"
+import Feather from 'react-native-vector-icons/Feather';
 import {Avatar, Title, Caption, Drawer, Divider} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -180,14 +181,11 @@ class DrawerContent extends Component {
           <Divider />
           <DrawerItem
             icon={() => (
-              <MaterialCommunityIcons
-                name="qrcode-scan"
-                color="#21618C"
-                size={25}
-              />
+              <Feather name="plus-circle" size={25} color="#21618C"  />
+              
             )}
-            label="Barcode Scanner"
-            onPress={() => this.props.navigation.navigate('BarcodeScanner')}
+            label="Add Item"
+            onPress={() => this.props.navigation.navigate('Additem')}
             labelStyle={styles.labelStyle}
           />
           <Divider />

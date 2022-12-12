@@ -1,6 +1,8 @@
 import logo from '../../assets/Image/ilogo.png';
 import React, {useState, useEffect} from 'react';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 const {width, height} = Dimensions.get('window');
+
 const delay = 5;
 import {
   SafeAreaView,
@@ -18,6 +20,29 @@ import {
 
 
 const SplashScreen = ({navigation}) => {
+  const handleDynamicLink = link => {
+    console.log("===> link",link)
+        // Handle dynamic link inside your own application
+        navigation.navigate('ResetPassword', {link: link.url});
+    
+      };
+      useEffect(() => {
+        const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+        // When the component is unmounted, remove the listener
+        return () => unsubscribe();
+      }, []);
+      useEffect(() => {
+        dynamicLinks()
+          .getInitialLink()
+          .then(link => {
+            if (link.url) {
+    console.log("getInitialLink",link.url)
+         navigation.navigate('ResetPassword', {link: link.url});
+    
+              // ...set initial route as offers screen
+            }
+          });
+      }, []);
     useEffect(() => {
     let timer1 = setTimeout(() => navigation.navigate('Login'), 1000);
     return () => {

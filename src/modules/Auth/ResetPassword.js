@@ -9,13 +9,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Header from './components/Header';
+
 import {Toast} from 'native-base';
 import InputText from '../../components/InputText';
 import Button from '../../components/Button';
 import Icon from 'react-native-vector-icons/Entypo';
 import {resetpassword} from '../../services/api.function';
 import {verifyPassword} from './miscellaneous/miscellaneous.configure';
+import Header from './components/Header';
 
 export default class ResetPassword extends Component {
   constructor() {
@@ -170,23 +171,11 @@ export default class ResetPassword extends Component {
       <SafeAreaView>
           <StatusBar barStyle="dark-content" />
         <Spinner visible={this.state.isLoading} />
-        <View
-          style={{
-            backgroundColor: '#fff',
-            height: 75,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              color: '#0F0B56',
-              fontSize: 24,
-              lineHeight: 36,
-              fontWeight: '600',
-            }}>
-            Reset Your Password!
-          </Text>
-        </View>
+        <Header
+          text="Reset Password"
+          onPress={() =>  props.navigation.goBack()}
+        />
+       <View style={{paddingHorizontal:20}}>
         <View style={{marginTop: 30}}>
           <InputText
             label="Password"
@@ -236,10 +225,11 @@ export default class ResetPassword extends Component {
         <View style={{marginTop: 35}}>
           <Button
             text="Reset Password"
-            backgroundColor="#6633FF"
+            backgroundColor="#2874A6"
             onPress={() => this.onHandleResetPassword()}
           />
         </View>
+        </View> 
       </SafeAreaView>
     );
   }
