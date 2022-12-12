@@ -28,7 +28,7 @@
     "react-native-bouncy-checkbox": "^2.1.7",
     "react-native-camera": "^4.2.1",
     "react-native-camera-kit": "^13.0.0",
-    "react-native-dropdown-picker": "^5.1.28",
+    "react-native-element-dropdown": "^2.5.0",
     "react-native-geocoding": "^0.5.0",
     "react-native-gesture-handler": "^2.5.0",
     "react-native-image-crop-picker": "^0.38.0",

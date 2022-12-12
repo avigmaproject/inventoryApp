@@ -98,7 +98,7 @@ const Register = ({navigation}) => {
           setloading(false);
           dispatch(setToken(res.access_token));
           AsyncStorage.setItem('token', res.access_token);
-          navigation.navigate('DrawerNavigator', {screen: 'HomeScreen'});
+          // navigation.navigate('DrawerNavigator', {screen: 'HomeScreen'});
         })
         .catch(error => {
           setloading(false);
