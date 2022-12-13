@@ -45,7 +45,7 @@ export default function Itemlist(props){
     const _renderItem = ({item, index}) => {
       return (
 <View  style={{flexDirection:'row',height:50,backgroundColor:'white',marginTop:30,alignItems:'center'}}>
-<TouchableOpacity style={{flexDirection:'row'}} onPress={() =>  props.navigation.navigate('ItemDetail',{Detail:item})} > 
+<TouchableOpacity style={{flexDirection:'row'}} onPress={() =>  props.navigation.navigate('Additem',{Detail:item})} > 
 <Image
                   style={{
                     marginLeft:20,

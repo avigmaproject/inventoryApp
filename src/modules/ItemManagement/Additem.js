@@ -30,8 +30,12 @@ export default function Additem(props) {
   const [selectedvendorItems, setselectedvendorItems] = useState(null);
   const [selectedcatItems, setselectedcatItems] = useState({});
   const [selectedsubcatItems, setselectedsubcatItems] = useState({});
+  const [selectedropdownItems, setselectedropdownItems] = useState({});
+
   const [open, setOpen] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
+  const [isFocuscat, setIsFocuscat] = useState(false);
+  const [isFocusubcat, setIsFocusubcat] = useState(false);
   const [vendor, setvendor] = useState([]);
   const [Category, setcategory] = useState([]);
   const [subCategory, setsubcategory] = useState([]);
@@ -47,22 +51,61 @@ export default function Additem(props) {
   //   {label: 'Individual item', value: 'individual item'},
   // ]);
   const token = useSelector(state => state.authReducer.userToken);
+  const [itemdetail, setitemdetail] = useState(props.route.params.Detail);
   useEffect(() => {
     GetVendorMaster();
     getAsyncData();
   }, []);
+  useEffect(() => {
+    if(props.route.params && props.route.params.Detail)
+    {
+     setitemdetail(props.route.params.Detail)
+    }
+    
+   //  setitemdetail(props.route.params.Detail)
+   console.log("**** details....",itemdetail)
+     },[itemdetail]);
  
     useFocusEffect(
       React.useCallback(() => {
         getAsyncData()
       }, [])
     )
+    const onupdate = async () => {
+      let data = {
+        Type: 2,
+        Pro_Vendor_Name: selectedvendorItems.value,
+        Pro_Category: selectedcatItems.value,
+         Pro_SubCategory:selectedsubcatItems.value,
+       Pro_TypeOfItem:selectedropdownItems.value,
+        Pro_RFIDTag: rfidtxt,
+        Pro_LPN: lpntxt,
+        Pro_Model: modeltxt,
+        Pro_Serial: serialtxt,
+        Pro_Qty:qtytxt
+     
+      }
+      console.log("Itemupdate....",data, token)
+      // return 0
+      await additemdata(data, token)
+        .then((res) => {
+          alert("Item updated")
+          props.navigation.navigate('Itemlist')
+          console.log("res of update........", res[0])
+          console.log("res of update data ........", res)
+         
+        
+        })
+        .catch((error) => {
+          console.log("errror is.....", error)          
+        })
+    }
     const onAdditem = async () => {
       let data = {
         Type: 1,
-       Pro_Vendor_Name: selectedvendorItems,
-        Pro_Category: selectedcatItems.id,
-         Pro_SubCategory:selectedsubcatItems.id,
+       Pro_Vendor_Name: selectedvendorItems.value,
+        Pro_Category: selectedcatItems.value,
+         Pro_SubCategory:selectedsubcatItems.value,
        Pro_TypeOfItem:selectedropdownItems.value,
         Pro_RFIDTag: rfidtxt,
         Pro_LPN: lpntxt,
@@ -77,11 +120,23 @@ export default function Additem(props) {
           alert("Item Added")
           props.navigation.navigate('Itemlist')
           console.log("res of additem........", res[0])
-        
+          console.log("res of additem data ........", res)
+          // AsyncStorage.clear();.
+          removeFew()
         })
         .catch((error) => {
           console.log("errror is.....", error)          
         })
+    }
+    removeFew = async () => {
+      const keys = ['rfid', 'lpn','model','serial','qty','model1','rfid1','vendor','category','subcategory','id']
+      try {
+        await AsyncStorage.multiRemove(keys)
+      } catch(e) {
+        // remove error
+      }
+    
+      console.log('Done')
     }
     
   const getAsyncData = async () => {
@@ -97,10 +152,12 @@ export default function Additem(props) {
     const cat = await AsyncStorage.getItem('category');
     const subcat = await AsyncStorage.getItem('subcategory');
     const itemValue = await AsyncStorage.getItem('id');
-    const parsecat = cat != null ? JSON.parse(cat) : null;
-    const parsesubcat = subcat != null ? JSON.parse(subcat) : null;
+    // const parsecat = cat != null ? JSON.parse(cat) : null;
+    const parsecat = JSON.parse(cat);
+    const parsesubcat = JSON.parse(subcat);
     const parsevendor = JSON.parse(vendor1);
     console.log('parse*****vendor is', parsevendor);
+    
     setid(itemValue);
     setrfidtxt(rfid);
     setrfidtxt1(rfid1);
@@ -124,7 +181,7 @@ export default function Additem(props) {
   const oncatselected = item => {
     setselectedcatItems(item);
     console.log("category item.....",item)
- 
+    console.log("onselected itemmm category",selectedcatItems)
     const catitem = JSON.stringify(item)
     AsyncStorage.setItem(`category`, catitem);
     GetSubCategory(item);
@@ -149,7 +206,7 @@ export default function Additem(props) {
         setvendor(collectvendor);
         const fetchcat = res[1];
         const collectcat = fetchcat?.map(item => {
-          return {id: item.Cat_Pkey, name: item.Cat_Name};
+          return {value: item.Cat_Pkey, label: item.Cat_Name};
         });
         setcategory(collectcat);
         console.log('response of collectcat is', collectvendor);
@@ -170,7 +227,7 @@ export default function Additem(props) {
       .then(res => {
         const fetchsubcat = res[0];
         const collectsubcat = fetchsubcat?.map(item => {
-          return {id: item.SubCat_Cat_Pkey, name: item.SubCat_Name};
+          return {value: item.SubCat_Cat_Pkey, label: item.SubCat_Name};
         });
         setsubcategory(collectsubcat);
         // console.log('responsee of subcategory', res[0]);
@@ -190,6 +247,20 @@ export default function Additem(props) {
       </View>
     );
   };
+  const renderItemcat = item => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.textItem}>{item.label}</Text>
+      </View>
+    );
+  };
+  const renderItemsubcat = item => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.textItem}>{item.label}</Text>
+      </View>
+    );
+  };
   return (
     // <ScrollView  style={{height:'100%'}}>
     <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
@@ -199,12 +270,12 @@ export default function Additem(props) {
         back={true}
         save={true}
         onPressCancel={() => props.navigation.goBack()}
-        onPressSave={() => onAdditem()}
+        onPressSave={() => onupdate()}
       />
       <ScrollView
         keyboardShouldPersistTaps="handled"
         style={{paddingHorizontal: 20}}>
-        <View style={{width: '90%', alignSelf: 'center'}}>
+        <View style={{width: '100%', alignSelf: 'center',marginTop:20}}>
           <Dropdown
             style={styles.dropdown}
             placeholderStyle={styles.placeholderStyle}
@@ -220,7 +291,7 @@ export default function Additem(props) {
               width: '90%',
               marginLeft: 1,
             }}
-            activeColor="red"
+            activeColor="#1FAFDF"
             data={vendor}
             autoScroll
             dropdownPosition="bottom"
@@ -228,13 +299,80 @@ export default function Additem(props) {
             maxHeight={150}
             labelField="label"
             valueField="value"
-            placeholder={'Vender'}
+            placeholder={'Select Vendor'}
             searchPlaceholder="Search..."
             value={selectedvendorItems}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={item => onvendorselected(item)}
             renderItem={renderItem}
+          />
+        </View>
+        <View style={{width: '100%', alignSelf: 'center',marginTop:20}}>
+          <Dropdown
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            containerStyle={{
+              backgroundColor: '#FFF',
+              borderBottomEndRadius: 5,
+              borderBottomStartRadius: 5,
+              borderWidth: 0,
+              marginTop: -2,
+              width: '90%',
+              marginLeft: 1,
+            }}
+            activeColor="#1FAFDF"
+            data={Category}
+            autoScroll
+            dropdownPosition="bottom"
+            search
+            maxHeight={150}
+            labelField="label"
+            valueField="value"
+            placeholder={'Select Category'}
+            searchPlaceholder="Search..."
+            value={selectedcatItems}
+            onFocus={() => setIsFocuscat(true)}
+            onBlur={() => setIsFocuscat(false)}
+            onChange={item => oncatselected(item)}
+            renderItem={renderItemcat}
+          />
+        </View>
+        <View style={{width: '100%', alignSelf: 'center',marginTop:20}}>
+          <Dropdown
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            containerStyle={{
+              // backgroundColor: '',
+              borderBottomEndRadius: 5,
+              borderBottomStartRadius: 5,
+              borderWidth: 0,
+              marginTop: -2,
+              width: '90%',
+              marginLeft: 1,
+            
+            }}
+            activeColor="#1FAFDF"
+            data={subCategory}
+            autoScroll
+            dropdownPosition="bottom"
+            search
+            maxHeight={150}
+            labelField="label"
+            valueField="value"
+            placeholder={'Select  Sub Category'}
+            searchPlaceholder="Search..."
+            value={selectedsubcatItems}
+            onFocus={() => setIsFocusubcat(true)}
+            onBlur={() => setIsFocusubcat(false)}
+            onChange={item => onsubselected(item)}
+            renderItem={renderItemsubcat}
           />
         </View>
 
@@ -276,7 +414,7 @@ export default function Additem(props) {
             underlineColorAndroid="transparent"
           />
         </View> */}
-        <View style={{marginTop: 20}}>
+        {/* <View style={{marginTop: 20}}>
           <SearchableDropdown
             selectedItems={selectedcatItems}
             onTextChange={text => console.log(text)}
@@ -338,7 +476,7 @@ export default function Additem(props) {
             resPtValue={false}
             underlineColorAndroid="transparent"
           />
-        </View>
+        </View> */}
 
         <View style={{marginTop: 20, alignItems: 'center'}}>
           <Select
@@ -363,8 +501,8 @@ export default function Additem(props) {
         </View>
         {id == '1' ? (
           <View>
-            <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
-              <View style={{width: '90%'}}>
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText
                   label="RFID tag"
                   placeholder="Enter RFID tag"
@@ -397,8 +535,8 @@ export default function Additem(props) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
-              <View style={{width: '90%'}}>
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText
                   label="LPN#(Pallet only)"
                   placeholder="Enter LPN#(Pallet only)"
@@ -431,8 +569,8 @@ export default function Additem(props) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
-              <View style={{width: '90%'}}>
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText
                   label="Model#"
                   placeholder="Enter Model#"
@@ -465,8 +603,8 @@ export default function Additem(props) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
-              <View style={{width: '90%'}}>
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText label="QTY" placeholder="Enter QTY" value={qtytxt} />
               </View>
               <View
@@ -498,8 +636,8 @@ export default function Additem(props) {
           </View>
         ) : id == '2' ? (
           <View>
-            <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
-              <View style={{width: '90%'}}>
+             <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText
                   label="RFID tag"
                   placeholder="Enter RFID tag"
@@ -533,8 +671,8 @@ export default function Additem(props) {
               </View>
             </View>
 
-            <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
-              <View style={{width: '90%'}}>
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText
                   label="Model#"
                   placeholder="Enter Model#"
@@ -567,8 +705,8 @@ export default function Additem(props) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={{marginTop: 20, width: '100%', flexDirection: 'row'}}>
-              <View style={{width: '90%'}}>
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText
                   label="Serial #"
                   placeholder="Serial #"
@@ -609,13 +747,16 @@ export default function Additem(props) {
 }
 const styles = StyleSheet.create({
   dropdown: {
-    height: 50,
+    height: 58,
     borderWidth: 1,
     paddingHorizontal: 8,
+    borderColor:'#21618C',
     backgroundColor: '#FFF',
     width: '100%',
     borderTopEndRadius: 5,
     borderTopStartRadius: 5,
+    borderBottomRightRadius:5,
+    borderBottomLeftRadius:5,
   },
   icon: {
     marginRight: 5,
@@ -646,8 +787,8 @@ const styles = StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
-    borderColor: '#000',
-    color: '#000',
+    borderColor: '#21618C',
+    color: 'black',
   },
   item: {
     padding: 12,
@@ -657,6 +798,6 @@ const styles = StyleSheet.create({
   },
   textItem: {
     fontSize: 16,
-    color: 'lightgray',
+    color: 'black',
   },
 });

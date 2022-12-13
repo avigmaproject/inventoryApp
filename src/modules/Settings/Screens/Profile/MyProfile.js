@@ -212,13 +212,13 @@ class MyProfile extends Component {
   
   Validation = () => {
     let cancel = false
-    if (this.state.form.name.length === 0) {
+    if (!this.state.form.name) {
       cancel = true
     }
-    if (this.state.form.phone.length === 0) {
+    if (!this.state.form.phone) {
       cancel = true
     }
-    if(this.state.form.password.length=== 0){
+    if(!this.state.form.password){
       cancel = true
     }
     if(!this.state.form.gender){

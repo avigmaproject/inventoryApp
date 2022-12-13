@@ -18,11 +18,15 @@ export default function ItemDetail(props){
  
   const [itemdetail, setitemdetail] = useState(props.route.params.Detail);
   useEffect(() => {
-   
+  //  if(props.route.params && props.route.params.Detail)
+  //  {
+
+  //   setitemdetail(props.route.params.Detail)
+  //  }
     
-      setitemdetail(props.route.params.Detail)
     
-    },[]);
+   setitemdetail(props.route.params.Detail)
+    },[itemdetail]);
     console.log(itemdetail,'******')
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
@@ -45,14 +49,14 @@ export default function ItemDetail(props){
             <InputText
               label="Select Vendor"
               placeholder="Select Vendor"
-              value={itemdetail.Ven_Name}
+              value={itemdetail.Pro_Vendor_Name}
             />
           </View>
           <View style={{marginTop: 20}}>
             <InputText
               label="Category"
               placeholder="Category"
-              value={itemdetail.Cat_Name}
+              value={itemdetail.Pro_Category}
             />
           </View>
           <View style={{marginTop: 20}}>
@@ -69,7 +73,7 @@ export default function ItemDetail(props){
               value={itemdetail.Pro_TypeOfItem}
             />
           </View>
-          <View style={{marginTop: 20}}>
+          <View style={{marginTop: 20,}}>
             <InputText
               label="RFID Tag"
               placeholder="RFID Tag"
