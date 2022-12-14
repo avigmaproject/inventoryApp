@@ -264,7 +264,7 @@ export default function Additem(props) {
   return (
     // <ScrollView  style={{height:'100%'}}>
     <SafeAreaView style={{flex: 1, backgroundColor: '#F3F2F4'}}>
-      <StatusBar barStyle="dark-content" />
+ <StatusBar barStyle="dark-content" backgroundColor={"white"} />
       <Header
         header="Add Item"
         back={true}

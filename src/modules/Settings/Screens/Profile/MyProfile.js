@@ -359,7 +359,7 @@ isvalidpassword = value => {
     console.log("imagepath",imagepath)
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F2F4" }}>
-         <StatusBar barStyle="dark-content" />
+          <StatusBar barStyle="dark-content" backgroundColor={"white"} />
         <Spinner visible={this.state.loading} />
         <View
           style={{

@@ -134,7 +134,7 @@ const ForgotPasswordScreen = (props) => {
   return (
    
       <SafeAreaView style={{flex: 1}}>
-        <StatusBar barStyle="dark-content" />
+         <StatusBar barStyle="dark-content" backgroundColor={"white"} />
         <Spinner
           visible={loading}
           textContent={'Loading...'}

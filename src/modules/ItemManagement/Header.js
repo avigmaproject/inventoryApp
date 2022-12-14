@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-const Header = ({header, onPressCancel, onPressSave, ...props}) => {
+const Header = ({header, onPressCancel, onPressSave,onPressFilter, ...props}) => {
   return (
     <View
       style={{
@@ -89,7 +89,7 @@ const Header = ({header, onPressCancel, onPressSave, ...props}) => {
           </Text>
         </TouchableOpacity>
           ) : props.filtricon ? (
-            <TouchableOpacity style={{marginTop:5}}> 
+            <TouchableOpacity style={{marginTop:5}}  onPress={onPressFilter}> 
             <Icon name="filter" size={30} color="#21618C" style={{}} />
             </TouchableOpacity>
              ) : null}

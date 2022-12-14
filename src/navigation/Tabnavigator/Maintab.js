@@ -3,7 +3,8 @@ import React from "react"
 import Itemlist from "../../modules/ItemManagement/Itemlist"
 import Itemnavigation from "../ItemtabNavigation"
 import HomeTabNavigation from "../HomeTabNavigation"
-import Icon from "react-native-vector-icons/Ionicons"
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 const Tab = createBottomTabNavigator()
 const Tabs = () => {
   return (
@@ -17,7 +18,7 @@ const Tabs = () => {
             fontSize: 60
           }
         },
-        tabBarStyle: { height: 50, fontSize: 60 },
+        tabBarStyle: { height: 70, fontSize: 60,paddingBottom:10,marginTop:10 },
         tabStyle: { fontSize: 50 },
         tabBarHideOnKeyboard: true
       })}
@@ -27,23 +28,23 @@ const Tabs = () => {
         name="Dashboard"
         component={HomeTabNavigation}
         options={{
-          tabBarLabel: "Dashboard",
+          // tabBarLabel: "Dashboard",
           tabBarColor: "#000000",
           tabBarIcon: ({ color }) => (
-            <Icon name="ios-home" color={color} size={26} />
+            <Icon name="view-dashboard-outline" color={color} size={35} />
           )
         }}
       />
 
       <Tab.Screen
-        name="ItemManagement"
+        name="Item Management"
         component={Itemnavigation}
         options={{
-          tabBarLabel: "Item Management",
+          // tabBarLabel: "Item Management",
 
           tabBarColor: "#000000",
           tabBarIcon: ({ color }) => (
-            <Icon name="person-circle-sharp" color={color} size={26} />
+            <MaterialIcons name="inventory" color={color} size={35} />
           )
         }}
       />

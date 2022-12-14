@@ -178,7 +178,7 @@ const Register = ({navigation}) => {
         backgroundColor: '#F3F2F4',
       }}>
       <ScrollView keyboardShouldPersistTaps="handled" style={{paddingHorizontal:20}}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={"white"} />
         <Spinner visible={loading} />
         <View
           style={{

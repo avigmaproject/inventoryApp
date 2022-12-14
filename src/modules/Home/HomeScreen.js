@@ -144,7 +144,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F2F4" }}>
-         <StatusBar barStyle="dark-content" />
+         <StatusBar barStyle="dark-content" backgroundColor={"white"} />
         <Spinner visible={this.state.loading} />
         <View
           style={{
@@ -232,7 +232,7 @@ class HomeScreen extends Component {
                 color: "black",
                 fontSize: 15,
                 fontWeight: "600",
-                marginLeft: 15
+                marginLeft: 30
               }}
             >
               Total Item Count ({this.state.totalitem})
