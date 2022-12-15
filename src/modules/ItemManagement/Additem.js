@@ -45,7 +45,6 @@ export default function Additem(props) {
   const [qtytxt, setqtytxt] = useState(null)
   const [serialtxt, setserialtxt] = useState(null)
   const token = useSelector((state) => state.authReducer.userToken)
-  const [itemdetail, setitemdetail] = useState([])
   const [isedit, setisedit] = useState(false)
   const [productid, setproductid] = useState(0)
 
@@ -113,7 +112,7 @@ export default function Additem(props) {
       "vendor",
       "category",
       "subcategory",
-      "id"
+      "id","productid"
     ]
     try {
       await AsyncStorage.multiRemove(keys)
@@ -136,6 +135,7 @@ export default function Additem(props) {
     const cat = await AsyncStorage.getItem("category")
     const subcat = await AsyncStorage.getItem("subcategory")
     const itemValue = await AsyncStorage.getItem("id")
+    const productid = await AsyncStorage.getItem("productid")
     const parsevendor = JSON.parse(vendor1)
     const parsecat = JSON.parse(cat)
     const parsesubcat = JSON.parse(subcat)
@@ -153,7 +153,7 @@ export default function Additem(props) {
     setselectedvendorItems(parsevendor)
     setselectedcatItems(parsecat)
     setselectedsubcatItems(parsesubcat)
-    console.log(selectedvendorItems)
+    setproductid(productid)
   }
 
   const onvendorselected = (item) => {

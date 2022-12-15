@@ -55,6 +55,7 @@ export default function Itemlist(props) {
     AsyncStorage.setItem(`id`,itemdetail.Pro_TypeOfItem.toString())
     AsyncStorage.setItem(`serial`,itemdetail.Pro_Serial.toString())
     AsyncStorage.setItem("id", itemdetail.Pro_TypeOfItem.toString())
+    AsyncStorage.setItem("productid", itemdetail.Pro_PkeyID.toString())
     const data = { value: itemdetail.Pro_Vendor, label: itemdetail.Ven_Name }
     AsyncStorage.setItem(`vendor`, JSON.stringify(data))
     const data1 = {
