@@ -20,7 +20,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import AntDesign from "react-native-vector-icons/AntDesign"
 import { useFocusEffect } from "@react-navigation/native"
 import Barcodescanner from "../Home/BarcodeScanner"
-import { Select, Toast } from "native-base"
+import {Select, useToast} from 'native-base';
 import InputText from "../../components/InputText"
 import Header from "./Header"
 import SearchableDropdown from "react-native-searchable-dropdown"
@@ -45,6 +45,7 @@ export default function Additem(props) {
   const [qtytxt, setqtytxt] = useState(null)
   const [serialtxt, setserialtxt] = useState(null)
   const token = useSelector((state) => state.authReducer.userToken)
+  const [itemdetail, setitemdetail] = useState([])
   const [isedit, setisedit] = useState(false)
   const [productid, setproductid] = useState(0)
 
@@ -55,6 +56,7 @@ export default function Additem(props) {
       setisedit(true)
     } else {
       setisedit(false)
+      
     }
   }, [])
 
@@ -66,12 +68,68 @@ export default function Additem(props) {
         setisedit(true)
       } else {
         setisedit(false)
-        removeFew()
+     
       }
     }, [])
   )
-
+  const toast = useToast();
+  const Validation = () => {
+    let cancel = false;
+    if (!rfidtxt) {
+      cancel = true;
+    }
+    if (!vendor) {
+      cancel = true;
+    }
+    if (!Category) {
+      cancel = true;
+    }
+    if (!subCategory) {
+      cancel = true;
+    }
+    if (!rfidtxt1) {
+      cancel = true;
+    }
+    if (!lpntxt) {
+      cancel = true;
+    }
+    if (!modeltxt) {
+      cancel = true;
+    }
+    if (!model1txt) {
+      cancel = true;
+    }
+    if (!serialtxt) {
+      cancel = true;
+    }
+    if (!qtytxt) {
+      cancel = true;
+    }
+    if (cancel) {
+      {isedit ?
+        showerrorMessage('Fields can not be empty'):
+        showerrorMessage('Fields can not be empty')
+      }
+      
+      return false;
+    } else {
+      return true;
+    }
+  };
+  const showerrorMessage = message => {
+    if (message !== '' && message !== null && message !== undefined) {
+      toast.show({
+        title: message,
+        placement: 'bottom',
+        status: 'error',
+        duration: 5000,
+        // backgroundColor: 'red.500',
+      });
+    }
+  };
   const onAdditem = async () => {
+    console.log("pkid isss....", isedit.Pro_PkeyID)
+    // if (Validation() ) {
     let data = {
       Type: isedit ? 2 : 1,
       Pro_Vendor: selectedvendorItems.value,
@@ -90,15 +148,24 @@ export default function Additem(props) {
       Pro_IsActive: true
     }
     console.log("Add itemss....", id, data, token)
+   
+    console.log("pkid isss....", isedit.Pro_PkeyID)
     await additemdata(data, token)
       .then((res) => {
         props.navigation.navigate("Itemlist")
         console.log("res of additem........", res[0])
+      
+        {isedit ?
+       
+        showMessage('Item Edited') :  
+        showMessage('Item Added') 
+      }
         removeFew()
       })
       .catch((error) => {
         console.log("errror is.....", error)
       })
+    // }
   }
   removeFew = async () => {
     const keys = [
@@ -112,17 +179,29 @@ export default function Additem(props) {
       "vendor",
       "category",
       "subcategory",
-      "id","productid"
+      "id"
     ]
     try {
-      await AsyncStorage.multiRemove(keys)
+      // await AsyncStorage.removeItem(keys);
+   
+    await AsyncStorage.multiRemove(keys)
     } catch (e) {
       // remove error
     }
 
     console.log("Done")
   }
-
+  const showMessage = message => {
+    if (message !== '' && message !== null && message !== undefined) {
+      toast.show({
+        title: message,
+        placement: 'bottom',
+        status: 'success',
+        duration: 5000,
+        // backgroundColor: 'red.500',
+      });
+    }
+  };
   const getAsyncData = async () => {
     const rfid = await AsyncStorage.getItem("rfid")
     const rfid1 = await AsyncStorage.getItem("rfid1")
@@ -135,7 +214,6 @@ export default function Additem(props) {
     const cat = await AsyncStorage.getItem("category")
     const subcat = await AsyncStorage.getItem("subcategory")
     const itemValue = await AsyncStorage.getItem("id")
-    const productid = await AsyncStorage.getItem("productid")
     const parsevendor = JSON.parse(vendor1)
     const parsecat = JSON.parse(cat)
     const parsesubcat = JSON.parse(subcat)
@@ -153,7 +231,7 @@ export default function Additem(props) {
     setselectedvendorItems(parsevendor)
     setselectedcatItems(parsecat)
     setselectedsubcatItems(parsesubcat)
-    setproductid(productid)
+    console.log(selectedvendorItems)
   }
 
   const onvendorselected = (item) => {

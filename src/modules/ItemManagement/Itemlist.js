@@ -19,6 +19,7 @@ import { useFocusEffect } from "@react-navigation/native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { useSelector } from "react-redux"
+import { borderRadius } from "styled-system"
 export default function Itemlist(props) {
   useEffect(() => {
     GetProductList()
@@ -45,17 +46,42 @@ export default function Itemlist(props) {
         console.log("errror is.....", error)
       })
   }
+  removeFew = async () => {
+    const keys = [
+      "rfid",
+      "lpn",
+      "model",
+      "serial",
+      "qty",
+      "model1",
+      "rfid1",
+      "vendor",
+      "category",
+      "subcategory",
+      "id"
+    ]
+    try {
+      // await AsyncStorage.removeItem(keys);
+   
+    await AsyncStorage.multiRemove(keys)
+    } catch (e) {
+      // remove error
+    }
+
+    console.log("Done")
+  }
   const _onHandleItemSelected = (itemdetail) => {
-    AsyncStorage.setItem(`rfid`, itemdetail.Pro_RFIDTag.toString())
-    AsyncStorage.setItem(`rfid1`, itemdetail.Pro_RFIDTag.toString())
-    AsyncStorage.setItem(`lpn`,itemdetail.Pro_LPN.toString())
-    AsyncStorage.setItem(`qty`, itemdetail.Pro_Qty.toString())
-    AsyncStorage.setItem(`model`,itemdetail.Pro_Model.toString())
-    AsyncStorage.setItem(`model1`,itemdetail.Pro_Model.toString())
-    AsyncStorage.setItem(`id`,itemdetail.Pro_TypeOfItem.toString())
-    AsyncStorage.setItem(`serial`,itemdetail.Pro_Serial.toString())
-    AsyncStorage.setItem("id", itemdetail.Pro_TypeOfItem.toString())
-    AsyncStorage.setItem("productid", itemdetail.Pro_PkeyID.toString())
+    removeFew()
+    AsyncStorage.setItem(`rfid`, itemdetail.Pro_RFIDTag? itemdetail.Pro_RFIDTag.toString():'')
+    AsyncStorage.setItem(`rfid1`,  itemdetail.Pro_RFIDTag?itemdetail.Pro_RFIDTag.toString():'')
+    AsyncStorage.setItem(`lpn`,itemdetail.Pro_LPN ?itemdetail.Pro_LPN.toString():'')
+    AsyncStorage.setItem(`qty`, itemdetail.Pro_Qty ? itemdetail.Pro_Qty.toString():'')
+    AsyncStorage.setItem(`model`,itemdetail.Pro_Model ?itemdetail.Pro_Model.toString():'')
+    AsyncStorage.setItem(`model1`,itemdetail.Pro_Model ?itemdetail.Pro_Model.toString():'')
+    AsyncStorage.setItem(`id`,itemdetail.Pro_TypeOfIte ? itemdetail.Pro_TypeOfItem.toString():'')
+    AsyncStorage.setItem(`serial`,itemdetail.Pro_Serial ? itemdetail.Pro_Serial.toString():'')
+    AsyncStorage.setItem("id",itemdetail.Pro_TypeOfItem? itemdetail.Pro_TypeOfItem.toString():'')
+    AsyncStorage.setItem("productid", itemdetail.Pro_PkeyID ?itemdetail.Pro_PkeyID.toString():'')
     const data = { value: itemdetail.Pro_Vendor, label: itemdetail.Ven_Name }
     AsyncStorage.setItem(`vendor`, JSON.stringify(data))
     const data1 = {
@@ -75,10 +101,11 @@ export default function Itemlist(props) {
       <View
         style={{
           flexDirection: "row",
-          height: 50,
+          height: 60,
           backgroundColor: "white",
           marginTop: 30,
-          alignItems: "center"
+          alignItems: "center",
+          borderRadius:20
         }}
       >
         <TouchableOpacity
@@ -122,13 +149,14 @@ export default function Itemlist(props) {
       />
 
       <View style={{ paddingHorizontal: 30, flex: 1 }}>
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
-            height: 50,
+            height: 60,
             backgroundColor: "white",
             marginTop: 30,
-            alignItems: "center"
+            alignItems: "center",
+            borderRadius:20
           }}
         >
           <TouchableOpacity
@@ -154,8 +182,8 @@ export default function Itemlist(props) {
             >
               Add Item
             </Text>
-          </TouchableOpacity>
-        </View>
+          </TouchableOpacity> */}
+        {/* </View> */}
         <View>
           <FlatList data={item} renderItem={_renderItem} />
         </View>
@@ -164,8 +192,8 @@ export default function Itemlist(props) {
             justifyContent: "center",
             alignItems: "center",
             position: "absolute",
-            bottom: 10,
-            right: 20,
+            bottom: 40,
+            right: 30,
             zIndex: 1,
             height: 65
           }}
