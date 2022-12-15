@@ -67,6 +67,7 @@ export default function Additem(props) {
         setisedit(true)
       } else {
         setisedit(false)
+        removeFew()
       }
     }, [])
   )
