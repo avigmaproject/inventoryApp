@@ -1,22 +1,25 @@
 import { View, Text } from "react-native"
 import React from "react"
-import { CameraScreen } from "react-native-camera-kit"
+import { CameraScreen,RNCamera } from "react-native-camera-kit"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 export default function BarcodeScanner(props) {
-   
- 
+ const [camrearef, setcamrearef] = useState(null)
   const onReadCode = (event) => {
     if (event.nativeEvent.codeStringValue) {
       AsyncStorage.setItem(`${props.route.params.title}`, event.nativeEvent.codeStringValue);
       console.log(props.route.params.title,event.nativeEvent.codeStringValue)
-     props.navigation.navigate('Additem')
+      props.navigation.navigate('Additem',{isedit:props.route.params.isedit})
+
     }
   }
   return (
     <View>
       <CameraScreen
+        ref={(ref) => setcamrearef(ref)}
+        focusMode={"on"}
         scanBarcode={true}
+        barcodeScannerEnabled
         onReadCode={(event) => onReadCode(event)} // optional
         showFrame={true} // (default false) optional, show frame with transparent layer (qr code or barcode will be read on this area ONLY), start animation for scanner,that stoped when find any code. Frame always at center of the screen
         laserColor="red" // (default red) optional, color of laser in scanner frame

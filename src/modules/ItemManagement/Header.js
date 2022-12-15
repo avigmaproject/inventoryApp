@@ -85,7 +85,7 @@ const Header = ({header, onPressCancel, onPressSave,onPressFilter, ...props}) =>
               lineHeight: 21,
               fontWeight: '500',
             }}>
-            Save
+            {props.title}
           </Text>
         </TouchableOpacity>
           ) : props.filtricon ? (

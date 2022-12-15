@@ -222,12 +222,12 @@ export const getsubcategorymaster = async (data, access_token) => {
     });
 
 };
-export const additemdata = async data => {
+export const additemdata = async (data,access_token) => {
   return axios(`${BASE_URL}${API.ADD_UPDATE_POST}`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Accept: 'application/json',
+   headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + access_token,
     },
     data: data,
   })
@@ -241,7 +241,7 @@ export const getproductlist = async (data, access_token) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // Authorization: 'Bearer ' + access_token,
+      Authorization: 'Bearer ' + access_token,
     },
     data: data,
   })
