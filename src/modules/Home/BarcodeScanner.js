@@ -17,9 +17,9 @@ export default function BarcodeScanner(props) {
     <View>
       <CameraScreen
         ref={(ref) => setcamrearef(ref)}
-        focusMode={on}
-        flashMode= {auto}
-        zoomMode={on}
+        focusMode={"on"}
+        flashMode= {"auto"}
+        zoomMode={"on"}
         scanBarcode={true}
         barcodeScannerEnabled
         onReadCode={(event) => onReadCode(event)} // optional

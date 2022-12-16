@@ -46,6 +46,11 @@ export default function Itemlist(props) {
         console.log("errror is.....", error)
       })
   }
+  const onhandleAdd = ()=>{
+    removeFew()
+    props.navigation.navigate("Additem", { isedit: false })
+
+  }
   removeFew = async () => {
     const keys = [
       "rfid",
@@ -204,8 +209,8 @@ export default function Itemlist(props) {
               backgroundColor: "#21618C",
               borderRadius: 50
             }}
-            onPress={() =>
-              props.navigation.navigate("Additem", { isedit: false })
+            onPress={() =>onhandleAdd()
+             
             }
           >
             <Icon name="plus-circle" size={65} color="white" />

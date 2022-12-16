@@ -5,21 +5,33 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Dropdown } from 'react-native-element-dropdown';
 import Entypo from 'react-native-vector-icons/Entypo';
 import InputText from "../../components/InputText"
-import { getproductlist } from "../../services/api.function"
+import { getProduct } from "../../services/api.function"
 import { useSelector } from "react-redux"
 
 export default function Filter(props) {
     const [item, setitem] = useState([])
+    const [vendorname, setvendorname] = useState("")
+    const [subcategory, setsubcategory] = useState("")
+    const [category, setcategory] = useState("")
+    const [filterdata,setfilterdata]=useState([])
     const token = useSelector((state) => state.authReducer.userToken)
-    useEffect(() => {
-        GetProductList()
-      }, [])
+    // useEffect(() => {
+    //     GetProductList()
+    //   }, [])
       const GetProductList = async () => {
         let data = {
-          Type: 4
+          Type: 6,
+          Pro_Vendor_Name:vendorname,
+          Cat_Name:category,
+          SubCat_Name:subcategory,
+          PageNumber:1,
+          NoofRows:100
         }
+        console.log("vendorname",data.Pro_Vendor_Name)
+        console.log("categoryname",data.Cat_Name)
+        console.log("subcategory name",data.SubCat_Name)
         console.log("data and tokenhome apgeeee", data, token)
-        await getproductlist(data, token)
+        await getProduct(data, token)
           .then((res) => {
             console.log("res of Product List........", res)
             setitem(res[0])
@@ -35,6 +47,7 @@ export default function Filter(props) {
        
       ];
       const [value, setValue] = useState(null);
+      console.log("valuee is",value)
     const [isFocus, setIsFocus] = useState(false);
     // const renderLabel = () => {
     //     if (value || isFocus) {
@@ -78,16 +91,39 @@ export default function Filter(props) {
                 }}
                 source={require("../../assets/Logo/items.png")}
               />
+              {value==="1" ?
               <Text
-                style={{
-                  color: "black",
-                  fontSize: 18,
-                  fontWeight: "600",
-                  marginLeft: 30
-                }}
-              >
-                {item.Ven_Name}
-              </Text>
+              style={{
+                color: "black",
+                fontSize: 18,
+                fontWeight: "600",
+                marginLeft: 30
+              }}
+            >
+              {item.Pro_Vendor}
+            </Text> : value==="2"?
+            <Text
+            style={{
+              color: "black",
+              fontSize: 18,
+              fontWeight: "600",
+              marginLeft: 30
+            }}
+          >
+            {item.Pro_Category}
+          </Text>:value==="3"?
+          <Text
+          style={{
+            color: "black",
+            fontSize: 18,
+            fontWeight: "600",
+            marginLeft: 30
+          }}
+        >
+          {item.Pro_SubCategory}
+        </Text>:""
+              }
+              
             </TouchableOpacity>
           </View>
         )
@@ -174,18 +210,93 @@ export default function Filter(props) {
       
             </View>
 
-            {value  &&(<View style={{marginTop:10,flexDirection:'row',alignItems:'center'}}>
+            {value==="1"  &&(<View style={{marginTop:10,flexDirection:'row',alignItems:'center'}}>
                 <View style={{width:'80%'}}>
                 <InputText
-                  label="Search Here"
+                  label="Search Vendor Name  Here"
                   placeholder="Enter Text You Want To Search"
-                //   value={rfidtxt}
+                  value={vendorname}
+                  onChangeText={vendorname => setvendorname(vendorname)}
                 />
               
                 </View>
+                
                 <View  style={{marginLeft:10,width:20}}>
                 <TouchableOpacity
-        //   onPress={onPressSave}
+           
+           onPress={() => GetProductList()}
+          style={{
+            backgroundColor:'#21618C',
+            height: 35,
+            width: 60,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius:15
+          }}>
+          <Text
+            style={{
+              color: 'white',
+              fontSize: 12,
+              lineHeight: 21,
+              fontWeight: '500',
+            }}>
+            Search
+          </Text>
+        </TouchableOpacity>
+                </View>
+               
+</View>)
+            }
+             {value==="2"  &&(<View style={{marginTop:10,flexDirection:'row',alignItems:'center'}}>
+                <View style={{width:'80%'}}>
+                <InputText
+                  label="Search Category Here"
+                  placeholder="Enter Text You Want To Search"
+                   value={ category}
+                   onChangeText={category => setcategory(category)}
+                />
+              
+                </View>
+                
+                <View  style={{marginLeft:10,width:20}}>
+                <TouchableOpacity
+         onPress={() => GetProductList()}
+          style={{
+            backgroundColor:'#21618C',
+            height: 35,
+            width: 60,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius:15
+          }}>
+          <Text
+            style={{
+              color: 'white',
+              fontSize: 12,
+              lineHeight: 21,
+              fontWeight: '500',
+            }}>
+            Search
+          </Text>
+        </TouchableOpacity>
+                </View>
+               
+</View>)
+            }
+             {value==="3"  &&(<View style={{marginTop:10,flexDirection:'row',alignItems:'center'}}>
+                <View style={{width:'80%'}}>
+                <InputText
+                  label="Search Sub Category"
+                  placeholder="Enter Text You Want To Search"
+                   value={subcategory}
+                   onChangeText={subcategory => setsubcategory(subcategory)}
+                />
+              
+                </View>
+                
+                <View  style={{marginLeft:10,width:20}}>
+                <TouchableOpacity
+       onPress={() => GetProductList()}
           style={{
             backgroundColor:'#21618C',
             height: 35,

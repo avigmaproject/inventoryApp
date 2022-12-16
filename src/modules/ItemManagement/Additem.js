@@ -4,6 +4,7 @@ import {
   getsubcategorymaster,
   additemdata
 } from "../../services/api.function"
+import { CameraScreen,RNCamera } from "react-native-camera-kit"
 import {
   SafeAreaView,
   ScrollView,
@@ -48,6 +49,9 @@ export default function Additem(props) {
   const [itemdetail, setitemdetail] = useState([])
   const [isedit, setisedit] = useState(false)
   const [productid, setproductid] = useState(0)
+  const [camrearef, setcamrearef] = useState(null)
+  const [showview, setshowview] = useState(false);
+  const [barcodeid, setbarcodeid] = useState(null);
 
   useEffect(() => {
     GetVendorMaster()
@@ -72,12 +76,35 @@ export default function Additem(props) {
       }
     }, [])
   )
+  const onReadCode = (event) => {
+    if (event.nativeEvent.codeStringValue) {
+      if(barcodeid === 'rfid')
+      setrfidtxt(event.nativeEvent.codeStringValue)
+      if(barcodeid === 'rfid1')
+      setrfidtxt1(event.nativeEvent.codeStringValue)
+      if(barcodeid === 'lpn')
+      setlpntxt(event.nativeEvent.codeStringValue)
+      if(barcodeid === 'model')
+      setmodeltxt(event.nativeEvent.codeStringValue)
+      if(barcodeid === 'model1')
+      setmodel1txt(event.nativeEvent.codeStringValue)
+      if(barcodeid === 'qty')
+      setqtytxt(event.nativeEvent.codeStringValue)
+      if(barcodeid === 'serial')
+      setserialtxt(event.nativeEvent.codeStringValue)
+     console.log("qrcode is ",event.nativeEvent.codeStringValue)
+     setshowview(false);
+    }
+  }
+  const onshowscanneropen = (text) => {
+    console.log("text is",text)
+    setbarcodeid(text)
+    setshowview(true);
+  }
   const toast = useToast();
   const Validation = () => {
     let cancel = false;
-    if (!rfidtxt) {
-      cancel = true;
-    }
+    
     if (!vendor) {
       cancel = true;
     }
@@ -87,24 +114,37 @@ export default function Additem(props) {
     if (!subCategory) {
       cancel = true;
     }
-    if (!rfidtxt1) {
-      cancel = true;
+    if(id === "1")
+    {
+      if (!rfidtxt) {
+        cancel = true;
+      }
+      if (!lpntxt) {
+        cancel = true;
+      }
+      if (!modeltxt) {
+        cancel = true;
+      }
+      if (!qtytxt) {
+        cancel = true;
+      }
     }
-    if (!lpntxt) {
-      cancel = true;
+    else{
+      if (!rfidtxt1) {
+        cancel = true;
+      }
+      
+      if (!model1txt) {
+        cancel = true;
+      }
+      if (!serialtxt) {
+        cancel = true;
+      }
+    
     }
-    if (!modeltxt) {
-      cancel = true;
-    }
-    if (!model1txt) {
-      cancel = true;
-    }
-    if (!serialtxt) {
-      cancel = true;
-    }
-    if (!qtytxt) {
-      cancel = true;
-    }
+    
+    
+   
     if (cancel) {
       {isedit ?
         showerrorMessage('Fields can not be empty'):
@@ -129,7 +169,7 @@ export default function Additem(props) {
   };
   const onAdditem = async () => {
     console.log("pkid isss....", isedit.Pro_PkeyID)
-    // if (Validation() ) {
+    if (Validation() ) {
     let data = {
       Type: isedit ? 2 : 1,
       Pro_Vendor: selectedvendorItems.value,
@@ -143,7 +183,7 @@ export default function Additem(props) {
       Pro_LPN: lpntxt,
       Pro_Model: id == "2" ? model1txt : modeltxt,
       Pro_Serial: serialtxt,
-      Pro_Qty: qtytxt,
+      Pro_Qty: parseDouble(qtytxt),
       Pro_PkeyID: isedit ? productid : 0,
       Pro_IsActive: true
     }
@@ -167,6 +207,7 @@ export default function Additem(props) {
       })
     // }
   }
+}
   removeFew = async () => {
     const keys = [
       "rfid",
@@ -331,10 +372,26 @@ export default function Additem(props) {
         header={isedit ? "Edit Item" : "Add Item"}
         back={true}
         save={true}
-        title={isedit ? "Edit" : "Save"}
+        title={isedit ? "Update" : "Save"}
         onPressCancel={() => props.navigation.goBack()}
         onPressSave={() => onAdditem()}
       />
+       {showview ?   <View >
+ <CameraScreen
+        ref={(ref) => setcamrearef(ref)}
+        focusMode={"on"}
+        flashMode= {"auto"}
+        zoomMode={"on"}
+        scanBarcode={true}
+        barcodeScannerEnabled
+        
+        onReadCode={(event) => onReadCode(event)} // optional
+        showFrame={true} // (default false) optional, show frame with transparent layer (qr code or barcode will be read on this area ONLY), start animation for scanner,that stoped when find any code. Frame always at center of the screen
+        laserColor="red" // (default red) optional, color of laser in scanner frame
+        frameColor="white" // (default white) optional, color of border of scanner frame
+      />
+          </View>:
+      
       <ScrollView
         keyboardShouldPersistTaps="handled"
         style={{ paddingHorizontal: 20 }}
@@ -460,17 +517,10 @@ export default function Additem(props) {
             <Select.Item label="Individual item" value={"2"} />
           </Select>
         </View>
-        {id == "1" ? (
+        {id == '1' ? (
           <View>
-            <View
-              style={{
-                marginTop: 20,
-                width: "100%",
-                flexDirection: "row",
-                marginLeft: 5
-              }}
-            >
-              <View style={{ width: "87%" }}>
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText
                   label="RFID tag"
                   placeholder="Enter RFID tag"
@@ -479,25 +529,23 @@ export default function Additem(props) {
               </View>
               <View
                 style={{
-                  width: "10%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: 5
-                }}
-              >
+                  width: '10%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 5,
+                }}>
                 <TouchableOpacity
-                  onPress={() =>
-                    props.navigation.navigate("BarcodeScanner", {
-                      title: "rfid",
-                      isedit: isedit
-                    })
-                  }
+                  // onPress={() =>
+                  //   props.navigation.navigate('BarcodeScanner', {
+                  //     title: 'rfid',
+                  //   })
+                  // }
+                  onPress={() => onshowscanneropen("rfid")}
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   <MaterialIcons
                     name="qr-code-scanner"
                     size={30}
@@ -506,15 +554,8 @@ export default function Additem(props) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View
-              style={{
-                marginTop: 20,
-                width: "100%",
-                flexDirection: "row",
-                marginLeft: 5
-              }}
-            >
-              <View style={{ width: "87%" }}>
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText
                   label="LPN#(Pallet only)"
                   placeholder="Enter LPN#(Pallet only)"
@@ -523,25 +564,23 @@ export default function Additem(props) {
               </View>
               <View
                 style={{
-                  width: "10%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: 5
-                }}
-              >
+                  width: '10%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 5,
+                }}>
                 <TouchableOpacity
-                  onPress={() =>
-                    props.navigation.navigate("BarcodeScanner", {
-                      title: "lpn",
-                      isedit: isedit
-                    })
-                  }
+                  // onPress={() =>
+                  //   props.navigation.navigate('BarcodeScanner', {
+                  //     title: 'lpn',
+                  //   })
+                  // }
+                  onPress={() => onshowscanneropen("lpn")}
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   <MaterialIcons
                     name="qr-code-scanner"
                     size={30}
@@ -550,15 +589,8 @@ export default function Additem(props) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View
-              style={{
-                marginTop: 20,
-                width: "100%",
-                flexDirection: "row",
-                marginLeft: 5
-              }}
-            >
-              <View style={{ width: "87%" }}>
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText
                   label="Model#"
                   placeholder="Enter Model#"
@@ -567,25 +599,23 @@ export default function Additem(props) {
               </View>
               <View
                 style={{
-                  width: "10%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: 5
-                }}
-              >
+                  width: '10%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 5,
+                }}>
                 <TouchableOpacity
-                  onPress={() =>
-                    props.navigation.navigate("BarcodeScanner", {
-                      title: "model",
-                      isedit: isedit
-                    })
-                  }
+                  // onPress={() =>
+                  //   props.navigation.navigate('BarcodeScanner', {
+                  //     title: 'model',
+                  //   })
+                  // }
+                  onPress={() => onshowscanneropen("model")}
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   <MaterialIcons
                     name="qr-code-scanner"
                     size={30}
@@ -594,38 +624,29 @@ export default function Additem(props) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View
-              style={{
-                marginTop: 20,
-                width: "100%",
-                flexDirection: "row",
-                marginLeft: 5
-              }}
-            >
-              <View style={{ width: "87%" }}>
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText label="QTY" placeholder="Enter QTY" value={qtytxt} />
               </View>
               <View
                 style={{
-                  width: "10%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: 5
-                }}
-              >
+                  width: '10%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 5,
+                }}>
                 <TouchableOpacity
-                  onPress={() =>
-                    props.navigation.navigate("BarcodeScanner", {
-                      title: "qty",
-                      isedit: isedit
-                    })
-                  }
+                  // onPress={() =>
+                  //   props.navigation.navigate('BarcodeScanner', {
+                  //     title: 'qty',
+                  //   })
+                  // }
+                  onPress={() => onshowscanneropen("qty")}
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   <MaterialIcons
                     name="qr-code-scanner"
                     size={30}
@@ -635,17 +656,10 @@ export default function Additem(props) {
               </View>
             </View>
           </View>
-        ) : id == "2" ? (
+        ) : id == '2' ? (
           <View>
-            <View
-              style={{
-                marginTop: 20,
-                width: "100%",
-                flexDirection: "row",
-                marginLeft: 5
-              }}
-            >
-              <View style={{ width: "87%" }}>
+             <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText
                   label="RFID tag"
                   placeholder="Enter RFID tag"
@@ -654,25 +668,23 @@ export default function Additem(props) {
               </View>
               <View
                 style={{
-                  width: "10%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: 5
-                }}
-              >
+                  width: '10%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 5,
+                }}>
                 <TouchableOpacity
-                  onPress={() =>
-                    props.navigation.navigate("BarcodeScanner", {
-                      title: "rfid1",
-                      isedit: isedit
-                    })
-                  }
+                  // onPress={() =>
+                  //   props.navigation.navigate('BarcodeScanner', {
+                  //     title: 'rfid1',
+                  //   })
+                  // }
+                  onPress={() => onshowscanneropen("rfid1")}
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   <MaterialIcons
                     name="qr-code-scanner"
                     size={30}
@@ -682,15 +694,8 @@ export default function Additem(props) {
               </View>
             </View>
 
-            <View
-              style={{
-                marginTop: 20,
-                width: "100%",
-                flexDirection: "row",
-                marginLeft: 5
-              }}
-            >
-              <View style={{ width: "87%" }}>
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText
                   label="Model#"
                   placeholder="Enter Model#"
@@ -699,25 +704,23 @@ export default function Additem(props) {
               </View>
               <View
                 style={{
-                  width: "10%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: 5
-                }}
-              >
+                  width: '10%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 5,
+                }}>
                 <TouchableOpacity
-                  onPress={() =>
-                    props.navigation.navigate("BarcodeScanner", {
-                      title: "model1",
-                      isedit: isedit
-                    })
-                  }
+                  // onPress={() =>
+                  //   props.navigation.navigate('BarcodeScanner', {
+                  //     title: 'model1',
+                  //   })
+                  // }
+                  onPress={() => onshowscanneropen("model1")}
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   <MaterialIcons
                     name="qr-code-scanner"
                     size={30}
@@ -726,15 +729,8 @@ export default function Additem(props) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View
-              style={{
-                marginTop: 20,
-                width: "100%",
-                flexDirection: "row",
-                marginLeft: 5
-              }}
-            >
-              <View style={{ width: "87%" }}>
+            <View style={{marginTop: 20, width: '100%', flexDirection: 'row',marginLeft:5}}>
+              <View style={{width: '87%'}}>
                 <InputText
                   label="Serial #"
                   placeholder="Serial #"
@@ -743,25 +739,23 @@ export default function Additem(props) {
               </View>
               <View
                 style={{
-                  width: "10%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: 5
-                }}
-              >
+                  width: '10%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 5,
+                }}>
                 <TouchableOpacity
-                  onPress={() =>
-                    props.navigation.navigate("BarcodeScanner", {
-                      title: "serial",
-                      isedit: isedit
-                    })
-                  }
+                  // onPress={() =>
+                  //   props.navigation.navigate('BarcodeScanner', {
+                  //     title: 'serial',
+                  //   })
+                  // }
+                  onPress={() => onshowscanneropen("serial")}
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   <MaterialIcons
                     name="qr-code-scanner"
                     size={30}
@@ -773,7 +767,9 @@ export default function Additem(props) {
           </View>
         ) : null}
       </ScrollView>
+}
     </SafeAreaView>
+
   )
 }
 const styles = StyleSheet.create({
