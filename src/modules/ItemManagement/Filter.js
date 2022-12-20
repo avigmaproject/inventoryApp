@@ -7,6 +7,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import InputText from "../../components/InputText"
 import { getProduct } from "../../services/api.function"
 import { useSelector } from "react-redux"
+import { paddingBottom } from "styled-system";
 
 export default function Filter(props) {
     const [item, setitem] = useState([])
@@ -70,15 +71,16 @@ export default function Filter(props) {
           <View
             style={{
               flexDirection: "row",
-              height: 50,
+              height: 65,
               backgroundColor: "white",
               marginTop: 30,
-              alignItems: "center"
+              alignItems: "center",
+              borderRadius:20
             }}
           >
             <TouchableOpacity
               style={{ flexDirection: "row" }}
-            //   onPress={() => _onHandleItemSelected(item)}
+              onPress={() =>  props.navigation.navigate('ItemDetail',{Detail:item})}
             >
               <Image
                 style={{
@@ -100,7 +102,7 @@ export default function Filter(props) {
                 marginLeft: 30
               }}
             >
-              {item.Pro_Vendor}
+              {item.Pro_PkeyID}
             </Text> : value==="2"?
             <Text
             style={{
@@ -110,7 +112,7 @@ export default function Filter(props) {
               marginLeft: 30
             }}
           >
-            {item.Pro_Category}
+            {item.Pro_PkeyID}
           </Text>:value==="3"?
           <Text
           style={{
@@ -120,7 +122,7 @@ export default function Filter(props) {
             marginLeft: 30
           }}
         >
-          {item.Pro_SubCategory}
+          {item.Pro_PkeyID}
         </Text>:""
               }
               
@@ -157,7 +159,7 @@ export default function Filter(props) {
               color: 'black',
               fontSize: 20,
               fontWeight: '600',
-            }}>Filter Data</Text>
+            }}>Filter</Text>
             
           </View>
 
@@ -190,7 +192,7 @@ export default function Filter(props) {
           maxHeight={300}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'Select item' : '...'}
+          placeholder={!isFocus ? 'Select' : '...'}
           value={value}
           onFocus={() => setIsFocus(true)}
           onBlur={(itemValue) => onsearchview(itemValue)}
@@ -319,7 +321,7 @@ export default function Filter(props) {
                
 </View>)
             }
-            <View>
+            <View style={{paddingBottom:20}}>
             <FlatList data={item} renderItem={_renderItem} />
             </View>
         

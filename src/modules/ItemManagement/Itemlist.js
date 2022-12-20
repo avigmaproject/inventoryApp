@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -10,140 +10,70 @@ import {
   View,
   Image,
   FlatList
-} from "react-native"
-import Header from "./Header"
-import Icon from "react-native-vector-icons/Feather"
-import HeaderBack from "../../components/HeaderBack"
-import { getproductlist } from "../../services/api.function"
-import { useFocusEffect } from "@react-navigation/native"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+} from 'react-native';
 
-import { useSelector } from "react-redux"
-import { borderRadius } from "styled-system"
-export default function Itemlist(props) {
+import {FAB} from 'react-native-paper';
+import Header from './Header';
+import Icon from 'react-native-vector-icons/Feather';
+import HeaderBack from '../../components/HeaderBack';
+import {
+  getproductlist
+} from '../../services/api.function';
+import {useSelector} from 'react-redux';
+import { useFocusEffect } from "@react-navigation/native"
+
+export default function Itemlist(props){
   useEffect(() => {
-    GetProductList()
-  }, [])
+    GetProductList();
+    
+  }, []);
   useFocusEffect(
     React.useCallback(() => {
       GetProductList()
     }, [])
   )
-  const [item, setitem] = useState([])
-  const token = useSelector((state) => state.authReducer.userToken)
-  console.log("token is", token)
+  const [item, setitem] = useState([]);
+  const token = useSelector(state => state.authReducer.userToken);
+  // console.log('token is', token);
   const GetProductList = async () => {
     let data = {
-      Type: 4
-    }
-    console.log("data and tokenhome apgeeee", data, token)
+      Type: 4,
+    };
+    // console.log('data and token', data, token);
     await getproductlist(data, token)
-      .then((res) => {
-        console.log("res of Product List........", res)
+      .then(res => {
+        //  console.log("res of Product List........", res)
         setitem(res[0])
-      })
-      .catch((error) => {
-        console.log("errror is.....", error)
-      })
-  }
-  const onhandleAdd = ()=>{
-    removeFew()
-    props.navigation.navigate("Additem", { isedit: false })
-
-  }
-  removeFew = async () => {
-    const keys = [
-      "rfid",
-      "lpn",
-      "model",
-      "serial",
-      "qty",
-      "model1",
-      "rfid1",
-      "vendor",
-      "category",
-      "subcategory",
-      "id"
-    ]
-    try {
-      // await AsyncStorage.removeItem(keys);
-   
-    await AsyncStorage.multiRemove(keys)
-    } catch (e) {
-      // remove error
+        })
+        .catch((error) => {
+          console.log("errror is.....", error)
+       
+          
+        })
     }
-
-    console.log("Done")
-  }
-  const _onHandleItemSelected = (itemdetail) => {
-    removeFew()
-    AsyncStorage.setItem(`rfid`, itemdetail.Pro_RFIDTag? itemdetail.Pro_RFIDTag.toString():'')
-    AsyncStorage.setItem(`rfid1`,  itemdetail.Pro_RFIDTag?itemdetail.Pro_RFIDTag.toString():'')
-    AsyncStorage.setItem(`lpn`,itemdetail.Pro_LPN ?itemdetail.Pro_LPN.toString():'')
-    AsyncStorage.setItem(`qty`, itemdetail.Pro_Qty ? itemdetail.Pro_Qty.toString():'')
-    AsyncStorage.setItem(`model`,itemdetail.Pro_Model ?itemdetail.Pro_Model.toString():'')
-    AsyncStorage.setItem(`model1`,itemdetail.Pro_Model ?itemdetail.Pro_Model.toString():'')
-    AsyncStorage.setItem(`id`,itemdetail.Pro_TypeOfIte ? itemdetail.Pro_TypeOfItem.toString():'')
-    AsyncStorage.setItem(`serial`,itemdetail.Pro_Serial ? itemdetail.Pro_Serial.toString():'')
-    AsyncStorage.setItem("id",itemdetail.Pro_TypeOfItem? itemdetail.Pro_TypeOfItem.toString():'')
-    AsyncStorage.setItem("productid", itemdetail.Pro_PkeyID ?itemdetail.Pro_PkeyID.toString():'')
-    const data = { value: itemdetail.Pro_Vendor, label: itemdetail.Ven_Name }
-    AsyncStorage.setItem(`vendor`, JSON.stringify(data))
-    const data1 = {
-      value: itemdetail.Pro_Category,
-      label: itemdetail.Cat_Name
-    }
-    AsyncStorage.setItem(`category`, JSON.stringify(data1))
-    const data2 = {
-      value: itemdetail.Pro_SubCategory,
-      label: itemdetail.SubCat_Name
-    }
-    AsyncStorage.setItem(`subcategory`, JSON.stringify(data2))
-    props.navigation.navigate("Additem", { isedit: true })
-  }
-  const _renderItem = ({ item }) => {
+    const _renderItem = ({item, index}) => {
+      return (
+<View  style={{flexDirection:'row',height:65,backgroundColor:'white',marginTop:30,alignItems:'center',borderRadius:20}}>
+<TouchableOpacity style={{flexDirection:'row'}} onPress={() =>  props.navigation.navigate('ItemDetail',{Detail:item})} > 
+<Image
+                  style={{
+                    marginLeft:20,
+                    height: 35,
+                    width: 35,
+                    borderRadius: 45,
+                    borderColor: '#BDBDBD',
+                    borderWidth: 1,
+                  }}
+                  source={require('../../assets/Logo/items.png')}
+  />
+          <Text style={{color: 'black',
+              fontSize: 18,marginTop:5,
+              fontWeight: '600',marginLeft:30,}}>{item.Pro_PkeyID}</Text>
+              </TouchableOpacity>
+        </View>
+      )}
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          height: 60,
-          backgroundColor: "white",
-          marginTop: 30,
-          alignItems: "center",
-          borderRadius:20
-        }}
-      >
-        <TouchableOpacity
-          style={{ flexDirection: "row" }}
-          onPress={() => _onHandleItemSelected(item)}
-        >
-          <Image
-            style={{
-              marginLeft: 20,
-              height: 35,
-              width: 35,
-              borderRadius: 45,
-              borderColor: "#BDBDBD",
-              borderWidth: 1
-            }}
-            source={require("../../assets/Logo/items.png")}
-          />
-          <Text
-            style={{
-              color: "black",
-              fontSize: 18,
-              fontWeight: "600",
-              marginLeft: 30
-            }}
-          >
-            {item.Pro_PkeyID}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    )
-  }
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F2F4" }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F2F4" }}>
       <StatusBar barStyle="dark-content" />
       <Header
         header="Items"
@@ -154,41 +84,7 @@ export default function Itemlist(props) {
       />
 
       <View style={{ paddingHorizontal: 30, flex: 1 }}>
-        {/* <View
-          style={{
-            flexDirection: "row",
-            height: 60,
-            backgroundColor: "white",
-            marginTop: 30,
-            alignItems: "center",
-            borderRadius:20
-          }}
-        >
-          <TouchableOpacity
-            style={{ flexDirection: "row" }}
-            onPress={() =>
-              props.navigation.navigate("Additem", { isedit: false })
-            }
-          >
-            <Icon
-              name="plus-circle"
-              size={30}
-              color="#21618C"
-              style={{ marginLeft: 20 }}
-            />
 
-            <Text
-              style={{
-                color: "black",
-                fontSize: 18,
-                fontWeight: "600",
-                marginLeft: 30
-              }}
-            >
-              Add Item
-            </Text>
-          </TouchableOpacity> */}
-        {/* </View> */}
         <View>
           <FlatList data={item} renderItem={_renderItem} />
         </View>
@@ -197,7 +93,7 @@ export default function Itemlist(props) {
             justifyContent: "center",
             alignItems: "center",
             position: "absolute",
-            bottom: 40,
+            bottom: 50,
             right: 30,
             zIndex: 1,
             height: 65
@@ -209,9 +105,9 @@ export default function Itemlist(props) {
               backgroundColor: "#21618C",
               borderRadius: 50
             }}
-            onPress={() =>onhandleAdd()
+            onPress={() => props.navigation.navigate("Additem")}
              
-            }
+            
           >
             <Icon name="plus-circle" size={65} color="white" />
           </TouchableOpacity>
