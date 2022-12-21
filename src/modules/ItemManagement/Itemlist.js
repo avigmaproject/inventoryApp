@@ -32,6 +32,8 @@ export default function Itemlist(props){
       GetProductList()
     }, [])
   )
+
+  const [isview, setisview] = useState(true);
   const [item, setitem] = useState([]);
   const token = useSelector(state => state.authReducer.userToken);
   // console.log('token is', token);
@@ -42,8 +44,13 @@ export default function Itemlist(props){
     // console.log('data and token', data, token);
     await getproductlist(data, token)
       .then(res => {
+        if (res[0].length === 0) {
+          setisview(false);
+          } else {
+            setisview(true);
         //  console.log("res of Product List........", res)
         setitem(res[0])
+        }
         })
         .catch((error) => {
           console.log("errror is.....", error)
@@ -82,13 +89,26 @@ export default function Itemlist(props){
         onPressCancel={() => props.navigation.goBack()}
         onPressFilter={() => props.navigation.navigate("Filter")}
       />
-
+ {!isview ? (
+     <View
+     style={{
+       justifyContent: 'center',
+       alignItems: 'center',
+       flex: 1,
+       
+     }}>
+      <Text style={{color:"black",fontSize:24,weight:"600"}}>No Items</Text>
+      </View>
+       ) : (
       <View style={{ paddingHorizontal: 30, flex: 1 }}>
 
         <View>
           <FlatList data={item} renderItem={_renderItem} />
         </View>
-        <View
+    
+      </View>
+       )}
+           <View
           style={{
             justifyContent: "center",
             alignItems: "center",
@@ -112,7 +132,6 @@ export default function Itemlist(props){
             <Icon name="plus-circle" size={65} color="white" />
           </TouchableOpacity>
         </View>
-      </View>
     </SafeAreaView>
   )
 }

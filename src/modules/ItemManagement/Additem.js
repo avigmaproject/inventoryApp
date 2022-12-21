@@ -324,7 +324,7 @@ export default function Additem(props) {
         header="Add Item"
         back={true}
         save={true}
-        title={"save"}
+        title={"Save"}
         onPressCancel={() => props.navigation.goBack()}
         onPressSave={() => onAdditem()}
       />

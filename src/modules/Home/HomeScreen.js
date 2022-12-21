@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
   heading: {
     color: "#0F0B56",
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: "600",
     lineHeight: 30
   },
   backRightBtn: {

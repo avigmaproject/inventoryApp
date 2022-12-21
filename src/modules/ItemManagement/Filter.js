@@ -45,7 +45,6 @@ export default function Filter(props) {
         { label: 'Vendor Name', value: '1' },
         { label: 'Category Name', value: '2' },
         { label: 'Sub Category Name', value: '3' },
-       
       ];
       const [value, setValue] = useState(null);
       console.log("valuee is",value)

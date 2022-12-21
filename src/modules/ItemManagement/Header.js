@@ -62,7 +62,7 @@ const Header = ({header, onPressCancel, onPressSave,onPressFilter, ...props}) =>
         <Text
           style={{
             color: '#0F0B56',
-            fontSize: 20,
+            fontSize: 24,
             lineHeight: 36,
             fontWeight: '600',
           }}>
@@ -82,7 +82,7 @@ const Header = ({header, onPressCancel, onPressSave,onPressFilter, ...props}) =>
           <Text
             style={{
               color: 'white',
-              fontSize: 12,
+              fontSize: 16,
               lineHeight: 21,
               fontWeight: '500',
             }}>

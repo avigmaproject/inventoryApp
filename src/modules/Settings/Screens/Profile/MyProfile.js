@@ -380,9 +380,9 @@ isvalidpassword = value => {
           <Text
             style={{
               color: "#0F0B56",
-              fontSize: 22,
+              fontSize: 24,
               lineHeight: 36,
-              fontWeight: "700",
+              fontWeight: "600",
               top: 13
             }}
           >
