@@ -43,8 +43,8 @@ export default function Filter(props) {
       }
     const data = [
         { label: 'Vendor Name', value: '1' },
-        { label: 'Category Name', value: '2' },
-        { label: 'Sub Category Name', value: '3' },
+        { label: 'Class Name', value: '2' },
+        { label: 'Sub Class Name', value: '3' },
       ];
       const [value, setValue] = useState(null);
       console.log("valuee is",value)
@@ -101,7 +101,7 @@ export default function Filter(props) {
                 marginLeft: 30
               }}
             >
-              {item.Pro_PkeyID}
+              {item.Pro_RFIDTag}
             </Text> : value==="2"?
             <Text
             style={{
@@ -111,7 +111,7 @@ export default function Filter(props) {
               marginLeft: 30
             }}
           >
-            {item.Pro_PkeyID}
+            {item.Pro_RFIDTag}
           </Text>:value==="3"?
           <Text
           style={{
@@ -121,7 +121,7 @@ export default function Filter(props) {
             marginLeft: 30
           }}
         >
-          {item.Pro_PkeyID}
+          {item.Pro_RFIDTag}
         </Text>:""
               }
               
@@ -251,7 +251,7 @@ export default function Filter(props) {
              {value==="2"  &&(<View style={{marginTop:10,flexDirection:'row',alignItems:'center'}}>
                 <View style={{width:'80%'}}>
                 <InputText
-                  label="Search Category Here"
+                  label="Search Class Here"
                   placeholder="Enter Text You Want To Search"
                    value={ category}
                    onChangeText={category => setcategory(category)}
@@ -287,7 +287,7 @@ export default function Filter(props) {
              {value==="3"  &&(<View style={{marginTop:10,flexDirection:'row',alignItems:'center'}}>
                 <View style={{width:'80%'}}>
                 <InputText
-                  label="Search Sub Category"
+                  label="Search Sub Class"
                   placeholder="Enter Text You Want To Search"
                    value={subcategory}
                    onChangeText={subcategory => setsubcategory(subcategory)}

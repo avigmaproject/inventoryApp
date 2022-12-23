@@ -33,8 +33,10 @@ import { createIconSetFromFontello } from 'react-native-vector-icons';
 export default function ItemDetail(props) {
   const [selectedvendorItems, setselectedvendorItems] = useState(null);
   const [selectedcatItems, setselectedcatItems] = useState({});
-  const [selectedsubcatItems, setselectedsubcatItems] = useState({});
-  const [selectedropdownItems, setselectedropdownItems] = useState({});
+  const [selectedsubcatItems, setselectedsubcatItems] = useState([]);
+  const [selectevendordropdown, setselectevendordropdown] = useState([]);
+  const [selectecatdropdown, setselectecatdropdown] = useState({});
+  const [selectesubcatdropdown, setselectesubcatdropdown] = useState({});
 
   const [open, setOpen] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
@@ -60,6 +62,7 @@ export default function ItemDetail(props) {
  
   const [itemdetail, setitemdetail] = useState(props.route.params.Detail);
   const token = useSelector(state => state.authReducer.userToken);
+  
   const onReadCode = (event) => {
     if (event.nativeEvent.codeStringValue) {
       if(barcodeid === 'rfid')
@@ -87,28 +90,33 @@ export default function ItemDetail(props) {
     setshowview(true);
   }
   useEffect(() => {
-  setselectedvendorItems(itemdetail.Pro_Vendor)
-  setselectedsubcatItems(itemdetail.Pro_SubCategory)
-  setselectedcatItems(itemdetail.Pro_Category)
-  setid(itemdetail.Pro_TypeOfItem)
-    setmodel1txt(itemdetail.Pro_Model)
-    setmodeltxt(itemdetail.Pro_Model)
-  setlpntxt(itemdetail.Pro_LPN)
-  setrfidtxt(itemdetail.Pro_RFIDTag)
-  setrfidtxt1(itemdetail.Pro_RFIDTag)
-  setserialtxt(itemdetail.Pro_Serial)
-  setqtytxt(itemdetail.Pro_Qty)
-  setpkid(itemdetail.Pro_PkeyID)
-   setitemdetail(props.route.params.Detail)
+    setitemdetail(props.route.params.Detail)
+    setselectedvendorItems(itemdetail.Pro_Vendor)
+   
+    setselectedcatItems(itemdetail.Pro_Category)
+    GetSubCategory(itemdetail.Pro_Category);
+    setselectedsubcatItems(itemdetail.Pro_SubCategory)
+    setid(itemdetail.Pro_TypeOfItem)
+      setmodel1txt(itemdetail.Pro_Model)
+      setmodeltxt(itemdetail.Pro_Model)
+    setlpntxt(itemdetail.Pro_LPN)
+    setrfidtxt(itemdetail.Pro_RFIDTag)
+    setrfidtxt1(itemdetail.Pro_RFIDTag)
+    setserialtxt(itemdetail.Pro_Serial)
+    setqtytxt(itemdetail.Pro_Qty)
+    setpkid(itemdetail.Pro_PkeyID)
+   
     },[itemdetail]);
     useEffect(() => {
       GetVendorMaster();
      
+     
     }, []);
-
-     console.log(itemdetail.Pro_SubCategory,'******')
-     console.log(itemdetail.Pro_Category,'******')
-     console.log(itemdetail.Pro_Vendor,'******')
+    
+// console.log("'******'",selectedsubcatItems)
+    console.log("subcategorydetail",itemdetail.Pro_SubCategory,itemdetail.SubCat_Name)
+    //  console.log(itemdetail.Pro_Category,'******')
+    //  console.log(itemdetail.Pro_Vendor,'******')
     const GetVendorMaster = async () => {
       let data = {
         Type: 4,
@@ -120,7 +128,8 @@ export default function ItemDetail(props) {
           const collectvendor = fetchvendor?.map(item => {
             return {value: item.Ven_PkeyID, label: item.Ven_Name};
           });
-          setvendor(collectvendor);
+          //  setvendor(collectvendor);
+          setselectevendordropdown(collectvendor)
           const fetchcat = res[1];
           const collectcat = fetchcat?.map(item => {
             return {value: item.Cat_Pkey, label: item.Cat_Name};
@@ -144,10 +153,10 @@ export default function ItemDetail(props) {
         .then(res => {
           const fetchsubcat = res[0];
           const collectsubcat = fetchsubcat?.map(item => {
-            return {value: item.SubCat_Cat_Pkey, label: item.SubCat_Name};
+            return {value: item.SubCat_Pkey, label: item.SubCat_Name};
           });
           setsubcategory(collectsubcat);
-          // console.log('responsee of subcategory', res[0]);
+         console.log('responsee of subcategory', collectsubcat);
         })
         .catch(error => {
           // console.log('errorr of subcategory is', error);
@@ -157,6 +166,7 @@ export default function ItemDetail(props) {
       // await AsyncStorage.setItem('id', itemValue);
       setid(itemValue);
     };
+    
     const renderItem = item => {
       return (
         <View style={styles.item}>
@@ -245,11 +255,11 @@ export default function ItemDetail(props) {
       if (Validation() ) {
       let data = {
         Type: 2,
-        Pro_Vendor: selectedvendorItems.value,
+        Pro_Vendor: selectedvendorItems.value== null ? itemdetail.Pro_Vendor:selectedvendorItems.value,
         Ven_Name: selectedvendorItems.label,
-        Pro_Category: selectedcatItems.value,
+        Pro_Category: selectedcatItems.value == null ? itemdetail.Pro_Category:selectedcatItems.value,
         Cat_Name: selectedcatItems.label,
-        Pro_SubCategory: selectedsubcatItems.value,
+        Pro_SubCategory: selectedsubcatItems.value  == null ? itemdetail.Pro_SubCategory :selectedsubcatItems.value,
         SubCat_Name: selectedsubcatItems.label,
         Pro_TypeOfItem: id,
         Pro_RFIDTag: id == "2" ? rfidtxt1 : rfidtxt,
@@ -278,7 +288,8 @@ export default function ItemDetail(props) {
     }
   }
     const onvendorselected = item => {
-      setselectedvendorItems(item);
+  
+       setselectedvendorItems(item);
       console.log('vendor item.....', item);
       const vanderitem = JSON.stringify(item);
       // AsyncStorage.setItem('vendor', vanderitem);
@@ -345,8 +356,8 @@ export default function ItemDetail(props) {
                  width: '90%',
                  marginLeft: 1,
                }}
-               activeColor="#1FAFDF"
-               data={vendor}
+              //  activeColor="#1FAFDF"
+               data={selectevendordropdown}
                autoScroll
                dropdownPosition="bottom"
                search
@@ -378,7 +389,7 @@ export default function ItemDetail(props) {
                  width: '90%',
                  marginLeft: 1,
                }}
-               activeColor="#1FAFDF"
+              //  activeColor="#1FAFDF"
                data={Category}
                autoScroll
                dropdownPosition="bottom"
@@ -386,7 +397,7 @@ export default function ItemDetail(props) {
                maxHeight={150}
                labelField="label"
                valueField="value"
-               placeholder={'Select Category'}
+               placeholder={'Select Class'}
                searchPlaceholder="Search..."
                value={selectedcatItems}
                onFocus={() => setIsFocuscat(true)}
@@ -412,7 +423,7 @@ export default function ItemDetail(props) {
                  marginLeft: 1,
                
                }}
-               activeColor="#1FAFDF"
+              //  activeColor="#1FAFDF"
                data={subCategory}
                autoScroll
                dropdownPosition="bottom"
@@ -420,12 +431,12 @@ export default function ItemDetail(props) {
                maxHeight={150}
                labelField="label"
                valueField="value"
-               placeholder={'Select  Sub Category'}
+               placeholder={'Select  Sub Class'}
                searchPlaceholder="Search..."
                value={selectedsubcatItems}
                onFocus={() => setIsFocusubcat(true)}
                onBlur={() => setIsFocusubcat(false)}
-               onChange={item => onsubselected(item)}
+                onChange={item => onsubselected(item)}
                renderItem={renderItemsubcat}
              />
            </View>

@@ -41,7 +41,7 @@ export default function Itemlist(props){
     let data = {
       Type: 4,
     };
-    // console.log('data and token', data, token);
+    console.log('category dataaaa', data.Pro_SubCategory,data.SubCat_Name);
     await getproductlist(data, token)
       .then(res => {
         if (res[0].length === 0) {
@@ -50,6 +50,7 @@ export default function Itemlist(props){
             setisview(true);
         //  console.log("res of Product List........", res)
         setitem(res[0])
+        console.log("res of Product List........", res[0])
         }
         })
         .catch((error) => {
@@ -75,7 +76,7 @@ export default function Itemlist(props){
   />
           <Text style={{color: 'black',
               fontSize: 18,marginTop:5,
-              fontWeight: '600',marginLeft:30,}}>{item.Pro_PkeyID}</Text>
+              fontWeight: '600',marginLeft:30,}}>{item.Pro_RFIDTag}</Text>
               </TouchableOpacity>
         </View>
       )}

@@ -33,7 +33,7 @@ export default function Additem(props) {
   const [selectedcatItems, setselectedcatItems] = useState({});
   const [selectedsubcatItems, setselectedsubcatItems] = useState({});
   const [selectedropdownItems, setselectedropdownItems] = useState({});
-
+  const [subcatdropdown, setsubcatdropdown] = useState([]);
   const [open, setOpen] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
   const [isFocuscat, setIsFocuscat] = useState(false);
@@ -52,6 +52,7 @@ export default function Additem(props) {
   const [camrearef, setcamrearef] = useState(null)
   const [showview, setshowview] = useState(false);
   const [id,setid]=useState(false)
+  
   //   {label: 'Pallet', value: 'Pallet'},
   //   {label: 'Individual item', value: 'individual item'},
   // ]);
@@ -208,13 +209,17 @@ export default function Additem(props) {
         Pro_IsActive: true
       }
       console.log("Add itemss....",data, token)
+      console.log("subcategory items are ........",data.Pro_SubCategory,data.SubCat_Name)
+          
       // return 0
       await additemdata(data, token)
         .then((res) => {
           alert("Item Added")
-          props.navigation.navigate('Itemlist')
-          console.log("res of additem........", res[0])
-          console.log("res of additem data ........", res)
+          console.log("subcategory items are ........",data.Pro_SubCategory,data.SubCat_Name)
+          
+         props.navigation.navigate('Itemlist')
+          // console.log("res of additem........", res[0])
+          // console.log("res of additem data ........", res)
           // AsyncStorage.clear();.
          
         })
@@ -240,10 +245,11 @@ export default function Additem(props) {
   };
   const onsubselected = item => {
     setselectedsubcatItems(item);
-    console.log('subcategory item.....', item.value);
+    setsubcatdropdown(item.value)
+    console.log('subcategory item.....', item);
     const subcatitem = JSON.stringify(item);
     
-    // AsyncStorage.setItem('subcategory', subcatitem);
+    console.log('subcategory', subcatitem);
   };
   const GetVendorMaster = async () => {
     let data = {
@@ -275,15 +281,17 @@ export default function Additem(props) {
       Type: 5,
       SubCat_Cat_Pkey: item.value,
     };
-
+    console.log("")
      console.log("data and token", data, token)
     await getsubcategorymaster(data, token)
       .then(res => {
         const fetchsubcat = res[0];
+        console.log("subcatttt",fetchsubcat)
         const collectsubcat = fetchsubcat?.map(item => {
-          return {value: item.SubCat_Cat_Pkey, label: item.SubCat_Name};
+          return {value: item.SubCat_Pkey, label: item.SubCat_Name};
         });
         setsubcategory(collectsubcat);
+        console.log("selected sub class  ",collectsubcat)
 
         // console.log('responsee of subcategory', collectsubcat);
       })
@@ -364,7 +372,7 @@ export default function Additem(props) {
               width: '90%',
               marginLeft: 1,
             }}
-            activeColor="#1FAFDF"
+            //  activeColor="#1FAFDF"
             data={vendor}
             autoScroll
             dropdownPosition="bottom"
@@ -397,7 +405,7 @@ export default function Additem(props) {
               width: '90%',
               marginLeft: 1,
             }}
-            activeColor="#1FAFDF"
+            //  activeColor="#1FAFDF"
             data={Category}
             autoScroll
             dropdownPosition="bottom"
@@ -405,7 +413,7 @@ export default function Additem(props) {
             maxHeight={150}
             labelField="label"
             valueField="value"
-            placeholder={'Select Category'}
+            placeholder={'Select Class'}
             searchPlaceholder="Search..."
             value={selectedcatItems}
             onFocus={() => setIsFocuscat(true)}
@@ -431,7 +439,7 @@ export default function Additem(props) {
               marginLeft: 1,
             
             }}
-            activeColor="#1FAFDF"
+            //  activeColor="#1FAFDF"
             data={subCategory}
             autoScroll
             dropdownPosition="bottom"
@@ -439,9 +447,9 @@ export default function Additem(props) {
             maxHeight={150}
             labelField="label"
             valueField="value"
-            placeholder={'Select  Sub Category'}
+            placeholder={'Select  Sub Class'}
             searchPlaceholder="Search..."
-            value={selectedsubcatItems}
+            value={subcatdropdown}
             onFocus={() => setIsFocusubcat(true)}
             onBlur={() => setIsFocusubcat(false)}
             onChange={item => onsubselected(item)}
