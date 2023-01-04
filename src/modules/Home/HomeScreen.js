@@ -72,6 +72,7 @@ class HomeScreen extends Component {
       console.log("token", this.props.token)
       this.GetProfile(), this.GetHomeData()
       this.GetVendorMaster()
+      this.clear()
 
       // this.GetProductList()
     })
@@ -125,6 +126,18 @@ class HomeScreen extends Component {
       },
       () => this.GetProductList("catitemcount",item.label)
     )
+  }
+  clear=() =>{
+    this.setState
+      (
+        {
+          selectedvendorItems:"",
+          venderitemcount:0,
+          catitemcount:0,
+          selectedcatItems:""
+        }
+      )
+    
   }
   showMessage = (message) => {
     if (message !== "" && message !== null && message !== undefined) {
@@ -317,7 +330,7 @@ class HomeScreen extends Component {
               style={{
                 flexDirection: "row",
                 height: 70,
-                borderRadius: 20,
+                borderRadius: 10,
                 backgroundColor: "white",
                 marginTop: 30,
                 alignItems: "center"
@@ -349,7 +362,7 @@ class HomeScreen extends Component {
               style={{
                 flexDirection: "row",
                 height: 70,
-                borderRadius: 20,
+                borderRadius: 10,
                 backgroundColor: "white",
                 marginTop: 30,
                 alignItems: "center"
@@ -399,8 +412,8 @@ class HomeScreen extends Component {
                       borderBottomEndRadius: 5,
                       borderBottomStartRadius: 5,
                       borderWidth: 0,
-                      marginTop: -2,
-                      width: "90%",
+                       marginTop: -2,
+                      width: "85%",
                       marginLeft: 1
                     }}
                     //  activeColor="#1FAFDF"
@@ -427,7 +440,7 @@ class HomeScreen extends Component {
               style={{
                 flexDirection: "row",
                 height: 70,
-                borderRadius: 20,
+                borderRadius: 10,
                 backgroundColor: "white",
                 marginTop: 30,
                 alignItems: "center"
@@ -466,7 +479,7 @@ class HomeScreen extends Component {
                   marginTop: 15
                 }}
               >
-                <View style={{ width: "80%", alignSelf: "center" }}>
+                <View style={{ width: "100%", alignSelf: "center" }}>
                   <Dropdown
                     style={styles.dropdown}
                     placeholderStyle={styles.placeholderStyle}
@@ -479,7 +492,7 @@ class HomeScreen extends Component {
                       borderBottomStartRadius: 5,
                       borderWidth: 0,
                       marginTop: -2,
-                      width: "90%",
+                      width: "85%",
                       marginLeft: 1
                     }}
                     //  activeColor="#1FAFDF"

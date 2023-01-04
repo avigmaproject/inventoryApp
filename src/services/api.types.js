@@ -17,6 +17,7 @@ export const API = {
   GET_PRODUCTS: '/api/cssell/GetProduct',
   GET_VENDOR_MASTER:"/api/cssell/GetVendorMaster",
   GET_SUBCATEGORY_MASTER:"/api/cssell/GetSubCategoryMaster",
+  GET_CATEGORY_MASTER:"/api/cssell/GetCategoryMaster",
   ADD_UPDATE_POST:"/api/cssell/CreateUpdateProduct",
   GET_PRODUCT_LIST:"/api/cssell/GetProduct",
   GET_HOME_MASTER_DATA:"/api/cssell/GetHomeMasterDataCount"

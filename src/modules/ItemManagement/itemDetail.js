@@ -53,13 +53,12 @@ export default function ItemDetail(props) {
   const [model1txt, setmodel1txt] = useState(null);
   const [qtytxt, setqtytxt] = useState(null);
   const [serialtxt, setserialtxt] = useState(null);
+  const [vendorid, setvendorid] = useState(null);
   const [camrearef, setcamrearef] = useState(null)
   const [showview, setshowview] = useState(false);
   const [id,setid]=useState(false)
+  const [selectid,setselectid]=useState()
   const [pkid,setpkid]=useState(false)
-
-
- 
   const [itemdetail, setitemdetail] = useState(props.route.params.Detail);
   const token = useSelector(state => state.authReducer.userToken);
   
@@ -92,11 +91,13 @@ export default function ItemDetail(props) {
   useEffect(() => {
     setitemdetail(props.route.params.Detail)
     setselectedvendorItems(itemdetail.Pro_Vendor)
-   
+    setvendorid(itemdetail.Ven_ID)
     setselectedcatItems(itemdetail.Pro_Category)
     GetSubCategory(itemdetail.Pro_Category);
     setselectedsubcatItems(itemdetail.Pro_SubCategory)
-    setid(itemdetail.Pro_TypeOfItem)
+    setid(itemdetail.Pro_TypeOfItemid)
+   
+    setselectid(itemdetail.Pro_TypeOfItem1)
       setmodel1txt(itemdetail.Pro_Model)
       setmodeltxt(itemdetail.Pro_Model)
     setlpntxt(itemdetail.Pro_LPN)
@@ -105,7 +106,6 @@ export default function ItemDetail(props) {
     setserialtxt(itemdetail.Pro_Serial)
     setqtytxt(itemdetail.Pro_Qty)
     setpkid(itemdetail.Pro_PkeyID)
-   
     },[itemdetail]);
     useEffect(() => {
       GetVendorMaster();
@@ -113,10 +113,11 @@ export default function ItemDetail(props) {
      
     }, []);
     
-// console.log("'******'",selectedsubcatItems)
-    console.log("subcategorydetail",itemdetail.Pro_SubCategory,itemdetail.SubCat_Name)
+// console.log("'******'",itemdetail.Ven_ID)
+    // console.log("subcategorydetail",itemdetail.Pro_SubCategory,itemdetail.SubCat_Name)
     //  console.log(itemdetail.Pro_Category,'******')
-    //  console.log(itemdetail.Pro_Vendor,'******')
+      console.log("vendor id",vendorid)
+    //  console.log(itemdetail.Pro_TypeOfItem,'******')
     const GetVendorMaster = async () => {
       let data = {
         Type: 4,
@@ -271,6 +272,7 @@ export default function ItemDetail(props) {
         Pro_PkeyID:pkid
      
       }
+      console.log("types of item.....",data.Pro_TypeOfItem)
       console.log("Itemupdate data is....",data, token)
       // return 0
       await additemdata(data, token)
@@ -406,6 +408,13 @@ export default function ItemDetail(props) {
                renderItem={renderItemcat}
              />
            </View>
+           <View style={{marginTop:20}}>
+ <InputText
+         label="Vendor Id"
+         placeholder="Enter Vendor Id"
+         value={vendorid}
+       />
+ </View>
            <View style={{width: '100%', alignSelf: 'center',marginTop:20}}>
              <Dropdown
                style={styles.dropdown}

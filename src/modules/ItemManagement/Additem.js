@@ -3,6 +3,7 @@ import {
   getvendormaster,
   getsubcategorymaster,
   additemdata,
+  getcategorymaster
 } from '../../services/api.function';
 import { CameraScreen,RNCamera } from "react-native-camera-kit"
 import {useToast} from 'native-base';
@@ -19,13 +20,9 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useFocusEffect} from '@react-navigation/native';
-import Barcodescanner from '../Home/BarcodeScanner';
 import {Select, Toast} from 'native-base';
 import InputText from '../../components/InputText';
 import Header from './Header';
-import SearchableDropdown from 'react-native-searchable-dropdown';
 import {Dropdown} from 'react-native-element-dropdown';
 import {useSelector} from 'react-redux';
 export default function Additem(props) {
@@ -35,11 +32,20 @@ export default function Additem(props) {
   const [selectedropdownItems, setselectedropdownItems] = useState({});
   const [subcatdropdown, setsubcatdropdown] = useState([]);
   const [open, setOpen] = useState(false);
+  const [isview,setisview] = useState(false);
+  const [isviewcat,setisviewcat] = useState(false);
+  const [isviewsub,setisviewsub] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
   const [isFocuscat, setIsFocuscat] = useState(false);
   const [isFocusubcat, setIsFocusubcat] = useState(false);
   const [vendor, setvendor] = useState([]);
   const [Category, setcategory] = useState([]);
+  const [vendorid, setvendorid] = useState([]);
+  const [vid, setvid] = useState([]);
+  const [catid, setcatid] = useState([]);
+  const [subcatid, setsubcatid] = useState([]);
+  const [catiddata, setcatiddata] = useState([]);
+
   const [subCategory, setsubcategory] = useState([]);
   const [barcodeid, setbarcodeid] = useState(null);
   const [rfidtxt, setrfidtxt] = useState(null);
@@ -51,6 +57,7 @@ export default function Additem(props) {
   const [serialtxt, setserialtxt] = useState(null);
   const [camrearef, setcamrearef] = useState(null)
   const [showview, setshowview] = useState(false);
+
   const [id,setid]=useState(false)
   
   //   {label: 'Pallet', value: 'Pallet'},
@@ -60,8 +67,18 @@ export default function Additem(props) {
   // const [itemdetail, setitemdetail] = useState(props.route.params.Detail);
   useEffect(() => {
     GetVendorMaster();
+    Vendorid(),
+    Categoryid()
    
-  }, []);
+  }, [vid]);
+  useEffect(() => {
+   
+    Categoryid()
+  }, [catid]);
+  useEffect(() => {
+   
+    Subcategoryid()
+  }, [subcatid]);
   const onReadCode = (event) => {
     if (event.nativeEvent.codeStringValue) {
       if(barcodeid === 'rfid')
@@ -165,14 +182,13 @@ export default function Additem(props) {
         Type: 2,
         Pro_Vendor_Name: selectedvendorItems.value,
         Pro_Category: selectedcatItems.value,
-         Pro_SubCategory:selectedsubcatItems.value,
-       Pro_TypeOfItem:selectedropdownItems.value,
+        Pro_SubCategory:selectedsubcatItems.value,
+        Pro_TypeOfItem:selectedropdownItems.value,
         Pro_RFIDTag: rfidtxt,
         Pro_LPN: lpntxt,
         Pro_Model: modeltxt,
         Pro_Serial: serialtxt,
         Pro_Qty:qtytxt
-     
       }
       console.log("Itemupdate....",data, token)
       // return 0
@@ -182,8 +198,6 @@ export default function Additem(props) {
           props.navigation.navigate('Itemlist')
           console.log("res of update........", res[0])
           console.log("res of update data ........", res)
-         
-        
         })
         .catch((error) => {
           console.log("errror is.....", error)          
@@ -200,15 +214,19 @@ export default function Additem(props) {
         Cat_Name: selectedcatItems.label,
         Pro_SubCategory: selectedsubcatItems.value,
         SubCat_Name: selectedsubcatItems.label,
-        Pro_TypeOfItem: id,
+        Pro_TypeOfItem:id,
         Pro_RFIDTag: id == "2" ? rfidtxt1 : rfidtxt,
         Pro_LPN: lpntxt,
         Pro_Model: id == "2" ? model1txt : modeltxt,
         Pro_Serial: serialtxt,
         Pro_Qty: qtytxt,
-        Pro_IsActive: true
+        Pro_IsActive: true,
+        
       }
       console.log("Add itemss....",data, token)
+      console.log("vendor id is......",vid)
+      console.log(" id is......",data.Pro_TypeOfItem)
+
       console.log("subcategory items are ........",data.Pro_SubCategory,data.SubCat_Name)
           
       // return 0
@@ -227,31 +245,96 @@ export default function Additem(props) {
           console.log("errror is.....", error)          
         })
     }}
-  const onvendorselected = item => {
+  const onvendorselected = async (item) => {
     setselectedvendorItems(item);
     console.log('vendor item.....', item);
-    const vanderitem = JSON.stringify(item);
+    const vanderitem = JSON.stringify(item.value);
+    // setvendorid(item.value)
+    setvid(vanderitem)
+    Vendorid()
+    console.log('vid is',vid)
+    setisview(true)
+     
+   
     // AsyncStorage.setItem('vendor', vanderitem);
   };
-  const oncatselected = item => {
+  const oncatselected = async (item )=> {
     setselectedcatItems(item);
+    // setcatid(item.value)
+    setisviewcat(true)
     console.log("category item.....",item)
     console.log("onselected itemmm category",selectedcatItems)
-    const catitem = JSON.stringify(item)
+    const catitem = JSON.stringify(item.value)
+    setcatid(catitem)
+    console.log("categorydata",catid)
+    Categoryid()
     // AsyncStorage.setItem(`category`, catitem);
     console.log("cat value",item.value)
     GetSubCategory(item);
-
   };
   const onsubselected = item => {
     setselectedsubcatItems(item);
     setsubcatdropdown(item.value)
+    setisviewsub(true)
     console.log('subcategory item.....', item);
-    const subcatitem = JSON.stringify(item);
-    
-    console.log('subcategory', subcatitem);
+    const subcatitem = JSON.stringify(item.value);
+    setsubcatid(subcatitem)
+    Subcategoryid()
+   
   };
-  const GetVendorMaster = async () => {
+  const Categoryid = async () =>{
+    console.log("*****",catid)
+    let data={
+      Type:2,
+      Cat_Pkey:catid
+    };
+    await getcategorymaster(data, token)
+    .then(res => {
+      console.log("response of cat  ",res[0])
+      setcatiddata(res[0][0].Cat_ID)
+      console.log("catid",catiddata)  
+     
+    })
+    .catch(error => {
+      console.log('errorr of vendor is', error);
+    });
+};
+  const Vendorid = async () =>{
+    console.log("*****",vid)
+    let data={
+      Type:2,
+      Ven_PkeyID:vid
+    };
+    await getvendormaster(data, token)
+    .then(res => {
+      console.log("response of vendor  ",res[0])
+      const vendoriddata = res[0][0].Ven_ID;
+      console.log("vendorid",vendoriddata)  
+      setvendorid(vendoriddata)
+    })
+    .catch(error => {
+      console.log('errorr of vendor is', error);
+    });
+};
+const Subcategoryid = async () =>{
+  console.log("subcat id *****",subcatid)
+  let data={
+    Type:2,
+    SubCat_Pkey:subcatid
+  };
+  await getsubcategorymaster(data, token)
+  .then(res => {
+    console.log("response of categoryy subb  ",res[0])
+    const subcaytiddata = res[0][0].SubCat_ID;
+    console.log("subcaytiddata",subcaytiddata)  
+    setsubcatid(subcaytiddata)
+    console.log("subcategory data",subcatid)
+  })
+  .catch(error => {
+    console.log('errorr of vendor is', error);
+  });
+};
+    const GetVendorMaster = async () => {
     let data = {
       Type: 4,
     };
@@ -267,6 +350,11 @@ export default function Additem(props) {
         const collectcat = fetchcat?.map(item => {
           return {value: item.Cat_Pkey, label: item.Cat_Name};
         });
+        const cat=fetchcat?.map(item => {
+          return {value: item.Cat_ID, label: item.Cat_Name};
+        });
+        setcatid(cat)
+        console.log("category id",cat)
         setcategory(collectcat);
         console.log('response of collectcat is', collectvendor);
       })
@@ -292,7 +380,6 @@ export default function Additem(props) {
         });
         setsubcategory(collectsubcat);
         console.log("selected sub class  ",collectsubcat)
-
         // console.log('responsee of subcategory', collectsubcat);
       })
       .catch(error => {
@@ -302,6 +389,7 @@ export default function Additem(props) {
   const onselectItem = async itemValue => {
     // await AsyncStorage.setItem('id', itemValue);
     setid(itemValue);
+    console.log("id",id)
   };
   const renderItem = item => {
     return (
@@ -389,6 +477,15 @@ export default function Additem(props) {
             renderItem={renderItem}
           />
         </View>
+        {isview &&(
+ <View style={{marginTop:20}}>
+ <InputText
+         label="Vendor Id"
+         placeholder="Enter Vendor Id"
+         value={vendorid}
+       />
+ </View>
+          )}
         <View style={{width: '100%', alignSelf: 'center',marginTop:20}}>
           <Dropdown
             style={styles.dropdown}
@@ -422,6 +519,15 @@ export default function Additem(props) {
             renderItem={renderItemcat}
           />
         </View>
+        {isviewcat &&(
+ <View style={{marginTop:20}}>
+ <InputText
+         label="Category Id"
+         placeholder="Enter Category Id"
+         value={catiddata}
+       />
+ </View>
+          )}
         <View style={{width: '100%', alignSelf: 'center',marginTop:20}}>
           <Dropdown
             style={styles.dropdown}
@@ -456,7 +562,15 @@ export default function Additem(props) {
             renderItem={renderItemsubcat}
           />
         </View>
-
+        {isviewsub &&(
+ <View style={{marginTop:20}}>
+ <InputText
+         label="Sub Class Id"
+         placeholder="Enter Sub Class Id"
+         value={subcatid}
+       />
+ </View>
+          )}
         {/* <View style={{ marginTop: 20 }}>
           <SearchableDropdown
             resetValue={true}

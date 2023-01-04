@@ -2,19 +2,16 @@ import React, {useState, useEffect} from 'react';
 import {  Snackbar } from 'react-native-paper';
 import {
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  Platform,
 } from 'react-native';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Header from './components/Header';
 import {Toast} from 'native-base';
-import InputText from '../../components/InputText';
 import Button from '../../components/Button';
 import {forgotpassword} from '../../services/api.function';
 const ForgotPasswordScreen = (props) => {
@@ -25,10 +22,6 @@ const ForgotPasswordScreen = (props) => {
   const [message, setmessage] = useState('');
   const [color, setcolor] = useState('green');
   const [device, setdevice] = useState(0)
-  const isValidEmail = value => {
-    const regx = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-    return regx.test(value);
-  };
   const handleSubmit = () => {
     var Validation2=true;
   
@@ -42,10 +35,7 @@ const ForgotPasswordScreen = (props) => {
       setEmailError('');
       Validation2 = true;
     }
-    console.log(Validation2)
     return Validation2
-    
-
   };
   React.useEffect(() => {
     if (Platform.OS === 'android') {
@@ -54,7 +44,6 @@ const ForgotPasswordScreen = (props) => {
       setdevice(2)
       }
       return () => {
-          console.log("unmount")
         }
       },[])
         const onToggleSnackBar = () => setVisible(!visible);
@@ -74,13 +63,10 @@ const ForgotPasswordScreen = (props) => {
       },
     });
     // Clipboard.setString(link)
-    console.log(link);
     return link
   };
   const submitForm = async () => {
-
     const link =   await generateLink();
-    console.log("link is",link)
        if (handleSubmit()) {
          let data = {
            EmailID: email,
@@ -89,17 +75,11 @@ const ForgotPasswordScreen = (props) => {
           //  Device: device,
          };
        setloading(true);
-          console.log("emaill is...",email);
-         console.log(data);
          await forgotpassword(data)
            .then(res => {
 
-             console.log('res: ', JSON.stringify(res));
-             console.log('res:123', res[0].UserCode);
-             onToggleSnackBar()
- 
+             onToggleSnackBar() 
              if (res[0].UserCode === 'Sucesss') {
-               console.log('successs');
                 setmessage("Link sent successfully. Please check your registered email.") 
              setcolor("green")
              }
@@ -115,17 +95,14 @@ const ForgotPasswordScreen = (props) => {
                  setmessage("Request Error") 
                  setcolor("red")
                  onToggleSnackBar()
-                 console.log(error.request)
                } else if (error.responce) {
                  setmessage("Responce Error") 
                  setcolor("red")
                  onToggleSnackBar()
-                 console.log(error.responce)
                } else {
                  setmessage("Somthing went wrong....") 
                  setcolor("red")
                  onToggleSnackBar()
-                 console.log(error)
                }
            });
        } 
@@ -133,7 +110,7 @@ const ForgotPasswordScreen = (props) => {
    };
   return (
    
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={styles.container}>
          <StatusBar barStyle="dark-content" backgroundColor={"white"} />
         <Spinner
           visible={loading}
@@ -143,26 +120,23 @@ const ForgotPasswordScreen = (props) => {
           text="Forgot Password"
           onPress={() =>  props.navigation.goBack()}
         />
-         <View style={{paddingHorizontal:20}}>
-        <Text style={{ fontSize: 16,
-marginTop:10,
-color: '#9B9C9F',
-fontWeight: '400',}}>
+         <View style={styles.mainview}>
+        <Text style={styles.textstyle}>
                 Enter the registered email address to receive the reset password
                 link.{' '}
               </Text>
-        <View style={{marginTop: 20}}>
+        <View style={styles.inputview}>
         <InputText
                 onChangeText={text => setEmail(text)}
                 label={'Email address'}
                   value={email}
               />
               {emailError.length > 0 && (
-                <Text style={{color: 'red'}}>{emailError}</Text>
+                <Text style={styles.text}>{emailError}</Text>
               )}
         </View>
 
-        <View style={{marginTop: 35}}>
+        <View style={styles.buttonview}>
         <Button
             text="Send Link"
             backgroundColor="#2874A6"
@@ -183,97 +157,29 @@ fontWeight: '400',}}>
           {message}
           </Snackbar>
       </SafeAreaView>
-     
-
   );
 };
 
 export default ForgotPasswordScreen;
 
 const styles = StyleSheet.create({
-  heading: {
-    marginTop: 25,
-    width: '90%',
-    height: 43,
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    marginVertical: 10,
+  container:{
+    flex:1
   },
-  text: {
-    fontSize: 30,
-
-    color: '#424242',
-    fontWeight: '700',
+  mainview:{
+    paddingHorizontal:20
   },
-  header: {
-    width: '90%',
-  },
-  text2: {
-    fontSize: 16,
-
-    color: '#9B9C9F',
-    fontWeight: '400',
-  },
-  textinput: {
-    width: '100%',
-    alignSelf: 'center',
-    marginTop: 20,
-  },
-  email: {
-    height: 47,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#EBEBEB',
-    marginVertical: 20,
-    padding: 10,
-  },
-
-  forgot: {
-    textAlign: 'right',
-    marginTop: 5,
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#9B9C9F',
-  },
-  reset1: {
-    textAlign: 'right',
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#9B9C9F',
-    marginVertical: 5,
-  },
-  containerFooter: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    fontSize: 16,
-    width: '90%',
-    alignSelf: 'center',
-    marginVertical: 20,
-  },
-  footer: {
-    fontSize: 16,
-
-    fontWeight: '400',
-    color: '#98A6AE',
-    height: 22,
-  },
-  footer1: {
-    fontSize: 16,
-
-    fontWeight: '400',
-    color: '#0FDEEB',
-    height: 22,
-  },
-  error: {
-    // textAlign: 'center',
-    // justifyContent: 'center',
-    color: '#DBBE80',
-
-    fontSize: 15,
-    width: '90%',
-  },
-  spinnerTextStyle: {
-    color: '#FFF',
-  },
+  textstyle:
+    { fontSize: 16,
+      marginTop:10,
+      color: '#9B9C9F',
+      fontWeight: '400',},
+      buttonview:
+      {marginTop: 35},
+      text:{
+        color: 'red'
+      },
+      inputview:
+      {marginTop: 20}
+  
 });

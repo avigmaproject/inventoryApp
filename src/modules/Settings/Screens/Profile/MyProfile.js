@@ -361,6 +361,7 @@ isvalidpassword = value => {
       <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F2F4" }}>
           <StatusBar barStyle="dark-content" backgroundColor={"white"} />
         <Spinner visible={this.state.loading} />
+      
         <View
           style={{
             backgroundColor: "#fff",
@@ -397,6 +398,7 @@ isvalidpassword = value => {
             </Text>
           </TouchableOpacity>
         </View>
+       
         <View style={{ justifyContent: "center", alignItems: "center",marginTop:10 }}>
           <TouchableOpacity
             style={{
@@ -452,7 +454,8 @@ isvalidpassword = value => {
           />
         </View>
 
-        <ScrollView style={{ paddingHorizontal: 20 }}>
+        <ScrollView 
+        keyboardShouldPersistTaps={'always'}style={{ paddingHorizontal: 20 }}>
           <View
             style={{
               marginTop: 10
@@ -491,7 +494,7 @@ isvalidpassword = value => {
               mt={1}
               style={{
                 justifyContent: "center",
-                height: 65,
+                height: 60,
                 fontSize: 14,
                 color: "#000000",
                 backgroundColor: "#fff"

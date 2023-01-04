@@ -41,7 +41,8 @@ export default function Itemlist(props){
     let data = {
       Type: 4,
     };
-    console.log('category dataaaa', data.Pro_SubCategory,data.SubCat_Name);
+    // console.log('category dataaaa', data.Pro_SubCategory,data.SubCat_Name);
+    console.log('itemmm ', data.Pro_TypeOfItem);
     await getproductlist(data, token)
       .then(res => {
         if (res[0].length === 0) {
@@ -61,7 +62,7 @@ export default function Itemlist(props){
     }
     const _renderItem = ({item, index}) => {
       return (
-<View  style={{flexDirection:'row',height:65,backgroundColor:'white',marginTop:30,alignItems:'center',borderRadius:20}}>
+<View  style={{flexDirection:'row',height:65,backgroundColor:'white',marginTop:30,alignItems:'center',borderRadius:10}}>
 <TouchableOpacity style={{flexDirection:'row'}} onPress={() =>  props.navigation.navigate('ItemDetail',{Detail:item})} > 
 <Image
                   style={{

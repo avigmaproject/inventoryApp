@@ -13,6 +13,7 @@ export default function Filter(props) {
     const [item, setitem] = useState([])
     const [vendorname, setvendorname] = useState("")
     const [subcategory, setsubcategory] = useState("")
+    const [isview, setisview] = useState(true);
     const [category, setcategory] = useState("")
     const [filterdata,setfilterdata]=useState([])
     const token = useSelector((state) => state.authReducer.userToken)
@@ -20,6 +21,7 @@ export default function Filter(props) {
     //     GetProductList()
     //   }, [])
       const GetProductList = async () => {
+        setisview(false)
         let data = {
           Type: 6,
           Pro_Vendor_Name:vendorname,
@@ -65,8 +67,16 @@ export default function Filter(props) {
         setIsFocus(false)
 
       }
+     const onListEmpty = () => {
+        return <View style={{justifyContent:'center',alignSelf:'center',marginTop:250}}>
+        <Text style={{color:"black",fontSize:24,weight:"600"}}>No Items</Text>
+       </View>
+     }
       const _renderItem = ({ item }) => {
+        console.log(item,"item is")
         return (
+          <View>
+       
           <View
             style={{
               flexDirection: "row",
@@ -74,7 +84,7 @@ export default function Filter(props) {
               backgroundColor: "white",
               marginTop: 30,
               alignItems: "center",
-              borderRadius:20
+              borderRadius:10
             }}
           >
             <TouchableOpacity
@@ -126,6 +136,7 @@ export default function Filter(props) {
               }
               
             </TouchableOpacity>
+          </View>
           </View>
         )
       }
@@ -320,9 +331,22 @@ export default function Filter(props) {
                
 </View>)
             }
-            <View style={{paddingBottom:20}}>
-            <FlatList data={item} renderItem={_renderItem} />
-            </View>
+
+           {isview ?(
+            <View style={{justifyContent:'center',alignSelf:'center',marginTop:250}}>
+               <Text style={{color:"black",fontSize:24,weight:"600"}}>No Items</Text>
+              </View>
+           ):
+
+           <View style={{paddingBottom:20}}>
+           <FlatList data={item} renderItem={_renderItem} 
+             ListEmptyComponent={onListEmpty()}
+             />
+           </View>
+           }
+           
+           
+ 
         
         </View>
     </SafeAreaView>
