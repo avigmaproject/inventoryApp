@@ -25,6 +25,7 @@ import InputText from "../../components/InputText"
 import Header from "./Header"
 import { Dropdown } from "react-native-element-dropdown"
 import { useSelector } from "react-redux"
+import { useIsFocused } from '@react-navigation/native';
 export default function Additem(props) {
   const [selectedvendorItems, setselectedvendorItems] = useState(null)
   const [selectedcatItems, setselectedcatItems] = useState({})
@@ -57,6 +58,7 @@ export default function Additem(props) {
   const [showview, setshowview] = useState(false)
   const [id, setid] = useState(false)
   const token = useSelector((state) => state.authReducer.userToken)
+  const isFocused = useIsFocused();
   useEffect(() => {
     GetVendorMaster()
     Vendorid(), Categoryid()
@@ -192,7 +194,7 @@ export default function Additem(props) {
     setisviewcat(true)
     const catitem = JSON.stringify(item.value)
     setcatid(catitem)
-    Categoryid()
+    Categoryid(catitem)
     GetSubCategory(item)
   }
   const onsubselected = (item) => {
@@ -201,12 +203,12 @@ export default function Additem(props) {
     setisviewsub(true)
     const subcatitem = JSON.stringify(item.value)
     setsubcatid(subcatitem)
-    Subcategoryid()
+    Subcategoryid(subcatitem)
   }
-  const Categoryid = async () => {
+  const Categoryid = async (id) => {
     let data = {
       Type: 2,
-      Cat_Pkey: catid
+      Cat_Pkey: id ? id: catid
     }
     await getcategorymaster(data, token)
       .then((res) => {
@@ -231,10 +233,10 @@ export default function Additem(props) {
         console.log("errorr of vendor is", error)
       })
   }
-  const Subcategoryid = async () => {
+  const Subcategoryid = async (id) => {
     let data = {
       Type: 2,
-      SubCat_Pkey: subcatid
+      SubCat_Pkey:id?id: subcatid
     }
     await getsubcategorymaster(data, token)
       .then((res) => {
@@ -337,6 +339,7 @@ export default function Additem(props) {
       />
       {showview ? (
         <View>
+           { isFocused &&
           <CameraScreen
             ref={(ref) => setcamrearef(ref)}
             focusMode={"on"}
@@ -348,7 +351,7 @@ export default function Additem(props) {
             showFrame={true} // (default false) optional, show frame with transparent layer (qr code or barcode will be read on this area ONLY), start animation for scanner,that stoped when find any code. Frame always at center of the screen
             laserColor="red" // (default red) optional, color of laser in scanner frame
             frameColor="white" // (default white) optional, color of border of scanner frame
-          />
+          />}
         </View>
       ) : (
         <ScrollView
@@ -394,6 +397,7 @@ export default function Additem(props) {
                 label="Vendor Id"
                 placeholder="Enter Vendor Id"
                 value={vendorid}
+                editable={true}
               />
             </View>
           )}
@@ -433,9 +437,10 @@ export default function Additem(props) {
           {isviewcat && (
             <View style={{ marginTop: 20 }}>
               <InputText
-                label="Category Id"
-                placeholder="Enter Category Id"
+                label="Class Id"
+                placeholder="Enter Class Id"
                 value={catiddata}
+                editable={true}
               />
             </View>
           )}
@@ -478,6 +483,7 @@ export default function Additem(props) {
                 label="Sub Class Id"
                 placeholder="Enter Sub Class Id"
                 value={subcatid}
+                editable={true}
               />
             </View>
           )}

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react"
 import {
   getvendormaster,
   getsubcategorymaster,
-  additemdata
+  getcategorymaster,
+  additemdata,
+  getproductlist
 } from "../../services/api.function"
 import { CameraScreen, RNCamera } from "react-native-camera-kit"
 import { useToast } from "native-base"
@@ -29,7 +31,7 @@ import SearchableDropdown from "react-native-searchable-dropdown"
 import { Dropdown } from "react-native-element-dropdown"
 import { useSelector } from "react-redux"
 import { createIconSetFromFontello } from "react-native-vector-icons"
-
+import { useIsFocused } from '@react-navigation/native';
 export default function ItemDetail(props) {
   const [selectedvendorItems, setselectedvendorItems] = useState(null)
   const [selectedcatItems, setselectedcatItems] = useState({})
@@ -57,9 +59,17 @@ export default function ItemDetail(props) {
   const [camrearef, setcamrearef] = useState(null)
   const [showview, setshowview] = useState(false)
   const [id, setid] = useState(0)
+  const [venid, setvenid] = useState(0)
+  const [catid, setcatid] = useState(0)
+  const [subcatid, setsubcatid] = useState(0) 
   const [selectid, setselectid] = useState()
-  const [pkid, setpkid] = useState(false)
+  const [pkid, setpkid] = useState(0)
   const [itemdetail, setitemdetail] = useState(props.route.params.Detail)
+  const [vid, setvid] = useState([])
+  const [catid1, setcatid1] = useState([])
+  const [subcatid1, setsubcatid1] = useState([])
+  const [catiddata, setcatiddata] = useState([])
+  const isFocused = useIsFocused();
   const token = useSelector((state) => state.authReducer.userToken)
 
   const onReadCode = (event) => {
@@ -100,7 +110,38 @@ export default function ItemDetail(props) {
     setserialtxt(itemdetail.Pro_Serial)
     setqtytxt(itemdetail.Pro_Qty)
     setpkid(itemdetail.Pro_PkeyID)
+    GetProductList(itemdetail.Pro_PkeyID)
   }, [itemdetail])
+  console.log("itemdetail",itemdetail)
+  useEffect(() => {
+    GetVendorMaster()
+    Vendorid(), Categoryid()
+  }, [venid])
+  useEffect(() => {
+    Categoryid()
+  }, [catid])
+  useEffect(() => {
+    Subcategoryid()
+  }, [subcatid])
+  const GetProductList = async (id) => {
+    console.log("pkid is",pkid)
+    let data = {
+      Type: 2,
+      Pro_PkeyID:id ? id: pkid
+    }
+    await getproductlist(data, token)
+      .then((res) => {
+       console.log("response of id is",res[0][0].Ven_ID)
+       setvenid(res[0][0].Ven_ID)
+       setcatid(res[0][0].Cat_ID)
+       setsubcatid(res[0][0].SubCat_ID)
+       console.log("response of id is",venid)
+      })
+      .catch((error) => {
+        console.log("errror is.....", error)
+      })
+  }
+
   useEffect(() => {
     GetVendorMaster()
   }, [])
@@ -273,18 +314,66 @@ export default function ItemDetail(props) {
   const onvendorselected = (item) => {
     setselectedvendorItems(item)
     console.log("vendor item.....", item)
-    const vanderitem = JSON.stringify(item)
+    const vanderitem = JSON.stringify(item.value)
+    setvenid(vanderitem)
+    Vendorid(vanderitem)
     // AsyncStorage.setItem('vendor', vanderitem);
   }
   const oncatselected = (item) => {
     setselectedcatItems(item)
-    const catitem = JSON.stringify(item)
+    const catitem = JSON.stringify(item.value)
     GetSubCategory(item.value)
+    setcatid(catitem)
+    Categoryid(catitem)
   }
   const onsubselected = (item) => {
     setselectedsubcatItems(item)
     console.log("subcategory item.....", item)
-    const subcatitem = JSON.stringify(item)
+    const subcatitem = JSON.stringify(item.value)
+    setsubcatid(subcatitem)
+    Subcategoryid(subcatitem)
+  }
+  const Categoryid = async (id) => {
+    let data = {
+      Type: 2,
+      Cat_Pkey: id ? id: catid
+    }
+    await getcategorymaster(data, token)
+      .then((res) => {
+        setcatid(res[0][0].Cat_ID)
+      })
+      .catch((error) => {
+        console.log("errorr of vendor is", error)
+      })
+  }
+  const Vendorid = async (id) => {
+    let data = {
+      Type: 2,
+      Ven_PkeyID:id?id: venid
+    }
+    await getvendormaster(data, token)
+      .then((res) => {
+        console.log("response of vendor  ", res[0])
+        const vendoriddata = res[0][0].Ven_ID
+        setvenid(vendoriddata)
+      })
+      .catch((error) => {
+        console.log("errorr of vendor is", error)
+      })
+  }
+  const Subcategoryid = async (id) => {
+    let data = {
+      Type: 2,
+      SubCat_Pkey:id?id: subcatid
+    }
+    await getsubcategorymaster(data, token)
+      .then((res) => {
+        const subcaytiddata = res[0][0].SubCat_ID
+        setsubcatid(subcaytiddata)
+      })
+      .catch((error) => {
+        console.log("errorr of vendor is", error)
+      })
   }
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F2F4" }}>
@@ -299,6 +388,7 @@ export default function ItemDetail(props) {
       />
       {showview ? (
         <View>
+           { isFocused && 
           <CameraScreen
             ref={(ref) => setcamrearef(ref)}
             focusMode={"on"}
@@ -311,6 +401,7 @@ export default function ItemDetail(props) {
             laserColor="red" // (default red) optional, color of laser in scanner frame
             frameColor="white" // (default white) optional, color of border of scanner frame
           />
+           }
         </View>
       ) : (
         <ScrollView
@@ -350,6 +441,14 @@ export default function ItemDetail(props) {
               renderItem={renderItem}
             />
           </View>
+          <View style={{ marginTop: 20 }}>
+            <InputText
+              label="Vendor Id"
+              placeholder="Enter Vendor Id"
+              value={venid}
+              editable={true}
+            />
+          </View>
           <View style={{ width: "100%", alignSelf: "center", marginTop: 20 }}>
             <Dropdown
               style={styles.dropdown}
@@ -385,9 +484,10 @@ export default function ItemDetail(props) {
           </View>
           <View style={{ marginTop: 20 }}>
             <InputText
-              label="Vendor Id"
-              placeholder="Enter Vendor Id"
-              value={vendorid}
+              label="Class Id"
+              placeholder="Enter Class Id"
+              value={catid}
+              editable={true}
             />
           </View>
           <View style={{ width: "100%", alignSelf: "center", marginTop: 20 }}>
@@ -421,7 +521,14 @@ export default function ItemDetail(props) {
               renderItem={renderItemsubcat}
             />
           </View>
-
+          <View style={{ marginTop: 20 }}>
+            <InputText
+              label="Sub Class Id"
+              placeholder="Enter Sub Class Id"
+              value={subcatid}
+              editable={true}
+            />
+          </View>
           {/* <View style={{ marginTop: 20 }}>
              <SearchableDropdown
                resetValue={true}

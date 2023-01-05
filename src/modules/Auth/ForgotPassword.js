@@ -8,6 +8,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
+import InputText from '../../components/InputText';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Header from './components/Header';
@@ -22,6 +23,10 @@ const ForgotPasswordScreen = (props) => {
   const [message, setmessage] = useState('');
   const [color, setcolor] = useState('green');
   const [device, setdevice] = useState(0)
+  const isValidEmail = value => {
+    const regx = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    return regx.test(value);
+  };
   const handleSubmit = () => {
     var Validation2=true;
   

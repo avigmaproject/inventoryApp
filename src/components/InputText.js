@@ -23,6 +23,7 @@ const InputText = props => {
       onBlur={props.onBlur}
       mode="outlined"
       outlineColor="#2874A6"
+      editable={!props.editable}
       
       // dense
       style={{

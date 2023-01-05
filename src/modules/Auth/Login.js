@@ -34,6 +34,7 @@ const Login = ({navigation}) => {
       secureTextEntry: !data.secureTextEntry,
     });
   };
+  
   const Validation = () => {
     let cancel = false;
     if (email.length === 0) {
