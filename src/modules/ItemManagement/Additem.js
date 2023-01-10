@@ -18,7 +18,6 @@ import {
   View,
   Image
 } from "react-native"
-import { useFocusEffect } from "@react-navigation/native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import { Select, Toast } from "native-base"
@@ -48,8 +47,8 @@ export default function Additem(props) {
 
   const [subCategory, setsubcategory] = useState([])
   const [barcodeid, setbarcodeid] = useState(null)
-  const [rfidtxt, setrfidtxt] = useState("")
-  const [rfidtxt1, setrfidtxt1] = useState("")
+  const [rfidtxt, setrfidtxt] = useState(null)
+  const [rfidtxt1, setrfidtxt1] = useState(null)
   const [lpntxt, setlpntxt] = useState(null)
   const [modeltxt, setmodeltxt] = useState(null)
   const [model1txt, setmodel1txt] = useState(null)
@@ -59,50 +58,32 @@ export default function Additem(props) {
   const [showview, setshowview] = useState(false)
   const [id, setid] = useState(false)
   const token = useSelector((state) => state.authReducer.userToken)
-
-
   const isFocused = useIsFocused();
   useEffect(() => {
     GetVendorMaster()
-   
-  },[] )
+    Vendorid(), Categoryid()
+  }, [vid])
   useEffect(() => {
-    setrfidtxt(rfidcode)
-      setrfidtxt1(rfid1code)
-      setmodeltxt(modelcode)
-      setmodel1txt(model1code)
-      setlpntxt(lpncode)
-      setqtytxt(qtycode)
-      setserialtxt(serialcode)
-   
-  },[] )
-  const rfidcode = useSelector((state) => state.dataReducer.rfid)
-  const rfid1code = useSelector((state) => state.dataReducer.rfid1)
-  const modelcode = useSelector((state) => state.dataReducer.model)
-  const model1code = useSelector((state) => state.dataReducer.model1)
-  const lpncode = useSelector((state) => state.dataReducer.lpn)
-  const qtycode = useSelector((state) => state.dataReducer.qty)
-  const serialcode = useSelector((state) => state.dataReducer.serial)
-  useFocusEffect(
-    React.useCallback(() => {
-      setrfidtxt(rfidcode)
-      setrfidtxt1(rfid1code)
-      setmodeltxt(modelcode)
-      setmodel1txt(model1code)
-      setlpntxt(lpncode)
-      setqtytxt(qtycode)
-      setserialtxt(serialcode)
-    }, [])
-  )
-  console.log("rfidcode....",rfidcode)
-  console.log("rfidtextt....",rfidtxt)
-  // useEffect(() => {
-  //   Categoryid()
-  // }, [catid])
-  // useEffect(() => {
-  //   Subcategoryid()
-  // }, [subcatid])
-
+    Categoryid()
+  }, [catid])
+  useEffect(() => {
+    Subcategoryid()
+  }, [subcatid])
+  const onReadCode = (event) => {
+    if (event.nativeEvent.codeStringValue) {
+      if (barcodeid === "rfid") setrfidtxt(event.nativeEvent.codeStringValue)
+      if (barcodeid === "rfid1") setrfidtxt1(event.nativeEvent.codeStringValue)
+      if (barcodeid === "lpn") setlpntxt(event.nativeEvent.codeStringValue)
+      if (barcodeid === "model") setmodeltxt(event.nativeEvent.codeStringValue)
+      if (barcodeid === "model1")
+        setmodel1txt(event.nativeEvent.codeStringValue)
+      if (barcodeid === "qty") setqtytxt(event.nativeEvent.codeStringValue)
+      if (barcodeid === "serial")
+        setserialtxt(event.nativeEvent.codeStringValue)
+      console.log("qrcode is ", event.nativeEvent.codeStringValue)
+      setshowview(false)
+    }
+  }
   const onshowscanneropen = (text) => {
     console.log("text is", text)
     setbarcodeid(text)
@@ -204,7 +185,7 @@ export default function Additem(props) {
     console.log("vendor item.....", item)
     const vanderitem = JSON.stringify(item.value)
     setvid(vanderitem)
-    Vendorid(vanderitem)
+    Vendorid()
     console.log("vid is", vid)
     setisview(true)
   }
@@ -237,10 +218,10 @@ export default function Additem(props) {
         console.log("errorr of vendor is", error)
       })
   }
-  const Vendorid = async (id) => {
+  const Vendorid = async () => {
     let data = {
       Type: 2,
-      Ven_PkeyID: id? id: vid
+      Ven_PkeyID: vid
     }
     await getvendormaster(data, token)
       .then((res) => {
@@ -377,6 +358,30 @@ export default function Additem(props) {
           keyboardShouldPersistTaps="handled"
           style={{ paddingHorizontal: 20 }}
         >
+          <View style={{justifyContent:'center',alignItems:'center',}}>
+          <TouchableOpacity
+                    onPress={() =>
+                      props.navigation.navigate('BarcodeScanner')}
+                    style={{
+                      backgroundColor:'#21618C',
+                      height:35,
+                      width: 90,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderRadius:15,
+                      marginTop:20
+
+                    }}
+                  >
+                    <Text
+                    style={{
+                      color: 'white',
+                      fontSize: 16,
+                      lineHeight: 21,
+                      fontWeight: '500',
+                    }}>Scanner</Text>
+                    </TouchableOpacity>
+          </View>
           <View style={{ width: "100%", alignSelf: "center", marginTop: 20 }}>
             <Dropdown
               style={styles.dropdown}
@@ -656,11 +661,7 @@ export default function Additem(props) {
                   }}
                 >
                   <TouchableOpacity
-                   onPress={() =>
-                    props.navigation.navigate('BarcodeScanner', {
-                      title: 'rfid',
-                    })}
-                    // onPress={() => onshowscanneropen("rfid")}
+                    onPress={() => onshowscanneropen("rfid")}
                     style={{
                       flexDirection: "row",
                       justifyContent: "center",
@@ -699,11 +700,7 @@ export default function Additem(props) {
                   }}
                 >
                   <TouchableOpacity
-                   onPress={() =>
-                    props.navigation.navigate('BarcodeScanner', {
-                      title: 'lpn',
-                    })}
-                    // onPress={() => onshowscanneropen("lpn")}
+                    onPress={() => onshowscanneropen("lpn")}
                     style={{
                       flexDirection: "row",
                       justifyContent: "center",
@@ -742,11 +739,7 @@ export default function Additem(props) {
                   }}
                 >
                   <TouchableOpacity
-                     onPress={() =>
-                      props.navigation.navigate('BarcodeScanner', {
-                        title: 'model',
-                      })}
-                    // onPress={() => onshowscanneropen("model")}
+                    onPress={() => onshowscanneropen("model")}
                     style={{
                       flexDirection: "row",
                       justifyContent: "center",
@@ -785,11 +778,7 @@ export default function Additem(props) {
                   }}
                 >
                   <TouchableOpacity
-                     onPress={() =>
-                      props.navigation.navigate('BarcodeScanner', {
-                        title: 'qty',
-                      })}
-                    // onPress={() => onshowscanneropen("qty")}
+                    onPress={() => onshowscanneropen("qty")}
                     style={{
                       flexDirection: "row",
                       justifyContent: "center",
@@ -831,11 +820,7 @@ export default function Additem(props) {
                   }}
                 >
                   <TouchableOpacity
-                     onPress={() =>
-                      props.navigation.navigate('BarcodeScanner', {
-                        title: 'rfid1',
-                      })}
-                    // onPress={() => onshowscanneropen("rfid1")}
+                    onPress={() => onshowscanneropen("rfid1")}
                     style={{
                       flexDirection: "row",
                       justifyContent: "center",
@@ -875,11 +860,7 @@ export default function Additem(props) {
                   }}
                 >
                   <TouchableOpacity
-                     onPress={() =>
-                      props.navigation.navigate('BarcodeScanner', {
-                        title: 'model1',
-                      })}
-                    // onPress={() => onshowscanneropen("model1")}
+                    onPress={() => onshowscanneropen("model1")}
                     style={{
                       flexDirection: "row",
                       justifyContent: "center",
@@ -918,11 +899,7 @@ export default function Additem(props) {
                   }}
                 >
                   <TouchableOpacity
-                     onPress={() =>
-                      props.navigation.navigate('BarcodeScanner', {
-                        title: 'serial',
-                      })}
-                    // onPress={() => onshowscanneropen("serial")}
+                    onPress={() => onshowscanneropen("serial")}
                     style={{
                       flexDirection: "row",
                       justifyContent: "center",

@@ -33,6 +33,7 @@
     "react-native-gesture-handler": "^2.5.0",
     "react-native-image-crop-picker": "^0.38.0",
     "react-native-loading-spinner-overlay": "^2.0.0",
+    "react-native-nfc-manager": "^3.14.2",
     "react-native-paper": "^4.12.4",
     "react-native-permissions": "^3.6.1",
     "react-native-qrcode-svg": "^6.1.2",
