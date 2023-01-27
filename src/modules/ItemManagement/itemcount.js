@@ -29,7 +29,7 @@ import {
 // import { setBinId, setImage } from "../../store/action/auth/action"
 import { connect } from "react-redux"
 import { flexDirection, marginBottom } from "styled-system"
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 class HomeScreen extends Component {
   constructor() {
     super()
@@ -284,79 +284,49 @@ class HomeScreen extends Component {
       <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F2F4" }}>
         <StatusBar barStyle="dark-content" backgroundColor={"white"} />
         <Spinner visible={this.state.loading} />
-        <ScrollView keyboardShouldPersistTaps="handled" style={{}}>
-          <View
+        <View
             style={{
               backgroundColor: "#fff",
               height: 60,
-              justifyContent: "center"
-            }}>
-            <View
-              style={{
-                justifyContent: "center",
-                flexDirection: "row"
-              }}>
+              flexDirection:'row',
+              alignContent:'center'
+            }}
+          >
+             <View
+        style={{
+          flexDirection: 'row',
+           marginTop: 13,
+           marginLeft:20
+        //   justifyContent: 'space-between',
+          //   alignItems: 'center',
+        }}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.openDrawer()}
-                style={{ position: "absolute", left: 20 }}>
-                <Entypo name="menu" size={30} color="#0F0B56" />
+                 onPress={() => this.props.navigation.goBack()}
+                style={{}}>
+                <Ionicons name="arrow-back" size={30} color="#0F0B56" />
               </TouchableOpacity>
-              <View
-                style={{
-                  position: "absolute",
-                  right: 25,
-                  marginTop: -5
-                  //   borderColor:"#FFFFFF"
-                }}
-              >
-                <TouchableOpacity
-                  style={{}}
-                  onPress={() => this.props.navigation.navigate("MyProfile")}
-                >
-                  <Image
-                    style={styles.profileimage}
-                    source={{
-                      uri: this.state.imagepath
-                        ? this.state.imagepath
-                        : "https://t4.ftcdn.net/jpg/03/32/59/65/360_F_332596535_lAdLhf6KzbW6PWXBWeIFTovTii1drkbT.jpg"
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={styles.heading}>Hi {this.state.name}</Text>
-              </View>
-            </View>
+            
+        </View>
+        <View style={{justifyContent:'center',marginLeft:95}}>
+        <Text
+          style={{
+            color: '#0F0B56',
+            fontSize: 24,
+            lineHeight: 36,
+            fontWeight: '600',
+          }}>
+         Item Count
+        </Text>
+        </View>
           </View>
+        <ScrollView keyboardShouldPersistTaps="handled" style={{}}>
+       
           <View style={{ paddingHorizontal: 30 }}>
             {/* putaway */}
-          <View style={styles.cardview}>
-               <TouchableOpacity
-                style={{ flexDirection: "row" }}
-                onPress={() => this.props.navigation.navigate("PutawayScreen")}>
-              <Image
-                style={styles.cardimage}
-                source={require("../../assets/Logo/items.png")}
-              />
-              <Text style={styles.cardtext}>Put Away
-              </Text>
-              </TouchableOpacity>
-              </View> 
+          
 
-              {/* total count   */}
-              <View style={styles.cardview}>
-               <TouchableOpacity
-                style={{ flexDirection: "row" }}
-                onPress={() => this.props.navigation.navigate("Itemcount")}>
-              <Image
-                style={styles.cardimage}
-                source={require("../../assets/Logo/items.png")}
-              />
-              <Text style={styles.cardtext}>Item Count
-              </Text>
-              </TouchableOpacity>
-              </View>   
-              {this.state.countview && (
+          
+            
                 <View>
                 <View style={styles.cardview}>
                   <Image style={styles.cardimage}
@@ -487,22 +457,10 @@ class HomeScreen extends Component {
                 </View>)}
               </View>
               
-              )}
+            
               
 
-              {/* Item ItemManagement */}
-              <View style={styles.cardview}>
-               <TouchableOpacity
-                style={{ flexDirection: "row" }}
-                onPress={() => this.props.navigation.navigate("Itemlist")}>
-              <Image
-                style={styles.cardimage}
-                source={require("../../assets/Logo/items.png")}
-              />
-              <Text style={styles.cardtext}>Item Management
-              </Text>
-              </TouchableOpacity>
-              </View>   
+              
           </View>
         </ScrollView>
       </SafeAreaView>
