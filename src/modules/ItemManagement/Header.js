@@ -13,7 +13,7 @@ import {
 import Icon from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const Header = ({header, onPressCancel, onPressSave,onPressFilter, ...props}) => {
+const Header = ({header, onPressCancel, onPressSave,onPressFilter,onLookup, ...props}) => {
   return (
     <View
       style={{
@@ -93,7 +93,28 @@ const Header = ({header, onPressCancel, onPressSave,onPressFilter, ...props}) =>
             <TouchableOpacity style={{marginTop:5}}  onPress={onPressFilter}> 
             <Ionicons name="options-outline" size={30} color="#21618C" style={{}} />
             </TouchableOpacity>
-             ) : null}
+             ) :props.lookup ?(
+              <TouchableOpacity
+              onPress={onLookup}
+              style={{
+                backgroundColor:'#21618C',
+                height: 35,
+                width: 70,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius:15
+              }}>
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: 16,
+                  lineHeight: 21,
+                  fontWeight: '500',
+                }}>
+               Lookup
+              </Text>
+            </TouchableOpacity>
+             ): null}
       </View>
        
     </View>
